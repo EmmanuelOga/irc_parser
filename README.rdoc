@@ -58,17 +58,11 @@ There is also a shortcut:
 * Documentation! Most of the message classes are generated using a helper method, and hence yard is not able to pick the class definition.
 * It would be interesting to add some support for parsing/generating extended mirc messages.
 * Most severs/clients do not implement the messages exactly as defined on the RFCs (sometimes http://www.mirc.net/raws/ was used as reference). So, some of the messages may require adjustments to be usable in the wild.
-* The library was initially built looking at the rfc 1459. When I started using it, I realised most servers and clients where designed with rfc 2812 as reference. At this point irc_parser is mostly 1459
-compliant, with some of the messages updated to the rfc 2812. Fixes/patches are warmly welcome!
+* The library was initially built looking at the rfc 1459. When I started using it, I realised most servers and clients where designed with rfc 2812 as reference. At this point irc_parser is mostly 1459 compliant, with some of the messages updated to the rfc 2812. Fixes/patches are warmly welcome!
 
 == AUTHORS
 
-A lot of projects where reviewed while implementing this library. My
-hope is that we developers of IRC stuff can join forces to get one of
-the most boring parts of IRC development done (parsing/generating
-messages). I may or may not have stolen something from one of
-these. If I forget about anyone please ping me so I can include you
-here.
+A lot of projects where reviewed while implementing this library. My hope is that we developers of IRC stuff can join forces to get one of the most boring parts of IRC development done (parsing/generating messages). I may or may not have stolen something from one of these. If I forget about anyone please ping me so I can include you here.
 
 * http://github.com/brodock/irk : Ragel parser and other portions where taken from irk.
 
