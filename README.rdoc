@@ -20,7 +20,7 @@ The parser is quite strict in parsing the input you provide acording with the RF
 
   require 'irc_parser'
   IRCParser::Parser.run(":Angel PRIVMSG Wiz :Hello are you receiving this message?\r\n")
-  # [nil, "Angel", "PRIVMSG", "Wiz", "Hello are you receiving this message ?"]
+  # ["Angel", "PRIVMSG", "Wiz", "Hello are you receiving this message ?"]
 
 The library also provides an extended parsing method that returns an instance of the Message class instead of an array of components:
 
