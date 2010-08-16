@@ -1,0 +1,96 @@
+== IRCParser
+
+A library containing a parser for IRC messages, and definitions of commands, errors and replies according from the IRC RFCs.
+
+This library does not deal at all with the networking parts of IRC.
+
+I have only tested this gem with ruby 1.9 so far.
+
+== Goals
+
+In every irc related library I've seen out there people implement the various irc messages again and again. IRCParser tries to tackle that boring task so the hard work in making the RFC compliant IRC messages can be shared across projects and we can get to the more fun parts of IRC development.
+
+IRCParser only deals with message parsing/generation. So this does _not_ provide an irc server, and irc client or a cool new DSL to implement IRC bots (though I hope the authors of those kind of projects will be able to capitalize on the use of IRCParser).
+
+= Parsing Messages
+
+You can run the 'low level' parser in a raw IRC message and get the components for it ([prefix, command, *params]).
+
+The parser is quite strict in parsing the input you provide acording with the RFC definition, so don't forget to include the IRC delimiters in the messages ('\r\n').
+
+  require 'irc_parser'
+  IRCParser::Parser.run(":Angel PRIVMSG Wiz :Hello are you receiving this message?\r\n")
+  # [nil, "Angel", "PRIVMSG", "Wiz", "Hello are you receiving this message ?"]
+
+The library also provides an extended parsing method that returns an instance of the Message class instead of an array of components:
+
+  require 'irc_parser/messages'
+  msg = IRCParser.parse(":Angel PRIVMSG Wiz :Hello are you receiving this message?\r\n")
+  # <IRCParser::Messages::Privmsg:0x00000001476370 @params=["Wiz", "Hello are you receiving this message?"], @prefix="Angel">
+
+  msg.prefix # => "Angel"
+  msg.params # => ["Wiz", "Hello are you receiving this message?"]
+  msg.from   # => "Angel"
+  msg.target # => "Wiz"
+  msg.body   # => "Hello are you receiving this message?"
+
+== Generating Messages
+
+  require 'irc_parser/messages'
+  msg = IRCParser::Messages::Privmsg.new
+  msg.from   = "Wiz"
+  msg.target = "Angel"
+  msg.body   = "Hello World!"
+  msg.to_s   # => ":Wiz PRIVMSG Angel :Hello World!\r\n"
+
+There is also a shortcut:
+
+  require 'irc_parser/messages'
+  msg = IRCParser.message(:privmsg) do |m|
+    msg.from   = "Wiz"
+    msg.target = "Angel"
+    msg.body   = "Hello World!"
+  end
+  msg.to_s # => ":Wiz PRIVMSG Angel :Hello World!\r\n"
+
+== TODO
+
+* Documentation! Most of the message classes are generated using a helper method, and hence yard is not able to pick the class definition.
+* It would be interesting to add some support for parsing/generating extended mirc messages.
+* Most severs/clients do not implement the messages exactly as defined on the RFCs (sometimes http://www.mirc.net/raws/ was used as reference). So, some of the messages may require adjustments to be usable in the wild.
+* The library was initially built looking at the rfc 1459. When I started using it, I realised most servers and clients where designed with rfc 2812 as reference. At this point irc_parser is mostly 1459
+compliant, with some of the messages updated to the rfc 2812. Fixes/patches are warmly welcome!
+
+== AUTHORS
+
+A lot of projects where reviewed while implementing this library. My
+hope is that we developers of IRC stuff can join forces to get one of
+the most boring parts of IRC development done (parsing/generating
+messages). I may or may not have stolen something from one of
+these. If I forget about anyone please ping me so I can include you
+here.
+
+* http://github.com/brodock/irk : Ragel parser and other portions where taken from irk.
+
+Other projects I examined (in vim-sort order):
+
+* http://git.sv.gnu.org/weechat.git
+* http://github.com/ChaosR/IdleIRCd
+* http://github.com/RISCfuture/autumn
+* http://github.com/Sutto/marvin
+* http://github.com/Syd/twitrc
+* http://github.com/TheLinx/MoonIRC
+* http://github.com/alexyoung/twitterircbot
+* http://github.com/andrzejkrzywda/ruby-ircd
+* http://github.com/apeiros/silverplatter-irc
+* http://github.com/bingos/parse-irc
+* http://github.com/cho45/net-irc
+* http://github.com/danopia/ooc-ircd
+* http://github.com/danopia/rbircd
+* http://github.com/injekt/cinch
+* http://github.com/konn/rupircd
+* http://github.com/myelin/irc-proxy
+* http://github.com/purzelrakete/mini
+* http://github.com/tagoh/prune
+* http://github.com/tsion/on_irc
+* http://ngircd.barton.de
