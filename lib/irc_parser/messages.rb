@@ -16,6 +16,9 @@ module IRCParser
       alias_method :from, :prefix
       alias_method :from=, :prefix=
 
+      alias_method :who, :prefix
+      alias_method :who=, :prefix=
+
       def self.predefined_params
         @predefined_params ||= Hash.new
       end
