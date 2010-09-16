@@ -10,7 +10,7 @@
   crlf = CR LF;
   comma = ',';
   nonwhite = ascii -- (SPACE | NUL | CR | LF);
-  special = ('-' | '[' | ']' | '\\' | '`' | '^' | '{' | '}');
+  special = ('_' | '-' | '[' | ']' | '\\' | '`' | '^' | '{' | '}');
 
   chstring = ascii -- (SPACE | BELL | NUL | CR | LF | comma);
   mask = ('#' | '$') chstring;
