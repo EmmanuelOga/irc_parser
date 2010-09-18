@@ -44,11 +44,11 @@ IRCParser::Messages::Message.define_message :Mode do
   end
 
   def for_channel?
-    IRCParser::RFC.valid_channel_name?(params.first.to_s)
+    IRCParser::Helper.valid_channel_name?(params.first.to_s)
   end
 
   def for_user?
-    IRCParser::RFC.valid_nick?(params.first.to_s)
+    IRCParser::Helper.valid_nick?(params.first.to_s)
   end
 
   CHANNEL_MODES = {
@@ -141,7 +141,7 @@ IRCParser::Messages::Message.define_message :Nick do
   param_means :hopcount, :index => 1 # removed in RFC 2812
 
   def invalid_nick?
-    IRCParser::RFC.invalid_nick?(nick)
+    IRCParser::Helper.invalid_nick?(nick)
   end
 
   def changing?
@@ -288,11 +288,11 @@ IRCParser::Messages::Message.define_message :Privmsg, :Notice do
   param_means :body, :index => 1
 
   def for_channel?
-    IRCParser::RFC.valid_channel_name?(target.to_s)
+    IRCParser::Helper.valid_channel_name?(target.to_s)
   end
 
   def for_user?
-    IRCParser::RFC.valid_nick?(target.to_s)
+    IRCParser::Helper.valid_nick?(target.to_s)
   end
 
   def for_server_pattern?
@@ -304,11 +304,11 @@ IRCParser::Messages::Message.define_message :Privmsg, :Notice do
   end
 
   def server_pattern
-    for_server_pattern? && RFC::parse_regexp(params.first[1..-1])
+    for_server_pattern? && Helper::parse_regexp(params.first[1..-1])
   end
 
   def host_pattern
-    for_host_pattern? && RFC::parse_regexp(params.first[1..-1])
+    for_host_pattern? && Helper::parse_regexp(params.first[1..-1])
   end
 
   alias_method :server_pattern=, :target=
@@ -322,7 +322,7 @@ IRCParser::Messages::Message.define_message :Who do
   alias_method :operator?, :operator
 
   def for_channel?
-    IRCParser::RFC.valid_channel_name?(channel)
+    IRCParser::Helper.valid_channel_name?(channel)
   end
 
   def operator!(true_or_false = true)
@@ -330,7 +330,7 @@ IRCParser::Messages::Message.define_message :Who do
   end
 
   def regexp
-    IRCParser::RFC.parse_regexp(pattern)
+    IRCParser::Helper.parse_regexp(pattern)
   end
 end
 
@@ -349,7 +349,7 @@ IRCParser::Messages::Message.define_message :Whois do
   end
 
   def regexp
-    IRCParser::RFC.parse_regexp(pattern)
+    IRCParser::Helper.parse_regexp(pattern)
   end
 end
 

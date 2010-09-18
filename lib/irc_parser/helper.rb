@@ -1,5 +1,5 @@
 module IRCParser
-  module RFC
+  module Helper
     extend self
 
     def parse_regexp(text)
@@ -31,7 +31,7 @@ module IRCParser
 
     module NicknameHelpers
       %w|valid_nick? invalid_nick?|.each do |meth|
-        define_method(meth) { IRCParser::RFC.send(meth, self) }
+        define_method(meth) { IRCParser::Helper.send(meth, self) }
       end
     end
 
@@ -60,7 +60,7 @@ module IRCParser
 
     module ChannelHelpers
       (CHANNEL_PREFIXES.keys.map {|mode| "#{mode}_channel?" } + %w|valid_channel_name? invalid_channel_name?|).each do |meth|
-        define_method(meth) { IRCParser::RFC.send(meth, self) }
+        define_method(meth) { IRCParser::Helper.send(meth, self) }
       end
     end
   end

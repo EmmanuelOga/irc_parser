@@ -1,13 +1,13 @@
 require 'spec_helper'
 
-describe IRCParser::RFC, "in general" do
+describe IRCParser::Helper, "in general" do
 
   def with_channel_helpers(str)
-    str.tap { |str| str.extend(IRCParser::RFC::ChannelHelpers) }
+    str.tap { |str| str.extend(IRCParser::Helper::ChannelHelpers) }
   end
 
   def with_nick_helpers(str)
-    str.tap { |str| str.extend(IRCParser::RFC::NicknameHelpers) }
+    str.tap { |str| str.extend(IRCParser::Helper::NicknameHelpers) }
   end
 
   it "knows valid and invalid nick names" do
@@ -16,7 +16,7 @@ describe IRCParser::RFC, "in general" do
   end
 
   it "knows valid and invalid channel names, and channel modes" do
-    IRCParser::RFC::CHANNEL_PREFIXES.values.each do |prefix|
+    IRCParser::Helper::CHANNEL_PREFIXES.values.each do |prefix|
       with_channel_helpers("#{prefix}hola").should be_valid_channel_name
       with_channel_helpers("#{prefix}hola").should_not be_invalid_channel_name
     end

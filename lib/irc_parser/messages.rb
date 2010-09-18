@@ -52,19 +52,6 @@ module IRCParser
   require "irc_parser/message_accessors"
   extend MessageAccessors
 
-  def parse(message)
-    prefix, identifier, *params = Parser.run(message)
-
-    klass = Messages::CLASS_FOR_IDENTIFIER[identifier.upcase]
-
-    raise IRCParser::Parser::Error.new(message, prefix, identifier, params) unless klass
-
-    klass.new do |message|
-      message.prefix = prefix
-      message.initialize_params(params)
-    end
-  end
-
   require 'irc_parser/definitions/messages'
   require 'irc_parser/definitions/errors'
   require 'irc_parser/definitions/replies'
