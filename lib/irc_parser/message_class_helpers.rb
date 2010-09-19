@@ -36,7 +36,7 @@ module IRCParser
         end
 
         def #{name}=(val)
-          super(Array(val).join(","))
+          super((val = Array(val).join(",")) == "" ? nil : val)
         end
       METHODS
 
@@ -45,7 +45,13 @@ module IRCParser
         options[:aliases].each { |alias_name| alias_method("#{alias_name}_given?", "#{name}_given?") }
       end
 
-      default_parameters << (options[:default] || IRCParser::Params::PLACEHOLDER)
+      if options.member?(:default)
+        default_parameters << options[:default]
+      elsif options[:csv]
+        default_parameters << nil
+      else
+        default_parameters << IRCParser::Params::PLACEHOLDER
+      end
     end
 
     def parameters(*names)

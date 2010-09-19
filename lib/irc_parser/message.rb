@@ -42,14 +42,21 @@ module IRCParser
 
     def initialize(prefix = nil, *params)
       self.prefix = prefix
-      @parameters = Params.new(self.class.default_parameters, self.class.postfixes)
+      @parameters = Params.new(default_parameters)
       params.each_with_index { |val, index| @parameters[index] = val }
       yield self if block_given?
     end
 
+    def default_parameters
+      self.class.default_parameters
+    end
+
+    def postfixes
+      self.class.postfixes
+    end
+
     def to_str
-      params = respond_to?(:process_parameters) ? process_parameters(parameters) : parameters
-      "#{prefix ? ":#{prefix}" : nil} #{identifier} #{params}".strip << "\r\n"
+      "#{prefix ? ":#{prefix}" : nil} #{identifier} #{parameters.to_s(postfixes)}".strip << "\r\n"
     end
 
     alias_method :to_s, :to_str

@@ -1,28 +1,21 @@
-module IRCParser::Messages::RemoveExtraWildcards
-  def process_parameters(params)
-    params.remove_placeholders
-  end
-end
-
 class IRCParser::Messages::Join < IRCParser::Message
-  parameter :channels, :csv => true
-  parameter :keys, :csv => true
+  parameter :channels , :csv => true
+  parameter :keys     , :csv => true
 end
 
 class IRCParser::Messages::Mode < IRCParser::Message
-  include IRCParser::Messages::RemoveExtraWildcards
-
-  parameter :channel, :aliases => [:nick]
-  parameter :flags, :default => ""
-  parameter :limit, :aliases => [:key]
-  parameter :user
+  parameter :channel  , :aliases => [:nick]
+  parameter :flags
+  parameter :limit    , :default => nil, :aliases => [:key]
+  parameter :user     , :default => nil
   parameter :ban_mask
 
   # Damned rfc.
   # Channel Parameters: <channel> {[+|-]|o|p|s|i|t|n|b|v} [<limit>] [<user>] [<ban mask>]
   # User Parameters: <nickname> {[+|-]|i|w|s|o}
   def initialize(prefix, *params)
-    super(prefix, [])
+    super(prefix)
+
     if params.length == 5 || params.length == 2
       params.each_with_index { |val, index| parameters[index] = val }
     else
@@ -191,8 +184,6 @@ class IRCParser::Messages::SQuit < IRCParser::Message
 end
 
 class IRCParser::Messages::Topic < IRCParser::Message
-  include IRCParser::Messages::RemoveExtraWildcards
-
   parameter :channel
   parameter :topic
 end
@@ -218,8 +209,6 @@ class IRCParser::Messages::Invite < IRCParser::Message
 end
 
 class IRCParser::Messages::Kick < IRCParser::Message
-  include IRCParser::Messages::RemoveExtraWildcards
-
   parameter :channels, :csv => true
   parameter :users, :csv => true
   parameter :kick_message
@@ -235,13 +224,12 @@ class IRCParser::Messages::Stats < IRCParser::Message
 end
 
 class IRCParser::Messages::Links < IRCParser::Message
-  include IRCParser::Messages::RemoveExtraWildcards
-
   parameter :remote_server
   parameter :server_mask
 
   def initialize(prefix, *params)
-    super(prefix, [])
+    super(prefix)
+
     case params.length
     when 1 then self.server_mask = params.first
     when 2 then self.remote_server, self.server_mask = *params
@@ -259,7 +247,7 @@ class IRCParser::Messages::Connect < IRCParser::Message
   parameter :remote_server
 
   def initialize(prefix, *params)
-    super(prefix, [])
+    super(prefix)
     case params.length
     when 1 then self.target_server = params.first
     when 2 then self.target_server, self.remote_server = *params
@@ -348,18 +336,12 @@ class IRCParser::Messages::Who < IRCParser::Message
 end
 
 class IRCParser::Messages::WhoIs < IRCParser::Message
-  include IRCParser::Messages::RemoveExtraWildcards
-
-  parameter :target
+  parameter :target, :default => nil
   parameter :pattern
 
   def initialize(prefix, *params)
-    super(prefix, [])
-    if params.length == 2
-      self.target, self.pattern = *params
-    else
-      self.pattern = params.first
-    end
+    super
+    self.target, self.pattern = nil, self.target if parameters[1] == IRCParser::Params::PLACEHOLDER
   end
 
   def regexp
@@ -393,13 +375,11 @@ class IRCParser::Messages::Pong < IRCParser::Message
 end
 
 class IRCParser::Messages::Error < IRCParser::Message
-  include IRCParser::Messages::RemoveExtraWildcards
-
   parameter :nick
   parameter :error_message
 
   def initialize(prefix, *params)
-    super(prefix, [])
+    super(prefix)
     if params.length == 2
       self.nick, self.error_message = *params
     else
@@ -409,7 +389,7 @@ class IRCParser::Messages::Error < IRCParser::Message
 end
 
 class IRCParser::Messages::Away < IRCParser::Message
-  parameter :away_message
+  parameter :away_message, :default => nil
 end
 
 class IRCParser::Messages::Rehash < IRCParser::Message

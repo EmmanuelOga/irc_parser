@@ -1,30 +1,22 @@
 module IRCParser
   class Params < Array
-    attr_reader :postfixes
-
     PLACEHOLDER = Object.new.tap {|o| def o.inspect; "<PLACEHOLDER>"; end }.freeze
 
     # Params is an array of values
-    # Postfixes is the number of paremeters used to build the last parameter
-    def initialize(params, postfixes)
+    def initialize(params)
       replace(params)
-      @postfixes = postfixes || 0
-    end
-
-    def remove_placeholders
-      dup.tap do |ret|
-        ret.delete_if { |val| val == PLACEHOLDER }
-      end
     end
 
     # The message has a number of postfixes, which are the paremeters to be
     # joined in the last parameter. This is because the RFC protocol only
     # allows blank on the last param.  All the parameters are joined by a
     # space.
-    def to_s
-      return "" if empty? || (length == 1 && first == PLACEHOLDER)
+    # Postfixes is the number of paremeters used to build the last parameter
+    def to_s(_postfixes)
+      postfixes = _postfixes || 0
+      return "" if empty? || (length == 1 && (first.nil? || first == ""))
 
-      parameters = dup
+      parameters = reject {|elem| elem.nil? } #dup
       parameters.pop while parameters.last == PLACEHOLDER # don't send unneeded wildcards
       parameters = parameters.map { |val| val == PLACEHOLDER ? "*" : val }
 

@@ -709,11 +709,11 @@ describe IRCParser, "command responses" do
   end
 
   it_generates IRCParser::Messages::TraceServerReply, "206 Serv class 10S 20C server nick!user@host" do |message|
-    message.klass="class"
-    message.intS="10S"
-    message.intC="20C"
-    message.server="server"
-    message.identifier="nick!user@host"""
+    message.klass    = "class"
+    message.intS     = "10S"
+    message.intC     = "20C"
+    message.server   = "server"
+    message.identity = "nick!user@host"
   end
 
   it_generates IRCParser::Messages::TraceNewTypeReply, "208 newtype 0 client_name" do |message|

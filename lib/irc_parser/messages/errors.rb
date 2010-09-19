@@ -50,7 +50,7 @@ class IRCParser::Messages::NoRecipientError < IRCParser::Message
   end
 
   def to_str
-    "#{numeric} :No recipient given (#{command})\r\n"
+    "#{identifier} :No recipient given (#{command})\r\n"
   end
   alias_method :to_s, :to_str
 end
@@ -98,7 +98,7 @@ class IRCParser::Messages::FileErrorError < IRCParser::Message
   end
 
   def to_str
-    "#{numeric} :File error doing #{file_op} on #{file}\r\n"
+    "#{identifier} :File error doing #{file_op} on #{file}\r\n"
   end
   alias_method :to_s, :to_str
 end

@@ -3,7 +3,7 @@ class IRCParser::Messages::WelcomeReply < IRCParser::Message
   parameters :nick, [:welcome, :user] # User format: nick!user@host
 
   def initialize(prefix, *params)
-    super(prefix, [])
+    super(prefix)
     unless params.empty?
       parts = params.last.split(" ")
       self.nick = params.first
@@ -18,7 +18,7 @@ class IRCParser::Messages::YourHostReply < IRCParser::Message
   parameters :nick, ["Your host is", :server_name, "running version", :version]
 
   def initialize(prefix, *params)
-    super(prefix, [])
+    super(prefix)
     self.nick = params.first
     if params.last =~ /Your host is (.+) running version (.+)/
       self.server_name = $1.chomp(",")
@@ -32,7 +32,7 @@ class IRCParser::Messages::CreatedReply < IRCParser::Message
   parameters :nick, ["This server was created", :date]
 
   def initialize(prefix, *params)
-    super(prefix, [])
+    super(prefix)
     self.nick = params.first
     self.date = $1 if params.last =~ /created (.+)/
   end
@@ -43,7 +43,7 @@ class IRCParser::Messages::MyInfoReply < IRCParser::Message
   parameters :nick, :server_name, :version, :available_user_modes, :available_channel_modes
 
   def initialize(prefix, *params)
-    super(prefix, [])
+    super(prefix)
     self.nick = params.first
     super
   end
@@ -54,7 +54,7 @@ class IRCParser::Messages::BounceReply < IRCParser::Message
   parameters :nick, ["Try server", :server_name, "port", :port]
 
   def initialize(prefix, *params)
-    super(prefix, [])
+    super(prefix)
     self.nick = params.first
     if params.last =~ /Try server (.+) port (.+)/
       self.server_name = $1.to_s.chomp(",")
@@ -74,11 +74,17 @@ end
 
 class IRCParser::Messages::IsOnReply < IRCParser::Message
   self.identifier = "303"
-  parameters :nicks
 
-  def initialize(prefix, *params)
-    super(prefix, [])
-    self.nicks = params.last.split(" ")
+  def postfixes
+    parameters.length
+  end
+
+  def nicks=(vals)
+    parameters.replace(Array(vals))
+  end
+
+  def nicks
+    parameters
   end
 end
 
@@ -99,12 +105,14 @@ end
 
 class IRCParser::Messages::WhoIsUserReply < IRCParser::Message
   self.identifier = '311'
-  parameters :nick, :user, :host, :ip, :real_name, :postfixes => 1
+  self.postfixes = 1
+  parameters :nick, :user, :host, :ip, :real_name
 end
 
 class IRCParser::Messages::WhoIsServerReply < IRCParser::Message
   self.identifier = '312'
-  parameters :nick, :user, :server, :info, :postfixes => 1
+  self.postfixes = 1
+  parameters :nick, :user, :server, :info
 end
 
 class IRCParser::Messages::WhoIsOperatorReply < IRCParser::Message
@@ -119,7 +127,8 @@ end
 
 class IRCParser::Messages::WhoIsChannelsReply < IRCParser::Message
   self.identifier = "319"
-  parameters :nick, :user, :channels, :postfixes => 1 # flags: [@|+]
+  self.postfixes = 1
+  parameters :nick, :user, :channels # flags: [@|+]
   def channels
     super.to_s.split(/\s+/)
   end
@@ -147,7 +156,8 @@ end
 
 class IRCParser::Messages::ListReply < IRCParser::Message
   self.identifier = '322'
-  parameters :nick, :channel, :visible, :topic, :postfixes => 1
+  self.postfixes = 1
+  parameters :nick, :channel, :visible, :topic
 end
 
 class IRCParser::Messages::ListEndReply < IRCParser::Message
@@ -189,9 +199,12 @@ end
 # nick0: added cause freenode's server sends it
 class IRCParser::Messages::WhoReplyReply < IRCParser::Message
   self.identifier = "352"
-  parameters :nick0, :channel, :user, :host, :server, :nick, :flags, :hopcount, :real_name, :postfixes => 2 # Flags: <H|G>[*][@|+] (here, gone)
+  self.postfixes = 2
+
+  parameters :nick0, :channel, :user, :host, :server, :nick, :flags, :hopcount, :real_name # Flags: <H|G>[*][@|+] (here, gone)
 
   FLAGS_INDEX_ON_PARAMS = 6
+
   FLAGS = {
     0 => { :here  => "H", :gone => "G" },
     1 => { :ircop => "*" },
@@ -199,20 +212,22 @@ class IRCParser::Messages::WhoReplyReply < IRCParser::Message
     3 => { :deaf  => "d" }
   }
 
-  def initialize
-    @flags = Array.new(FLAGS.size)
-    super
-  end
-
   def initialize(prefix, *params)
-    super(prefix, [])
-    self.hopcount, self.real_name = $1, $2.to_s.strip if params.last =~ /\s*(\d+)(.*)$/
-    original_flags = params[FLAGS_INDEX_ON_PARAMS]
+    super(prefix)
+
+    @flags = Array.new(FLAGS.size)
+
+    self.hopcount, self.real_name = $1, $2.to_s.strip if parameters.last =~ /\s*(\d+)(.*)$/
+
+    original_flags = parameters[FLAGS_INDEX_ON_PARAMS]
+
     FLAGS.each do |index, setters|
       setters.each do |flag, pattern|
         send "#{flag}!", true if original_flags.index(pattern)
       end
     end
+  rescue => e
+    ap e.backtrace
   end
 
   FLAGS.each do |index, flags|
@@ -247,7 +262,10 @@ end
 
 class IRCParser::Messages::NamReplyReply < IRCParser::Message
   self.identifier = '353'
-  parameters "=", :channel, :nicks, :postfixes => 1 # each nick should include flags [[@|+]#{nick}
+  self.postfixes = 1
+
+  parameters "=", :channel, :nicks # each nick should include flags [[@|+]#{nick}
+
   def nicks
     super.to_s.split(/\s+/)
   end
@@ -260,9 +278,10 @@ end
 
 class IRCParser::Messages::LinksReply < IRCParser::Message
   self.identifier = '364'
-  parameters :mask, :server, :hopcount, :server_info, :postfixes => 2
+  self.postfixes = 2
+  parameters :mask, :server, :hopcount, :server_info
   def initialize(prefix, *params)
-    super(prefix, [])
+    super(prefix)
     self.hopcount, self.server_info = $1, $2.to_s.strip if params.last =~ /\s*(\d+)(.*)$/
   end
 end
@@ -294,19 +313,23 @@ end
 
 class IRCParser::Messages::MotdStartReply < IRCParser::Message
   self.identifier = '375'
-  parameters "-", :server, "Message of the day -", :postfixes => 3
+  self.postfixes = 3
+  parameters "-", :server, "Message of the day -"
+
   def initialize(prefix, *params)
-    super(prefix, [])
+    super(prefix)
     self.server = params.last.to_s =~ /\s*-\s*(.+)Message of the day -/ && $1.strip
   end
 end
 
 class IRCParser::Messages::MotdReply < IRCParser::Message
   self.identifier = '372'
-  parameters "-", :motd, :postfixes => 2
+  self.postfixes = 2
+
+  parameters "-", :motd
 
   def initialize(prefix, *params)
-    super(prefix, [])
+    super(prefix)
     self.motd = params.last.to_s =~ /^\s*-\s*(.+)/ && $1.strip
   end
 end
@@ -323,12 +346,14 @@ end
 
 class IRCParser::Messages::RehashingReply < IRCParser::Message
   self.identifier = '382'
-  parameters :config_file, "Rehashing", :postfixes => 1
+  self.postfixes = 1
+  parameters :config_file, "Rehashing"
 end
 
 class IRCParser::Messages::TimeReply < IRCParser::Message
   self.identifier = '391'
-  parameters :server, :local_time, :postfixes => 1
+  self.postfixes = 1
+  parameters :server, :local_time
 end
 
 class IRCParser::Messages::UsersStartReply < IRCParser::Message
@@ -338,7 +363,8 @@ end
 
 class IRCParser::Messages::UsersReply < IRCParser::Message
   self.identifier = '393'
-  parameters :users, :postfixes => 1 # users format: %-8s %-9s %-8s
+  self.postfixes = 1
+  parameters :users # users format: %-8s %-9s %-8s
 end
 
 class IRCParser::Messages::EndOfUsersReply < IRCParser::Message
@@ -453,7 +479,8 @@ end
 
 class IRCParser::Messages::StatsUptimeReply < IRCParser::Message
   self.identifier = '242'
-  parameters "Server Up", :days, "days", :time, :postfixes => 4 # time format : %d:%02d:%02d
+  self.postfixes = 4
+  parameters "Server Up", :days, "days", :time # time format : %d:%02d:%02d
   def initialize_params(params)
     self.days = params.last.to_s.scan(/\d+/).first
     self.time = ( params.last.to_s =~ /days(.*)$/ ) && $1.strip
@@ -467,7 +494,8 @@ end
 
 class IRCParser::Messages::LUserClientReply < IRCParser::Message
   self.identifier = '251'
-  parameters "There are", :users_count, "users and", :invisible_count, "invisible on", :servers, "servers", :postfixes => 7
+  self.postfixes = 7
+  parameters "There are", :users_count, "users and", :invisible_count, "invisible on", :servers, "servers"
   def initialize_params(params)
     self.users_count, self.invisible_count, self.servers = *params.last.to_s.scan(/\d+/)
   end
@@ -490,7 +518,8 @@ end
 
 class IRCParser::Messages::LUserMeReply < IRCParser::Message
   self.identifier = '255'
-  parameters "I have", :clients_count, "clients and", :servers_count, "servers", :postfixes => 5
+  self.postfixes = 5
+  parameters "I have", :clients_count, "clients and", :servers_count, "servers"
 
   def initialize_params(params)
     self.clients_count, self.servers_count = *params.last.to_s.scan(/\d+/)
@@ -504,17 +533,20 @@ end
 
 class IRCParser::Messages::AdminLoc1Reply < IRCParser::Message
   self.identifier = '257'
-  parameters :info, :postfixes => 1
+  self.postfixes = 1
+  parameters :info
 end
 
 class IRCParser::Messages::AdminLoc2Reply < IRCParser::Message
   self.identifier = '258'
-  parameters :info, :postfixes => 1
+  self.postfixes = 1
+  parameters :info
 end
 
 class IRCParser::Messages::AdminEmailReply < IRCParser::Message
   self.identifier = '259'
-  parameters :info, :postfixes => 1
+  self.postfixes = 1
+  parameters :info
 end
 
 # Not Used / Reserved ( http://tools.ietf.org/html/rfc1459#section-6.3
