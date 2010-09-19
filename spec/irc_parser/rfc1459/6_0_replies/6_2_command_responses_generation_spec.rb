@@ -474,120 +474,120 @@ describe IRCParser, "command responses" do
 
   #------------------------------------------------------------------------------
 
-  it_generates IRCParser::Messages::RplNone, "300" do |message|
+  it_generates IRCParser::Messages::NoneReply, "300" do |message|
   end
 
-  it_generates IRCParser::Messages::RplUserHost, "302 :user * = + host" do |message|
+  it_generates IRCParser::Messages::UserHostReply, "302 :user * = + host" do |message|
     message.nicks_and_hosts = "user * = + host"
   end
 
 
-  it_generates IRCParser::Messages::RplIson, "303 :tony motola" do |message|
+  it_generates IRCParser::Messages::IsOnReply, "303 :tony motola" do |message|
     message.nicks = ["tony", "motola"]
   end
 
-  it_generates IRCParser::Messages::RplAway, "301 nick :away message" do |message|
+  it_generates IRCParser::Messages::AwayReply, "301 nick :away message" do |message|
     message.nick = "nick"
     message.message = "away message"
   end
 
-  it_generates IRCParser::Messages::RplUnAway, "305 :You are no longer marked as being away" do |message|
+  it_generates IRCParser::Messages::UnAwayReply, "305 :You are no longer marked as being away" do |message|
   end
 
-  it_generates IRCParser::Messages::RplNowAway, "306 :You have been marked as being away" do |message|
+  it_generates IRCParser::Messages::NowAwayReply, "306 :You have been marked as being away" do |message|
   end
 
-  it_generates IRCParser::Messages::RplWhoIsUser, "311 nick user host * :real name" do |message|
+  it_generates IRCParser::Messages::WhoIsUserReply, "311 nick user host * :real name" do |message|
     message.nick = "nick"
     message.user = "user"
     message.host = "host"
     message.real_name = "real name"
   end
 
-  it_generates IRCParser::Messages::RplWhoIsServer, "312 nick user server :server info" do |message|
+  it_generates IRCParser::Messages::WhoIsServerReply, "312 nick user server :server info" do |message|
     message.nick = "nick"
     message.user = "user"
     message.server = "server"
     message.info = "server info"
   end
 
-  it_generates IRCParser::Messages::RplWhoIsOperator, "313 nick user :is an IRC operator" do |message|
+  it_generates IRCParser::Messages::WhoIsOperatorReply, "313 nick user :is an IRC operator" do |message|
     message.user = "user"
     message.nick = "nick"
   end
 
-  it_generates IRCParser::Messages::RplWhoIsIdle, "317 nick user 10 :seconds idle" do |message|
+  it_generates IRCParser::Messages::WhoIsIdleReply, "317 nick user 10 :seconds idle" do |message|
     message.nick = "nick"
     message.user = "user"
     message.seconds = "10"
   end
 
-  it_generates IRCParser::Messages::RplEndOfWhoIs, "318 nick :End of /WHOIS list" do |message|
+  it_generates IRCParser::Messages::EndOfWhoIsReply, "318 nick :End of /WHOIS list" do |message|
     message.nick = "nick"
   end
 
-  it_generates IRCParser::Messages::RplWhoIsChannels, "319 nick user :@channel1 +channel2 #channel3" do |message|
+  it_generates IRCParser::Messages::WhoIsChannelsReply, "319 nick user :@channel1 +channel2 #channel3" do |message|
     message.nick = "nick"
     message.user = "user"
     message.channels = %w|@channel1 +channel2 #channel3|
   end
 
-  it_generates IRCParser::Messages::RplWhoWasUser, "314 nick user host * :real name" do |message|
+  it_generates IRCParser::Messages::WhoWasUserReply, "314 nick user host * :real name" do |message|
     message.nick = "nick"
     message.user = "user"
     message.host = "host"
     message.real_name = "real name"
   end
 
-  it_generates IRCParser::Messages::RplEndOfWhoWas, "369 nick :End of WHOWAS" do |message|
+  it_generates IRCParser::Messages::EndOfWhoWasReply, "369 nick :End of WHOWAS" do |message|
     message.nick = "nick"
   end
 
-  it_generates IRCParser::Messages::RplListStart, "321 Channel :Users  Name" do |message|
+  it_generates IRCParser::Messages::ListStartReply, "321 Channel :Users  Name" do |message|
   end
 
-  it_generates IRCParser::Messages::RplList, "322 emmanuel #channel 12 :some topic" do |message|
+  it_generates IRCParser::Messages::ListReply, "322 emmanuel #channel 12 :some topic" do |message|
     message.nick= "emmanuel"
     message.channel = "#channel"
     message.visible = "12"
     message.topic = "some topic"
   end
 
-  it_generates IRCParser::Messages::RplListEnd, "323 :End of /LIST" do |message|
+  it_generates IRCParser::Messages::ListEndReply, "323 :End of /LIST" do |message|
   end
 
-  it_generates IRCParser::Messages::RplChannelModeIs, "324 #channel o params" do |message|
+  it_generates IRCParser::Messages::ChannelModeIsReply, "324 #channel o params" do |message|
     message.channel = "#channel"
     message.mode = "o"
     message.mode_params = "params"
   end
 
-  it_generates IRCParser::Messages::RplNoTopic, "331 #channel :No topic is set" do |message|
+  it_generates IRCParser::Messages::NoTopicReply, "331 #channel :No topic is set" do |message|
     message.channel = "#channel"
   end
 
-  it_generates IRCParser::Messages::RplTopic, "332 emmanuel #channel :the topic" do |message|
+  it_generates IRCParser::Messages::TopicReply, "332 emmanuel #channel :the topic" do |message|
     message.nick = "emmanuel"
     message.channel = "#channel"
     message.topic = "the topic"
   end
 
-  it_generates IRCParser::Messages::RplInviting, "341 #channel nick" do |message|
+  it_generates IRCParser::Messages::InvitingReply, "341 #channel nick" do |message|
     message.channel = "#channel"
     message.nick = "nick"
   end
 
-  it_generates IRCParser::Messages::RplSummoning, "342 user :Summoning user to IRC" do |message|
+  it_generates IRCParser::Messages::SummoningReply, "342 user :Summoning user to IRC" do |message|
     message.user = "user"
   end
 
-  it_generates IRCParser::Messages::RplVersion, "351 version.debuglevel server :the comments" do |message|
+  it_generates IRCParser::Messages::VersionReply, "351 version.debuglevel server :the comments" do |message|
     message.version = "version.debuglevel"
     message.server = "server"
     message.comments = "the comments"
   end
 
-  it_generates IRCParser::Messages::RplWhoReply, "352 nick #channel user host server nick H*@ :10 John B. Jovi" do |message| # <H|G>[*][@|+]
+  it_generates IRCParser::Messages::WhoReplyReply, "352 nick #channel user host server nick H*@ :10 John B. Jovi" do |message| # <H|G>[*][@|+]
     message.channel = "#channel"
     message.user = "user"
     message.host = "host"
@@ -601,114 +601,114 @@ describe IRCParser, "command responses" do
     message.real_name = "John B. Jovi"
   end
 
-  it_generates IRCParser::Messages::RplEndOfWho, "315 pattern :End of /WHO list" do |message|
+  it_generates IRCParser::Messages::EndOfWhoReply, "315 pattern :End of /WHO list" do |message|
     message.pattern = "pattern"
   end
 
-  it_generates IRCParser::Messages::RplNamReply, "353 = #channel :@nick1 +nick2 nick3" do |message|
+  it_generates IRCParser::Messages::NamReplyReply, "353 = #channel :@nick1 +nick2 nick3" do |message|
     message.channel = "#channel"
     message.nicks = %w|@nick1 +nick2 nick3|
   end
 
-  it_generates IRCParser::Messages::RplEndOfNames, "366 #channel :End of /NAMES list" do |message|
+  it_generates IRCParser::Messages::EndOfNamesReply, "366 #channel :End of /NAMES list" do |message|
     message.channel = "#channel"
   end
 
-  it_generates IRCParser::Messages::RplLinks, "364 mask server.com :10 server info" do |message|
+  it_generates IRCParser::Messages::LinksReply, "364 mask server.com :10 server info" do |message|
     message.mask = "mask"
     message.server = "server.com"
     message.hopcount = 10
     message.server_info = "server info"
   end
 
-  it_generates IRCParser::Messages::RplEndOfLinks, "365 mask :End of /LINKS list" do |message|
+  it_generates IRCParser::Messages::EndOfLinksReply, "365 mask :End of /LINKS list" do |message|
     message.mask = "mask"
   end
 
-  it_generates IRCParser::Messages::RplBanList, "367 @channel banid" do |message|
+  it_generates IRCParser::Messages::BanListReply, "367 @channel banid" do |message|
     message.channel = "@channel"
     message.ban_id = "banid"
   end
 
-  it_generates IRCParser::Messages::RplEndOfBanList, "368 &channel :End of channel ban list" do |message|
+  it_generates IRCParser::Messages::EndOfBanListReply, "368 &channel :End of channel ban list" do |message|
     message.channel = "&channel"
   end
 
-  it_generates IRCParser::Messages::RplInfo, "371 :Some Message" do |message|
+  it_generates IRCParser::Messages::InfoReply, "371 :Some Message" do |message|
     message.info = "Some Message"
   end
 
-  it_generates IRCParser::Messages::RplEndOfInfo, "374 :End of /INFO list" do |message|
+  it_generates IRCParser::Messages::EndOfInfoReply, "374 :End of /INFO list" do |message|
   end
 
-  it_generates IRCParser::Messages::RplMotdStart, "375 :- pepito.com Message of the day -" do |message|
+  it_generates IRCParser::Messages::MotdStartReply, "375 :- pepito.com Message of the day -" do |message|
     message.server = "pepito.com"
   end
 
-  it_generates IRCParser::Messages::RplMotd, "372 :- This is the very cool motd" do |message|
+  it_generates IRCParser::Messages::MotdReply, "372 :- This is the very cool motd" do |message|
     message.motd = "This is the very cool motd"
   end
 
-  it_generates IRCParser::Messages::RplEndOfMotd, "376 :End of /MOTD command" do |message|
+  it_generates IRCParser::Messages::EndOfMotdReply, "376 :End of /MOTD command" do |message|
   end
 
-  it_generates IRCParser::Messages::RplYouReOper, "381 :You are now an IRC operator" do |message|
+  it_generates IRCParser::Messages::YouReOperReply, "381 :You are now an IRC operator" do |message|
   end
 
-  it_generates IRCParser::Messages::RplRehashing, "382 config.sys :Rehashing" do |message|
+  it_generates IRCParser::Messages::RehashingReply, "382 config.sys :Rehashing" do |message|
     message.config_file = "config.sys"
   end
 
-  it_generates IRCParser::Messages::RplTime, "391 server.com :10:10pm" do |message|
+  it_generates IRCParser::Messages::TimeReply, "391 server.com :10:10pm" do |message|
     message.server = "server.com"
     message.local_time = "10:10pm"
   end
 
-  it_generates IRCParser::Messages::RplUsersStart, "392 :UserID   Terminal  Host" do |message|
+  it_generates IRCParser::Messages::UsersStartReply, "392 :UserID   Terminal  Host" do |message|
   end
 
-  it_generates IRCParser::Messages::RplUsers, "393 :012344567 012345678 01234567" do |message|
+  it_generates IRCParser::Messages::UsersReply, "393 :012344567 012345678 01234567" do |message|
     message.users = "012344567 012345678 01234567"
   end
 
-  it_generates IRCParser::Messages::RplEndOfUsers, "394 :End of users" do |message|
+  it_generates IRCParser::Messages::EndOfUsersReply, "394 :End of users" do |message|
   end
 
-  it_generates IRCParser::Messages::RplNoUsers, "395 :Nobody logged in" do |message|
+  it_generates IRCParser::Messages::NoUsersReply, "395 :Nobody logged in" do |message|
   end
 
-  it_generates IRCParser::Messages::RplTraceLink, "200 Link 1.10 destination.com next_server.net" do |message|
+  it_generates IRCParser::Messages::TraceLinkReply, "200 Link 1.10 destination.com next_server.net" do |message|
     message.version = "1.10"
     message.destination = "destination.com"
     message.next_server = "next_server.net"
   end
 
-  it_generates IRCParser::Messages::RplTraceConnecting, "201 Try. class server" do |message|
+  it_generates IRCParser::Messages::TraceConnectingReply, "201 Try. class server" do |message|
     message.klass = "class"
     message.server = "server"
   end
 
-  it_generates IRCParser::Messages::RplTraceHandshake, "202 H.S. class server" do |message|
+  it_generates IRCParser::Messages::TraceHandshakeReply, "202 H.S. class server" do |message|
     message.klass = "class"
     message.server = "server"
   end
 
-  it_generates IRCParser::Messages::RplTraceUnknown, "203 ???? class 10.2.10.20" do |message|
+  it_generates IRCParser::Messages::TraceUnknownReply, "203 ???? class 10.2.10.20" do |message|
     message.klass = "class"
     message.ip_address = "10.2.10.20"
   end
 
-  it_generates IRCParser::Messages::RplTraceOperator, "204 Oper class nick" do |message|
+  it_generates IRCParser::Messages::TraceOperatorReply, "204 Oper class nick" do |message|
     message.klass = "class"
     message.nick = "nick"
   end
 
-  it_generates IRCParser::Messages::RplTraceUser, "205 User class nick" do |message|
+  it_generates IRCParser::Messages::TraceUserReply, "205 User class nick" do |message|
     message.klass = "class"
     message.nick = "nick"
   end
 
-  it_generates IRCParser::Messages::RplTraceServer, "206 Serv class 10S 20C server nick!user@host" do |message|
+  it_generates IRCParser::Messages::TraceServerReply, "206 Serv class 10S 20C server nick!user@host" do |message|
     message.klass="class"
     message.intS="10S"
     message.intC="20C"
@@ -716,17 +716,17 @@ describe IRCParser, "command responses" do
     message.identifier="nick!user@host"""
   end
 
-  it_generates IRCParser::Messages::RplTraceNewType, "208 newtype 0 client_name" do |message|
+  it_generates IRCParser::Messages::TraceNewTypeReply, "208 newtype 0 client_name" do |message|
     message.new_type = "newtype"
     message.client_name = "client_name"
   end
 
-  it_generates IRCParser::Messages::RplTraceLog, "261 File logfile.log 2000" do |message|
+  it_generates IRCParser::Messages::TraceLogReply, "261 File logfile.log 2000" do |message|
     message.logfile = "logfile.log"
     message.debug_level = "2000"
   end
 
-  it_generates IRCParser::Messages::RplStatsLinkInfo, "211 linkname sendq 123 2048 456 1024 100" do |message|
+  it_generates IRCParser::Messages::StatsLinkInfoReply, "211 linkname sendq 123 2048 456 1024 100" do |message|
     message.linkname= "linkname"
     message.sendq= "sendq"
     message.sent_messages= 123
@@ -736,111 +736,111 @@ describe IRCParser, "command responses" do
     message.time_open= 100
   end
 
-  it_generates IRCParser::Messages::RplStatsCommands, "212 command 10" do |message|
+  it_generates IRCParser::Messages::StatsCommandsReply, "212 command 10" do |message|
     message.command = "command"
     message.count = 10
   end
 
-  it_generates IRCParser::Messages::RplStatsCLine, "213 C host * name 1232 class" do |message|
+  it_generates IRCParser::Messages::StatsCLineReply, "213 C host * name 1232 class" do |message|
     message.host = "host"
     message.name_param = "name"
     message.port = "1232"
     message.klass = "class"
   end
 
-  it_generates IRCParser::Messages::RplStatsNLine, "214 N host * name 1232 class" do |message|
+  it_generates IRCParser::Messages::StatsNLineReply, "214 N host * name 1232 class" do |message|
     message.host = "host"
     message.name_param = "name"
     message.port = "1232"
     message.klass = "class"
   end
 
-  it_generates IRCParser::Messages::RplStatsILine, "215 I host1 * host2 1232 class" do |message|
+  it_generates IRCParser::Messages::StatsILineReply, "215 I host1 * host2 1232 class" do |message|
     message.host = "host1"
     message.second_host = "host2"
     message.port = "1232"
     message.klass = "class"
   end
 
-  it_generates IRCParser::Messages::RplStatsKLine, "216 K host * username 1232 class" do |message|
+  it_generates IRCParser::Messages::StatsKLineReply, "216 K host * username 1232 class" do |message|
     message.host = "host"
     message.username = "username"
     message.port = "1232"
     message.klass = "class"
   end
 
-  it_generates IRCParser::Messages::RplStatsYLine, "218 Y class 10 20 30" do |message|
+  it_generates IRCParser::Messages::StatsYLineReply, "218 Y class 10 20 30" do |message|
     message.klass = "class"
     message.ping_frequency = 10
     message.connect_frequency = 20
     message.max_sendq = 30
   end
 
-  it_generates IRCParser::Messages::RplEndOfStats, "219 L :End of /STATS report" do |message|
+  it_generates IRCParser::Messages::EndOfStatsReply, "219 L :End of /STATS report" do |message|
     message.stats_letter= "L"
   end
 
-  it_generates IRCParser::Messages::RplStatsLLine, "241 L hostmask * servername.com 20" do |message|
+  it_generates IRCParser::Messages::StatsLLineReply, "241 L hostmask * servername.com 20" do |message|
     message.host_mask = "hostmask"
     message.server_name = "servername.com"
     message.max_depth = 20
   end
 
-  it_generates IRCParser::Messages::RplStatsUptime, "242 :Server Up 20 days 10:30:30" do |message|
+  it_generates IRCParser::Messages::StatsUptimeReply, "242 :Server Up 20 days 10:30:30" do |message|
     message.days = "20"
     message.time = "10:30:30"
   end
 
-  it_generates IRCParser::Messages::RplStatsOLine, "243 O hostmask * name" do |message|
+  it_generates IRCParser::Messages::StatsOLineReply, "243 O hostmask * name" do |message|
     message.host_mask = "hostmask"
     message.name_param = "name"
   end
 
-  it_generates IRCParser::Messages::RplStatsHLine, "244 H hostmask * servername" do |message|
+  it_generates IRCParser::Messages::StatsHLineReply, "244 H hostmask * servername" do |message|
     message.host_mask = "hostmask"
     message.server_name = "servername"
   end
 
-  it_generates IRCParser::Messages::RplUModeIs, "221 UserModeString" do |message|
+  it_generates IRCParser::Messages::UModeIsReply, "221 UserModeString" do |message|
     message.user_mode = "UserModeString"
   end
 
-  it_generates IRCParser::Messages::RplLUserClient, "251 :There are 10 users and 20 invisible on 30 servers" do |message|
+  it_generates IRCParser::Messages::LUserClientReply, "251 :There are 10 users and 20 invisible on 30 servers" do |message|
     message.users_count = 10
     message.invisible_count = 20
     message.servers = 30
   end
 
-  it_generates IRCParser::Messages::RplLUserOp, "252 10 :operator(s) online" do |message|
+  it_generates IRCParser::Messages::LUserOpReply, "252 10 :operator(s) online" do |message|
     message.operator_count = 10
   end
 
-  it_generates IRCParser::Messages::RplLUserUnknown, "253 7 :unknown connection(s)" do |message|
+  it_generates IRCParser::Messages::LUserUnknownReply, "253 7 :unknown connection(s)" do |message|
     message.connections = 7
   end
 
-  it_generates IRCParser::Messages::RplLUserChannels, "254 3 :channels formed" do |message|
+  it_generates IRCParser::Messages::LUserChannelsReply, "254 3 :channels formed" do |message|
     message.channels_count = 3
   end
 
-  it_generates IRCParser::Messages::RplLUserMe, "255 :I have 8 clients and 3 servers" do |message|
+  it_generates IRCParser::Messages::LUserMeReply, "255 :I have 8 clients and 3 servers" do |message|
     message.clients_count = 8
     message.servers_count = 3
   end
 
-  it_generates IRCParser::Messages::RplAdminMe, "256 server.com :Administrative info" do |message|
+  it_generates IRCParser::Messages::AdminMeReply, "256 server.com :Administrative info" do |message|
     message.server = "server.com"
   end
 
-  it_generates IRCParser::Messages::RplAdminLoc1, "257 :info" do |message|
+  it_generates IRCParser::Messages::AdminLoc1Reply, "257 :info" do |message|
     message.info = "info"
   end
 
-  it_generates IRCParser::Messages::RplAdminLoc2, "258 :info" do |message|
+  it_generates IRCParser::Messages::AdminLoc2Reply, "258 :info" do |message|
     message.info = "info"
   end
 
-  it_generates IRCParser::Messages::RplAdminEmail, "259 :info" do |message|
+  it_generates IRCParser::Messages::AdminEmailReply, "259 :info" do |message|
     message.info = "info"
   end
 

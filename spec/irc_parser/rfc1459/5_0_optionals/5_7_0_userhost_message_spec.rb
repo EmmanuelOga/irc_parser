@@ -10,7 +10,7 @@ describe IRCParser, "parsing userhost message" do
 
   #------------------------------------------------------------------------------
 
-  it_generates IRCParser::Messages::Userhost, "USERHOST Wiz Michael Marty p" do |message|
+  it_generates IRCParser::Messages::UserHost, "USERHOST Wiz Michael Marty p" do |message|
     message.nicks= %w|Wiz Michael Marty p|
   end
 end

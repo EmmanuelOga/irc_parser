@@ -35,28 +35,28 @@ describe IRCParser, "parsing private messages" do
 
   #------------------------------------------------------------------------------
 
-  it_generates IRCParser::Messages::Privmsg, ":Angel PRIVMSG Wiz :Hello are you receiving this message ?" do |message|
+  it_generates IRCParser::Messages::PrivMsg, ":Angel PRIVMSG Wiz :Hello are you receiving this message ?" do |message|
     message.prefix= "Angel"
     message.target= "Wiz"
     message.body= "Hello are you receiving this message ?"
   end
 
-  it_generates IRCParser::Messages::Privmsg, "PRIVMSG Angel :yes I'm receiving it !receiving it !'u>(768u+1n) .br" do |message|
+  it_generates IRCParser::Messages::PrivMsg, "PRIVMSG Angel :yes I'm receiving it !receiving it !'u>(768u+1n) .br" do |message|
     message.target= "Angel"
     message.body= "yes I'm receiving it !receiving it !'u>(768u+1n) .br"
   end
 
-  it_generates IRCParser::Messages::Privmsg, "PRIVMSG jto@tolsun.oulu.fi :Hello !" do |message|
+  it_generates IRCParser::Messages::PrivMsg, "PRIVMSG jto@tolsun.oulu.fi :Hello !" do |message|
     message.target= "jto@tolsun.oulu.fi"
     message.body= "Hello !"
   end
 
-  it_generates IRCParser::Messages::Privmsg, "PRIVMSG $*.fi :Server tolsun.oulu.fi rebooting." do |message|
+  it_generates IRCParser::Messages::PrivMsg, "PRIVMSG $*.fi :Server tolsun.oulu.fi rebooting." do |message|
     message.server_pattern= "$*.fi"
     message.body= "Server tolsun.oulu.fi rebooting."
   end
 
-  it_generates IRCParser::Messages::Privmsg, "PRIVMSG #*.edu :NSFNet is undergoing work, expect interruptions" do |message|
+  it_generates IRCParser::Messages::PrivMsg, "PRIVMSG #*.edu :NSFNet is undergoing work, expect interruptions" do |message|
     message.host_pattern= "#*.edu"
     message.body= "NSFNet is undergoing work, expect interruptions"
   end

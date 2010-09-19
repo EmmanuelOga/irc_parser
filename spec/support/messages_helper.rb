@@ -26,7 +26,7 @@ module ParsingHelper
 
   def it_generates(klass, gen_message, &block)
     it("generates #{gen_message}") do
-      message = klass.new
+      message = klass.new(nil)
       instance_exec(message, &block)
       message.to_s.should == "#{gen_message}\r\n"
     end

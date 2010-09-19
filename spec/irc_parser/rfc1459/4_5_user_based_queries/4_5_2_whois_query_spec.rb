@@ -16,11 +16,11 @@ describe IRCParser, "parsing whois query" do
 
   #------------------------------------------------------------------------------
 
-  it_generates IRCParser::Messages::Whois, "WHOIS wiz" do |message|
+  it_generates IRCParser::Messages::WhoIs, "WHOIS wiz" do |message|
     message.target= "wiz"
   end
 
-  it_generates IRCParser::Messages::Whois, "WHOIS eff.org trillian" do |message|
+  it_generates IRCParser::Messages::WhoIs, "WHOIS eff.org trillian" do |message|
     message.target= "eff.org"
     message.pattern= "trillian"
   end

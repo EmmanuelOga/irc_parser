@@ -2,15 +2,13 @@ module IRCParser
   class Params < Array
     attr_reader :postfixes
 
-    PLACEHOLDER = :PARAM_PLACEHOLDER
+    PLACEHOLDER = Object.new.tap {|o| def o.inspect; "<PLACEHOLDER>"; end }.freeze
 
     # Params is an array of values
     # Postfixes is the number of paremeters used to build the last parameter
     def initialize(params, postfixes)
-      @postfixes = postfixes
-      params.keys.sort.each do |key|
-        push(params[key])
-      end
+      replace(params)
+      @postfixes = postfixes || 0
     end
 
     def remove_placeholders

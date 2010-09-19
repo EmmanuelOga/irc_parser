@@ -23,16 +23,16 @@ describe IRCParser, "parsing whowas" do
 
   #------------------------------------------------------------------------------
 
-  it_generates IRCParser::Messages::Whowas, "WHOWAS Wiz" do |message|
+  it_generates IRCParser::Messages::WhoWas, "WHOWAS Wiz" do |message|
     message.nick= "Wiz"
   end
 
-  it_generates IRCParser::Messages::Whowas, "WHOWAS Mermaid 9" do |message|
+  it_generates IRCParser::Messages::WhoWas, "WHOWAS Mermaid 9" do |message|
     message.nick= "Mermaid"
     message.count= 9
   end
 
-  it_generates IRCParser::Messages::Whowas, "WHOWAS Trillian 1 *.edu" do |message|
+  it_generates IRCParser::Messages::WhoWas, "WHOWAS Trillian 1 *.edu" do |message|
     message.nick= "Trillian"
     message.count= 1
     message.server= "*.edu"

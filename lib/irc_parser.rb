@@ -6,17 +6,16 @@ module IRCParser
   autoload :Parser, "irc_parser/parser"
   autoload :Helper, "irc_parser/helper"
   autoload :Params, 'irc_parser/params'
+  autoload :Message, 'irc_parser/message'
+  autoload :Messages, 'irc_parser/messages'
 
   def parse(message)
     prefix, identifier, *params = Parser.run(message)
 
-    klass = Messages::CLASS_FOR_IDENTIFIER[identifier.upcase]
+    klass = Messages::ALL[identifier.upcase]
 
     raise IRCParser::Parser::Error.new(message, prefix, identifier, params) unless klass
 
-    klass.new do |message|
-      message.prefix = prefix
-      message.initialize_params(params)
-    end
+    klass.new(prefix, *params)
   end
 end

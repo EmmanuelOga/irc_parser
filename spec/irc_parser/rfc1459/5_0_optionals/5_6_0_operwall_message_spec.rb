@@ -10,7 +10,7 @@ describe IRCParser, "parsing operwall message" do
 
   #------------------------------------------------------------------------------
 
-  it_generates IRCParser::Messages::Wallops, ":csd.bu.edu WALLOPS :Connect '*.uiuc.edu 6667' from Joshua" do |message|
+  it_generates IRCParser::Messages::WallOps, ":csd.bu.edu WALLOPS :Connect '*.uiuc.edu 6667' from Joshua" do |message|
     message.from= "csd.bu.edu"
     message.wall_message= "Connect '*.uiuc.edu 6667' from Joshua"
   end

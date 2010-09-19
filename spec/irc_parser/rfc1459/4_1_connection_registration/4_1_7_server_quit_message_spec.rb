@@ -17,12 +17,12 @@ describe IRCParser, "parsing server quit message" do
 
   #------------------------------------------------------------------------------
 
-  it_generates IRCParser::Messages::Squit, "SQUIT tolsun.oulu.fi :Bad Link ?" do |message|
+  it_generates IRCParser::Messages::SQuit, "SQUIT tolsun.oulu.fi :Bad Link ?" do |message|
     message.server= "tolsun.oulu.fi"
     message.reason= "Bad Link ?"
   end
 
-  it_generates IRCParser::Messages::Squit, ":Trillian SQUIT cm22.eng.umd.edu :Server out of control" do |message|
+  it_generates IRCParser::Messages::SQuit, ":Trillian SQUIT cm22.eng.umd.edu :Server out of control" do |message|
     message.server= "cm22.eng.umd.edu"
     message.reason= "Server out of control"
     message.from= "Trillian"

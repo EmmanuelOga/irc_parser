@@ -5,13 +5,13 @@ describe IRCParser, "parsing ison message" do
 
   # ; Sample ISON request for 7 nicks.
   it_parses "ISON phone trillian WiZ jarlek Avalon Angel Monstah" do |message|
-    message.nicks.should == %w|phone trillian WiZ jarlek Avalon Angel Monstah|
+    message.parameters.should == %w|phone trillian WiZ jarlek Avalon Angel Monstah|
   end
 
   #------------------------------------------------------------------------------
 
-  it_generates IRCParser::Messages::Ison, "ISON phone trillian WiZ jarlek Avalon Angel Monstah" do |message|
-    message.nicks= %w|phone trillian WiZ jarlek Avalon Angel|
-    message.add_nick("Monstah")
+  it_generates IRCParser::Messages::IsOn, "ISON phone trillian WiZ jarlek Avalon Angel Monstah" do |message|
+    message.nicks = %w|phone trillian WiZ jarlek Avalon Angel|
+    message.nicks << "Monstah"
   end
 end
