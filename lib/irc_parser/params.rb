@@ -13,8 +13,7 @@ module IRCParser
     # allows blank on the last param.  All the parameters are joined by a
     # space.
     # Postfixes is the number of paremeters used to build the last parameter
-    def to_s(_postfixes)
-      postfixes = _postfixes || 0
+    def to_s(postfixes)
       return "" if empty? || (length == 1 && (first.nil? || first == ""))
 
       parameters = reject {|elem| elem.nil? } #dup
@@ -25,14 +24,14 @@ module IRCParser
       # spaces, because in that case we need to put the colon in the last param
       # even if it is not a postfix.
       last = []
-      (postfixes == 0 ? 1 : postfixes).times do
+      (postfixes.nil? || postfixes == 0 ? 1 : postfixes).times do
         param = parameters.pop
         last.unshift param
       end
 
       last = last.flatten.join(" ")
 
-      parameters.push(last == "" || last.nil? || last =~ /\s+/ || postfixes > 0 ? ":#{last}" : last)
+      parameters.push(last == "" || last.nil? || last =~ /\s+/ || ( postfixes && postfixes > 0 ) ? ":#{last}" : last)
 
       parameters.join(" ") || ""
     end
