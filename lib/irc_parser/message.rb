@@ -10,22 +10,26 @@ module IRCParser
 
     class << self
       attr_reader :identifier
-      attr_accessor :postfixes
+      attr_accessor :postfixes, :to_sym
 
       def identifier=(ident)
         IRCParser::Messages::ALL[@identifier = ident] = self
       end
 
-      private :identifier=, :postfixes=
+      private :identifier=, :postfixes=, :to_sym=
     end
 
     def self.inherited(klass)
       ident = klass.name.split("::").last
+      symbol = IRCParser::Helper.underscore(ident).to_sym
 
       klass.class_eval do
         self.identifier = ident
         self.identifier = ident.upcase
-        self.identifier = IRCParser::Helper.underscore(ident)
+        self.identifier = symbol
+        self.identifier = symbol.to_s
+
+        self.to_sym = symbol
 
         # Last one: order is important (last one is used in to_s to identify the msg)
         self.identifier = ident.upcase
@@ -51,6 +55,10 @@ module IRCParser
 
     def postfixes
       self.class.postfixes
+    end
+
+    def to_sym
+      self.class.to_sym
     end
 
     def to_str
