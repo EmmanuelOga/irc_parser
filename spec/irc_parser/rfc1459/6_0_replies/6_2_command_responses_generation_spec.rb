@@ -329,7 +329,7 @@ describe IRCParser, "command responses" do
     message.intS="10S"
     message.intC="20C"
     message.server="server"
-    message.identifier="nick!user@host"""
+    message.identity="nick!user@host"""
   end
 
   it_parses "208 newtype 0 client_name" do |message|
@@ -594,9 +594,9 @@ describe IRCParser, "command responses" do
     message.server = "server"
     message.nick = "nick"
     message.flags = "H*@"
-    message.should be_here
-    message.should be_ircop
-    message.should be_opped
+    message.here! true
+    message.ircop! true
+    message.opped! true
     message.hopcount = 10
     message.real_name = "John B. Jovi"
   end

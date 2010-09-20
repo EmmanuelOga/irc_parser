@@ -224,7 +224,7 @@ class IRCParser::Messages::Stats < IRCParser::Message
 end
 
 class IRCParser::Messages::Links < IRCParser::Message
-  parameter :remote_server
+  parameter :remote_server, :default => nil
   parameter :server_mask
 
   def initialize(prefix, *params)
@@ -238,7 +238,7 @@ class IRCParser::Messages::Links < IRCParser::Message
 end
 
 class IRCParser::Messages::Time < IRCParser::Message
-  parameter :for_server
+  parameter :for_server, :default => nil
 end
 
 class IRCParser::Messages::Connect < IRCParser::Message
@@ -257,10 +257,7 @@ class IRCParser::Messages::Connect < IRCParser::Message
 end
 
 class IRCParser::Messages::Trace < IRCParser::Message
-  parameter :server
-
-  # synonims.. if to_nick is found on the list of nicks it is a nick, else it is a server.
-  parameter :to_nick
+  parameter :server, :aliases => [:to_nick]
 end
 
 class IRCParser::Messages::Admin < IRCParser::Message
@@ -268,10 +265,7 @@ class IRCParser::Messages::Admin < IRCParser::Message
 end
 
 class IRCParser::Messages::Info < IRCParser::Message
-  parameter :server
-
-  # synonims.. if to_nick is found on the list of nicks it is a nick, else it is a server.
-  parameter :server_for_nick
+  parameter :server, :default => nil, :aliases => [:server_for_nick]
 end
 
 module IRCParser::Messages::MesageMan
@@ -300,11 +294,11 @@ module IRCParser::Messages::MesageMan
   end
 
   def server_pattern
-    for_server_pattern? && Helper::parse_regexp(parameters.first[1..-1])
+    for_server_pattern? && IRCParser::Helper::parse_regexp(parameters.first[1..-1])
   end
 
   def host_pattern
-    for_host_pattern? && Helper::parse_regexp(parameters.first[1..-1])
+    for_host_pattern? && IRCParser::Helper::parse_regexp(parameters.first[1..-1])
   end
 end
 
@@ -375,7 +369,7 @@ class IRCParser::Messages::Pong < IRCParser::Message
 end
 
 class IRCParser::Messages::Error < IRCParser::Message
-  parameter :nick
+  parameter :nick, :default => nil
   parameter :error_message
 
   def initialize(prefix, *params)

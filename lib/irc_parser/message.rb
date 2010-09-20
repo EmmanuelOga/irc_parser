@@ -36,15 +36,13 @@ module IRCParser
       @predefined_params ||= Array.new
     end
 
-    def identifier
-      self.class.identifier
+    def initialize(prefix = nil, *params)
+      self.prefix, @parameters = prefix, Params.new(default_parameters, params)
+      yield self if block_given?
     end
 
-    def initialize(prefix = nil, *params)
-      self.prefix = prefix
-      @parameters = Params.new(default_parameters)
-      params.each_with_index { |val, index| @parameters[index] = val }
-      yield self if block_given?
+    def identifier
+      self.class.identifier
     end
 
     def default_parameters
@@ -58,7 +56,6 @@ module IRCParser
     def to_str
       "#{prefix ? ":#{prefix}" : nil} #{identifier} #{parameters.to_s(postfixes)}".strip << "\r\n"
     end
-
     alias_method :to_s, :to_str
   end
 end

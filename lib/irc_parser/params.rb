@@ -3,8 +3,9 @@ module IRCParser
     PLACEHOLDER = Object.new.tap {|o| def o.inspect; "<PLACEHOLDER>"; end }.freeze
 
     # Params is an array of values
-    def initialize(params)
-      replace(params)
+    def initialize(defaults, params)
+      replace(defaults)
+      params.each_with_index { |elem, index| self[index] = elem }
     end
 
     # The message has a number of postfixes, which are the paremeters to be
