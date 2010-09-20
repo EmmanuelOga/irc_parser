@@ -41,7 +41,7 @@ module IRCParser
     end
 
     def initialize(prefix = nil, *params)
-      self.prefix, @parameters = prefix, Params.new(default_parameters, params)
+      self.prefix, @parameters = prefix, Params.new(default_parameters, *params)
       yield self if block_given?
     end
 
