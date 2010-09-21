@@ -13,12 +13,12 @@ class IRCParser::Messages::Mode < IRCParser::Message
   # Damned rfc.
   # Channel Parameters: <channel> {[+|-]|o|p|s|i|t|n|b|v} [<limit>] [<user>] [<ban mask>]
   # User Parameters: <nickname> {[+|-]|i|w|s|o}
-  def initialize(prefix, *params)
-    super(prefix)
+  def initialize(prefix, *params, &block)
+    super
 
-    if params.length == 5 || params.length == 2
-      params.each_with_index { |val, index| parameters[index] = val }
-    else
+    return if params.length <= 1
+
+    if params.length != 5 && params.length != 2
       self.channel = params[0]
       self.flags = params[1]
 
@@ -34,7 +34,11 @@ class IRCParser::Messages::Mode < IRCParser::Message
       end
     end
 
-    self.flags = self.flags ? self.flags.downcase : ""
+    self.flags = self.flags.downcase if self.flags
+  end
+
+  def flags
+    super || ( self.flags = "" )
   end
 
   def for_channel?
@@ -227,7 +231,7 @@ class IRCParser::Messages::Links < IRCParser::Message
   parameter :remote_server, :default => nil
   parameter :server_mask
 
-  def initialize(prefix, *params)
+  def initialize(prefix, *params, &block)
     super(prefix)
 
     case params.length
@@ -246,7 +250,7 @@ class IRCParser::Messages::Connect < IRCParser::Message
   parameter :port
   parameter :remote_server
 
-  def initialize(prefix, *params)
+  def initialize(prefix, *params, &block)
     super(prefix)
     case params.length
     when 1 then self.target_server = params.first
@@ -333,7 +337,7 @@ class IRCParser::Messages::WhoIs < IRCParser::Message
   parameter :target, :default => nil
   parameter :pattern
 
-  def initialize(prefix, *params)
+  def initialize(prefix, *params, &block)
     super
     self.target, self.pattern = nil, self.target if parameters[1] == IRCParser::Params::PLACEHOLDER
   end
@@ -372,7 +376,7 @@ class IRCParser::Messages::Error < IRCParser::Message
   parameter :nick, :default => nil
   parameter :error_message
 
-  def initialize(prefix, *params)
+  def initialize(prefix, *params, &block)
     super(prefix)
     if params.length == 2
       self.nick, self.error_message = *params
