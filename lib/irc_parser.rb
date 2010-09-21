@@ -22,4 +22,8 @@ module IRCParser
   def message(name, prefix = nil, *params, &block)
     Messages::ALL[name].new(prefix, *params, &block)
   end
+
+  def message_class(name)
+    Messages::ALL[name]
+  end
 end
