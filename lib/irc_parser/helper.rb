@@ -62,7 +62,7 @@ module IRCParser
       end
     end
 
-    module ChannelHelpers
+    module Channel
       (CHANNEL_PREFIXES.keys.map {|mode| "#{mode}_channel?" } + %w|valid_channel_name? invalid_channel_name?|).each do |meth|
         define_method(meth) { IRCParser::Helper.send(meth, self) }
       end

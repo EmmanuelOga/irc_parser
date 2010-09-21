@@ -3,7 +3,7 @@ require 'spec_helper'
 describe IRCParser::Helper, "in general" do
 
   def with_channel_helpers(str)
-    str.tap { |str| str.extend(IRCParser::Helper::ChannelHelpers) }
+    str.tap { |str| str.extend(IRCParser::Helper::Channel) }
   end
 
   def with_nick_helpers(str)
