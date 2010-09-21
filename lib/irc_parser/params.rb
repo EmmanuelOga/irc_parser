@@ -21,7 +21,7 @@ module IRCParser
       parameters = parameters.map { |val| val == PLACEHOLDER ? "*" : val }
 
       split_index = postfixes.nil? || postfixes == 0 ? 1 : postfixes
-      parameters, last = parameters[0...-split_index], parameters[-split_index..-1].flatten.join(" ")
+      parameters, last = Array(parameters[0...-split_index]), Array(parameters[-split_index..-1]).flatten.join(" ")
       parameters.push(last == "" || last.nil? || last =~ /\s+/ || (postfixes && postfixes > 0) ? ":#{last}" : last)
 
       parameters.join(" ") || ""

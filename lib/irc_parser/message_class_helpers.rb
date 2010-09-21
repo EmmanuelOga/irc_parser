@@ -17,16 +17,15 @@ module IRCParser
 
       include Module.new.tap {|m| m.module_eval(<<-METHODS, __FILE__, __LINE__) }
         def #{name}
-          val = parameters[#{parameter_index}]
-          ( val == IRCParser::Params::PLACEHOLDER ) ? nil : val
+          ( val = @parameters[#{parameter_index}] ) == IRCParser::Params::PLACEHOLDER ? nil : val
         end
 
         def #{name}=(val)
-          parameters[#{parameter_index}] = val
+          @parameters[#{parameter_index}] = val
         end
 
         def #{name}_given?
-          parameters[#{parameter_index}] != IRCParser::Params::PLACEHOLDER
+          @parameters[#{parameter_index}] != IRCParser::Params::PLACEHOLDER
         end
       METHODS
 
