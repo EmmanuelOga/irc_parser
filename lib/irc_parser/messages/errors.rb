@@ -38,7 +38,6 @@ class IRCParser::Messages::NoOriginError < IRCParser::Message
   parameters "No origin specified"
 end
 
-
 class IRCParser::Messages::NoRecipientError < IRCParser::Message
   self.identifier = "411"
   parameters "No recipient given (", :command, ")" do
@@ -70,7 +69,6 @@ class IRCParser::Messages::WildTopLevelError < IRCParser::Message
   parameters :mask, "Wildcard in toplevel domain"
 end
 
-
 class IRCParser::Messages::UnknownCommandError < IRCParser::Message
   self.identifier = "421"
   parameters :command, "Unknown command"
@@ -85,7 +83,6 @@ class IRCParser::Messages::NoAdminInfoError < IRCParser::Message
   self.identifier = "423"
   parameters :server, "No administrative info available"
 end
-
 
 class IRCParser::Messages::FileErrorError < IRCParser::Message
   self.identifier = "424"
@@ -112,7 +109,6 @@ class IRCParser::Messages::ErroneusNickNameError < IRCParser::Message
   self.identifier = "432"
   parameters :nick, "Erroneus nickname"
 end
-
 
 class IRCParser::Messages::NickNameInUseError < IRCParser::Message
   self.identifier = '433'

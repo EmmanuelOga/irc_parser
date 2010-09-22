@@ -13,7 +13,7 @@ module IRCParser
     # joined in the last parameter. This is because the RFC protocol only
     # allows blank on the last param.  All the parameters are joined by a
     # space.
-    def to_s(postfixes)
+    def to_s(postfixes = 0)
       return "" if empty? || (length == 1 && (first.nil? || first == ""))
 
       parameters = reject {|elem| elem.nil? }
