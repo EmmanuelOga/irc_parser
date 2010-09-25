@@ -19,11 +19,13 @@ module IRCParser
     klass.new(prefix, *params)
   end
 
-  def message(name, prefix = nil, *params, &block)
-    Messages::ALL[name].new(prefix, *params, &block)
+  def message(reference, prefix = nil, *params, &block)
+    message_class(reference).new(prefix, *params, &block)
   end
 
-  def message_class(name)
-    Messages::ALL[name]
+  def message_class(reference)
+    Messages::ALL[reference].tap do |klass|
+      raise ArgumentError.new("no message with reference #{reference.inspect}") unless klass
+    end
   end
 end

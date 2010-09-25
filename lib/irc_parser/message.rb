@@ -19,8 +19,12 @@ module IRCParser
       private :identifier=, :postfixes=, :to_sym=
     end
 
+    def self.class_name
+      name.split("::").last
+    end
+
     def self.inherited(klass)
-      ident = klass.name.split("::").last
+      ident = klass.class_name
       symbol = IRCParser::Helper.underscore(ident).to_sym
 
       klass.class_eval do
@@ -43,6 +47,10 @@ module IRCParser
     def initialize(prefix = nil, *params)
       self.prefix, @parameters = prefix, Params.new(default_parameters, *params)
       yield self if block_given?
+    end
+
+    def class_name
+      self.class.class_name
     end
 
     def identifier
