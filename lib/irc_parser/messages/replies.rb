@@ -492,7 +492,8 @@ end
 
 class IRCParser::Messages::UModeIsReply < IRCParser::Message
   self.identifier = '221'
-  parameters :user_mode
+  parameters :nick
+  parameters :flags
 end
 
 class IRCParser::Messages::LUserClientReply < IRCParser::Message

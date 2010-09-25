@@ -418,8 +418,10 @@ describe IRCParser, "command responses" do
     message.server_name.should ==  "servername"
   end
 
-  it_parses "221 UserModeString" do |message|
-    message.user_mode.should ==  "UserModeString"
+  it_parses ":server 221 Emmanuel +i" do |message|
+    message.prefix.should == "server"
+    message.nick.should ==  "Emmanuel"
+    message.flags.should ==  "+i"
   end
 
   # In processing an LUSERS message, the server sends a set of replies from
@@ -801,8 +803,10 @@ describe IRCParser, "command responses" do
     message.server_name = "servername"
   end
 
-  it_generates IRCParser::Messages::UModeIsReply, "221 UserModeString" do |message|
-    message.user_mode = "UserModeString"
+  it_generates IRCParser::Messages::UModeIsReply, ":server 221 Emmanuel +i" do |message|
+    message.prefix = "server"
+    message.nick   = "Emmanuel"
+    message.flags  = "+i"
   end
 
   it_generates IRCParser::Messages::LUserClientReply, "251 :There are 10 users and 20 invisible on 30 servers" do |message|
