@@ -240,165 +240,165 @@ describe IRCParser, "error replies" do
 
   #------------------------------------------------------------------------------
 
-  it_generates IRCParser::Messages::NoSuchNickError, "401 Tony :No such nick/channel" do |message|
+  it_generates IRCParser::Messages::ErrNoSuchNick, "401 Tony :No such nick/channel" do |message|
     message.nick= "Tony"
   end
 
-  it_generates IRCParser::Messages::NoSuchServerError, "402 oga.com :No such server" do |message|
+  it_generates IRCParser::Messages::ErrNoSuchServer, "402 oga.com :No such server" do |message|
     message.server= "oga.com"
   end
 
-  it_generates IRCParser::Messages::NoSuchChannelError, "403 #Carlitos :No such channel" do |message|
+  it_generates IRCParser::Messages::ErrNoSuchChannel, "403 #Carlitos :No such channel" do |message|
     message.channel= "#Carlitos"
   end
 
-  it_generates IRCParser::Messages::CannotSendToChanError, "404 #something :Cannot send to channel" do |message|
+  it_generates IRCParser::Messages::ErrCannotSendToChan, "404 #something :Cannot send to channel" do |message|
     message.channel= "#something"
   end
 
-  it_generates IRCParser::Messages::TooManyChannelsError, "405 #room :You have joined too many channels" do |message|
+  it_generates IRCParser::Messages::ErrTooManyChannels, "405 #room :You have joined too many channels" do |message|
     message.channel= "#room"
   end
 
-  it_generates IRCParser::Messages::WasNoSuchNickError, "406 John :There was no such nickname" do |message|
+  it_generates IRCParser::Messages::ErrWasNoSuchNick, "406 John :There was no such nickname" do |message|
     message.nick= "John"
   end
 
-  it_generates IRCParser::Messages::TooManyTargetsError, "407 target :Duplicate recipients. No message delivered" do |message|
+  it_generates IRCParser::Messages::ErrTooManyTargets, "407 target :Duplicate recipients. No message delivered" do |message|
     message.target= "target"
   end
 
-  it_generates IRCParser::Messages::NoOriginError, "409 :No origin specified"  do |message|
+  it_generates IRCParser::Messages::ErrNoOrigin, "409 :No origin specified"  do |message|
   end
 
-  it_generates IRCParser::Messages::NoRecipientError, "411 :No recipient given (PRIVMSG)" do |message|
+  it_generates IRCParser::Messages::ErrNoRecipient, "411 :No recipient given (PRIVMSG)" do |message|
     message.command= "PRIVMSG"
   end
 
-  it_generates IRCParser::Messages::NoTextToSendError, "412 :No text to send" do |message|
+  it_generates IRCParser::Messages::ErrNoTextToSend, "412 :No text to send" do |message|
   end
 
-  it_generates IRCParser::Messages::NoTopLevelError, "413 mask :No toplevel domain specified" do |message|
+  it_generates IRCParser::Messages::ErrNoTopLevel, "413 mask :No toplevel domain specified" do |message|
     message.mask= "mask"
   end
 
-  it_generates IRCParser::Messages::WildTopLevelError, "414 mask :Wildcard in toplevel domain" do |message|
+  it_generates IRCParser::Messages::ErrWildTopLevel, "414 mask :Wildcard in toplevel domain" do |message|
     message.mask= "mask"
   end
 
-  it_generates IRCParser::Messages::UnknownCommandError, "421 PILDONGA :Unknown command" do |message|
+  it_generates IRCParser::Messages::ErrUnknownCommand, "421 PILDONGA :Unknown command" do |message|
     message.command= "PILDONGA"
   end
 
-  it_generates IRCParser::Messages::NoMotdError, "422 :MOTD File is missing" do |message|
+  it_generates IRCParser::Messages::ErrNoMotd, "422 :MOTD File is missing" do |message|
   end
 
-  it_generates IRCParser::Messages::NoAdminInfoError, "423 oulu.fi :No administrative info available" do |message|
+  it_generates IRCParser::Messages::ErrNoAdminInfo, "423 oulu.fi :No administrative info available" do |message|
     message.server= "oulu.fi"
   end
 
-  it_generates IRCParser::Messages::FileErrorError, "424 :File error doing rm on readme.txt" do |message|
+  it_generates IRCParser::Messages::ErrFileError, "424 :File error doing rm on readme.txt" do |message|
     message.file_op= "rm"
     message.file= "readme.txt"
   end
 
-  it_generates IRCParser::Messages::NoNickNameGivenError, "431 :No nickname given" do |message|
+  it_generates IRCParser::Messages::ErrNoNickNameGiven, "431 :No nickname given" do |message|
   end
 
-  it_generates IRCParser::Messages::ErroneusNickNameError, "432 nick :Erroneus nickname" do |message|
+  it_generates IRCParser::Messages::ErrErroneusNickName, "432 nick :Erroneus nickname" do |message|
     message.nick= "nick"
   end
 
-  it_generates IRCParser::Messages::NickNameInUseError, "433 nick :Nickname is already in use" do |message|
+  it_generates IRCParser::Messages::ErrNickNameInUse, "433 nick :Nickname is already in use" do |message|
     message.nick= "nick"
   end
 
-  it_generates IRCParser::Messages::NickCollisionError, "436 nick :Nickname collision KILL" do |message|
+  it_generates IRCParser::Messages::ErrNickCollision, "436 nick :Nickname collision KILL" do |message|
     message.nick= "nick"
   end
 
-  it_generates IRCParser::Messages::UserNotInChannelError, "441 nick #channel :They aren't on that channel" do |message|
+  it_generates IRCParser::Messages::ErrUserNotInChannel, "441 nick #channel :They aren't on that channel" do |message|
     message.nick= "nick"
     message.channel= "#channel"
   end
-  it_generates IRCParser::Messages::NotOnChannelError, "442 #channel :You're not on that channel" do |message|
+  it_generates IRCParser::Messages::ErrNotOnChannel, "442 #channel :You're not on that channel" do |message|
     message.channel= "#channel"
   end
 
-  it_generates IRCParser::Messages::UserOnChannelError, "443 user #channel :is already on channel" do |message|
+  it_generates IRCParser::Messages::ErrUserOnChannel, "443 user #channel :is already on channel" do |message|
     message.user= "user"
     message.channel= "#channel"
   end
 
-  it_generates IRCParser::Messages::NoLoginError, "444 user :User not logged in" do |message|
+  it_generates IRCParser::Messages::ErrNoLogin, "444 user :User not logged in" do |message|
     message.user= "user"
   end
 
-  it_generates IRCParser::Messages::SummonDisabledError, "445 :SUMMON has been disabled" do |message|
+  it_generates IRCParser::Messages::ErrSummonDisabled, "445 :SUMMON has been disabled" do |message|
   end
 
-  it_generates IRCParser::Messages::UsersDisabledError, "446 :USERS has been disabled" do |message|
+  it_generates IRCParser::Messages::ErrUsersDisabled, "446 :USERS has been disabled" do |message|
   end
 
-  it_generates IRCParser::Messages::NotRegisteredError, "451 :You have not registered" do |message|
+  it_generates IRCParser::Messages::ErrNotRegistered, "451 :You have not registered" do |message|
   end
 
-  it_generates IRCParser::Messages::NeedMoreParamsError, "461 PRIVMSG :Not enough parameters" do |message|
+  it_generates IRCParser::Messages::ErrNeedMoreParams, "461 PRIVMSG :Not enough parameters" do |message|
     message.command= "PRIVMSG"
   end
 
-  it_generates IRCParser::Messages::AlreadyRegistredError, "462 :You may not reregister" do |message|
+  it_generates IRCParser::Messages::ErrAlreadyRegistred, "462 :You may not reregister" do |message|
   end
 
-  it_generates IRCParser::Messages::NoPermForHostError, "463 :Your host isn't among the privileged" do |message|
+  it_generates IRCParser::Messages::ErrNoPermForHost, "463 :Your host isn't among the privileged" do |message|
   end
 
-  it_generates IRCParser::Messages::PasswdMismatchError, "464 :Password incorrect" do |message|
+  it_generates IRCParser::Messages::ErrPasswdMismatch, "464 :Password incorrect" do |message|
   end
 
-  it_generates IRCParser::Messages::YouReBannedCreepError, "465 :You are banned from this server" do |message|
+  it_generates IRCParser::Messages::ErrYouReBannedCreep, "465 :You are banned from this server" do |message|
   end
 
-  it_generates IRCParser::Messages::KeySetError, "467 #channel :Channel key already set" do |message|
+  it_generates IRCParser::Messages::ErrKeySet, "467 #channel :Channel key already set" do |message|
     message.channel= "#channel"
   end
 
-  it_generates IRCParser::Messages::ChannelIsFullError, "471 #channel :Cannot join channel (+l)" do |message|
+  it_generates IRCParser::Messages::ErrChannelIsFull, "471 #channel :Cannot join channel (+l)" do |message|
     message.channel= "#channel"
   end
 
-  it_generates IRCParser::Messages::UnknownModeError, "472 c :is unknown mode char to me" do |message|
+  it_generates IRCParser::Messages::ErrUnknownMode, "472 c :is unknown mode char to me" do |message|
     message.char= "c"
   end
 
-  it_generates IRCParser::Messages::InviteOnLYChanError, "473 #channel :Cannot join channel (+i)" do |message|
+  it_generates IRCParser::Messages::ErrInviteOnLYChan, "473 #channel :Cannot join channel (+i)" do |message|
     message.channel= "#channel"
   end
 
-  it_generates IRCParser::Messages::BannedFromChanError, "474 #channel :Cannot join channel (+b)" do |message|
+  it_generates IRCParser::Messages::ErrBannedFromChan, "474 #channel :Cannot join channel (+b)" do |message|
     message.channel= "#channel"
   end
 
-  it_generates IRCParser::Messages::BadChannelKeyError, "475 #channel :Cannot join channel (+k)" do |message|
+  it_generates IRCParser::Messages::ErrBadChannelKey, "475 #channel :Cannot join channel (+k)" do |message|
     message.channel= "#channel"
   end
 
-  it_generates IRCParser::Messages::NoPrivilegesError, "481 :Permission Denied- You're not an IRC operator" do |message|
+  it_generates IRCParser::Messages::ErrNoPrivileges, "481 :Permission Denied- You're not an IRC operator" do |message|
   end
 
-  it_generates IRCParser::Messages::ChanOPrivsNeededError, "482 #channel :You're not channel operator" do |message|
+  it_generates IRCParser::Messages::ErrChanOPrivsNeeded, "482 #channel :You're not channel operator" do |message|
     message.channel= "#channel"
   end
 
-  it_generates IRCParser::Messages::CantKillServerError, "483 :You cant kill a server!" do |message|
+  it_generates IRCParser::Messages::ErrCantKillServer, "483 :You cant kill a server!" do |message|
   end
 
-  it_generates IRCParser::Messages::NoOperHostError, "491 :No O-lines for your host" do |message|
+  it_generates IRCParser::Messages::ErrNoOperHost, "491 :No O-lines for your host" do |message|
   end
 
-  it_generates IRCParser::Messages::UModeUnknownFlagError, "501 :Unknown MODE flag" do |message|
+  it_generates IRCParser::Messages::ErrUModeUnknownFlag, "501 :Unknown MODE flag" do |message|
   end
 
-  it_generates IRCParser::Messages::UsersDontMatchError, "502 :Cant change mode for other users" do |message|
+  it_generates IRCParser::Messages::ErrUsersDontMatch, "502 :Cant change mode for other users" do |message|
   end
 end

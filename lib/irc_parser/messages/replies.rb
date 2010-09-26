@@ -1,4 +1,4 @@
-class IRCParser::Messages::WelcomeReply < IRCParser::Message
+class IRCParser::Messages::RplWelcome < IRCParser::Message
   self.identifier = "001"
   parameters :nick, [:welcome, :user] # User format: nick!user@host
 
@@ -13,7 +13,7 @@ class IRCParser::Messages::WelcomeReply < IRCParser::Message
   end
 end
 
-class IRCParser::Messages::YourHostReply < IRCParser::Message
+class IRCParser::Messages::RplYourHost < IRCParser::Message
   self.identifier = "002"
   parameters :nick, ["Your host is", :server_name, "running version", :version]
 
@@ -27,7 +27,7 @@ class IRCParser::Messages::YourHostReply < IRCParser::Message
   end
 end
 
-class IRCParser::Messages::CreatedReply < IRCParser::Message
+class IRCParser::Messages::RplCreated < IRCParser::Message
   self.identifier = "003"
   parameters :nick, ["This server was created", :date]
 
@@ -38,7 +38,7 @@ class IRCParser::Messages::CreatedReply < IRCParser::Message
   end
 end
 
-class IRCParser::Messages::MyInfoReply < IRCParser::Message
+class IRCParser::Messages::RplMyInfo < IRCParser::Message
   self.identifier = "004"
   parameters :nick, :server_name, :version, :available_user_modes, :available_channel_modes
 
@@ -49,7 +49,7 @@ class IRCParser::Messages::MyInfoReply < IRCParser::Message
   end
 end
 
-class IRCParser::Messages::BounceReply < IRCParser::Message
+class IRCParser::Messages::RplBounce < IRCParser::Message
   self.identifier = "005"
   parameters :nick, ["Try server", :server_name, "port", :port]
 
@@ -63,16 +63,16 @@ class IRCParser::Messages::BounceReply < IRCParser::Message
   end
 end
 
-class IRCParser::Messages::NoneReply < IRCParser::Message
+class IRCParser::Messages::RplNone < IRCParser::Message
   self.identifier = '300'
 end
 
-class IRCParser::Messages::UserHostReply < IRCParser::Message
+class IRCParser::Messages::RplUserHost < IRCParser::Message
   self.identifier = "302"
   parameters :nicks_and_hosts # format: <nick>['*'] '=' <'+'|'-'><hostname>
 end
 
-class IRCParser::Messages::IsOnReply < IRCParser::Message
+class IRCParser::Messages::RplIsOn < IRCParser::Message
   self.identifier = "303"
 
   def initialize(prefix, *params)
@@ -93,44 +93,44 @@ class IRCParser::Messages::IsOnReply < IRCParser::Message
   end
 end
 
-class IRCParser::Messages::AwayReply < IRCParser::Message
+class IRCParser::Messages::RplAway < IRCParser::Message
   self.identifier = "301"
   parameters :nick, :message
 end
 
-class IRCParser::Messages::UnAwayReply < IRCParser::Message
+class IRCParser::Messages::RplUnAway < IRCParser::Message
   self.identifier = '305'
   parameters "You are no longer marked as being away"
 end
 
-class IRCParser::Messages::NowAwayReply < IRCParser::Message
+class IRCParser::Messages::RplNowAway < IRCParser::Message
   self.identifier = '306'
   parameters "You have been marked as being away"
 end
 
-class IRCParser::Messages::WhoIsUserReply < IRCParser::Message
+class IRCParser::Messages::RplWhoIsUser < IRCParser::Message
   self.identifier = '311'
   self.postfixes = 1
   parameters :nick, :user, :host, :ip, :real_name
 end
 
-class IRCParser::Messages::WhoIsServerReply < IRCParser::Message
+class IRCParser::Messages::RplWhoIsServer < IRCParser::Message
   self.identifier = '312'
   self.postfixes = 1
   parameters :nick, :user, :server, :info
 end
 
-class IRCParser::Messages::WhoIsOperatorReply < IRCParser::Message
+class IRCParser::Messages::RplWhoIsOperator < IRCParser::Message
   self.identifier = '313'
   parameters :nick, :user, "is an IRC operator"
 end
 
-class IRCParser::Messages::WhoIsIdleReply < IRCParser::Message
+class IRCParser::Messages::RplWhoIsIdle < IRCParser::Message
   self.identifier = '317'
   parameters :nick, :user, :seconds, "seconds idle"
 end
 
-class IRCParser::Messages::WhoIsChannelsReply < IRCParser::Message
+class IRCParser::Messages::RplWhoIsChannels < IRCParser::Message
   self.identifier = "319"
   self.postfixes = 1
   parameters :nick, :user, :channels # flags: [@|+]
@@ -139,70 +139,70 @@ class IRCParser::Messages::WhoIsChannelsReply < IRCParser::Message
   end
 end
 
-class IRCParser::Messages::EndOfWhoIsReply < IRCParser::Message
+class IRCParser::Messages::RplEndOfWhoIs < IRCParser::Message
   self.identifier = '318'
   parameters :nick, "End of /WHOIS list"
 end
 
-class IRCParser::Messages::WhoWasUserReply < IRCParser::Message
+class IRCParser::Messages::RplWhoWasUser < IRCParser::Message
   self.identifier = '314'
   parameters :nick, :user, :host, "*", :real_name
 end
 
-class IRCParser::Messages::EndOfWhoWasReply < IRCParser::Message
+class IRCParser::Messages::RplEndOfWhoWas < IRCParser::Message
   self.identifier = '369'
   parameters :nick, "End of WHOWAS"
 end
 
-class IRCParser::Messages::ListStartReply < IRCParser::Message
+class IRCParser::Messages::RplListStart < IRCParser::Message
   self.identifier = '321'
   parameters "Channel", "Users  Name"
 end
 
-class IRCParser::Messages::ListReply < IRCParser::Message
+class IRCParser::Messages::RplList < IRCParser::Message
   self.identifier = '322'
   self.postfixes = 1
   parameters :nick, :channel, :visible, :topic
 end
 
-class IRCParser::Messages::ListEndReply < IRCParser::Message
+class IRCParser::Messages::RplListEnd < IRCParser::Message
   self.identifier = '323'
   parameters "End of /LIST"
 end
 
-class IRCParser::Messages::ChannelModeIsReply < IRCParser::Message
+class IRCParser::Messages::RplChannelModeIs < IRCParser::Message
   self.identifier = '324'
   parameters :channel, :mode, :mode_params
 end
 
-class IRCParser::Messages::NoTopicReply < IRCParser::Message
+class IRCParser::Messages::RplNoTopic < IRCParser::Message
   self.identifier = '331'
   parameters :channel, "No topic is set"
 end
 
-class IRCParser::Messages::TopicReply < IRCParser::Message
+class IRCParser::Messages::RplTopic < IRCParser::Message
   self.identifier = '332'
   parameters :nick, :channel, :topic
 end
 
-class IRCParser::Messages::InvitingReply < IRCParser::Message
+class IRCParser::Messages::RplInviting < IRCParser::Message
   self.identifier = '341'
   parameters :channel, :nick
 end
 
-class IRCParser::Messages::SummoningReply < IRCParser::Message
+class IRCParser::Messages::RplSummoning < IRCParser::Message
   self.identifier = '342'
   parameters :user, "Summoning user to IRC"
 end
 
-class IRCParser::Messages::VersionReply < IRCParser::Message
+class IRCParser::Messages::RplVersion < IRCParser::Message
   self.identifier = '351'
   parameters :version, :server, :comments
 end
 
 # http://www.mirc.net/raws/?view=352
 # nick0: added cause freenode's server sends it
-class IRCParser::Messages::WhoReplyReply < IRCParser::Message
+class IRCParser::Messages::RplWhoReply < IRCParser::Message
   self.identifier = "352"
 
   # nick0 was added to mimic freenode's 352 definition
@@ -257,12 +257,12 @@ class IRCParser::Messages::WhoReplyReply < IRCParser::Message
   private :update_flags
 end
 
-class IRCParser::Messages::EndOfWhoReply < IRCParser::Message
+class IRCParser::Messages::RplEndOfWho < IRCParser::Message
   self.identifier = '315'
   parameters :pattern, "End of /WHO list"
 end
 
-class IRCParser::Messages::NamReplyReply < IRCParser::Message
+class IRCParser::Messages::RplNamReply < IRCParser::Message
   self.identifier = '353'
   self.postfixes = 1
 
@@ -273,12 +273,12 @@ class IRCParser::Messages::NamReplyReply < IRCParser::Message
   end
 end
 
-class IRCParser::Messages::EndOfNamesReply < IRCParser::Message
+class IRCParser::Messages::RplEndOfNames < IRCParser::Message
   self.identifier = '366'
   parameters :channel, "End of /NAMES list"
 end
 
-class IRCParser::Messages::LinksReply < IRCParser::Message
+class IRCParser::Messages::RplLinks < IRCParser::Message
   self.identifier = '364'
   parameters :mask, :server, [:hopcount, :server_info]
 
@@ -288,32 +288,32 @@ class IRCParser::Messages::LinksReply < IRCParser::Message
   end
 end
 
-class IRCParser::Messages::EndOfLinksReply < IRCParser::Message
+class IRCParser::Messages::RplEndOfLinks < IRCParser::Message
   self.identifier = '365'
   parameters :mask, "End of /LINKS list"
 end
 
-class IRCParser::Messages::BanListReply < IRCParser::Message
+class IRCParser::Messages::RplBanList < IRCParser::Message
   self.identifier = '367'
   parameters :channel, :ban_id
 end
 
-class IRCParser::Messages::EndOfBanListReply < IRCParser::Message
+class IRCParser::Messages::RplEndOfBanList < IRCParser::Message
   self.identifier = '368'
   parameters :channel, "End of channel ban list"
 end
 
-class IRCParser::Messages::InfoReply < IRCParser::Message
+class IRCParser::Messages::RplInfo < IRCParser::Message
   self.identifier = '371'
   parameters :info
 end
 
-class IRCParser::Messages::EndOfInfoReply < IRCParser::Message
+class IRCParser::Messages::RplEndOfInfo < IRCParser::Message
   self.identifier = '374'
   parameters "End of /INFO list"
 end
 
-class IRCParser::Messages::MotdStartReply < IRCParser::Message
+class IRCParser::Messages::RplMotdStart < IRCParser::Message
   self.identifier = '375'
   self.postfixes = 3
   parameters "-", :server, "Message of the day -"
@@ -324,7 +324,7 @@ class IRCParser::Messages::MotdStartReply < IRCParser::Message
   end
 end
 
-class IRCParser::Messages::MotdReply < IRCParser::Message
+class IRCParser::Messages::RplMotd < IRCParser::Message
   self.identifier = '372'
   self.postfixes = 2
 
@@ -336,150 +336,150 @@ class IRCParser::Messages::MotdReply < IRCParser::Message
   end
 end
 
-class IRCParser::Messages::EndOfMotdReply < IRCParser::Message
+class IRCParser::Messages::RplEndOfMotd < IRCParser::Message
   self.identifier = '376'
   parameters "End of /MOTD command"
 end
 
-class IRCParser::Messages::YouReOperReply < IRCParser::Message
+class IRCParser::Messages::RplYouReOper < IRCParser::Message
   self.identifier = '381'
   parameters "You are now an IRC operator"
 end
 
-class IRCParser::Messages::RehashingReply < IRCParser::Message
+class IRCParser::Messages::RplRehashing < IRCParser::Message
   self.identifier = '382'
   self.postfixes = 1
   parameters :config_file, "Rehashing"
 end
 
-class IRCParser::Messages::TimeReply < IRCParser::Message
+class IRCParser::Messages::RplTime < IRCParser::Message
   self.identifier = '391'
   self.postfixes = 1
   parameters :server, :local_time
 end
 
-class IRCParser::Messages::UsersStartReply < IRCParser::Message
+class IRCParser::Messages::RplUsersStart < IRCParser::Message
   self.identifier = '392'
   parameters "UserID   Terminal  Host"
 end
 
-class IRCParser::Messages::UsersReply < IRCParser::Message
+class IRCParser::Messages::RplUsers < IRCParser::Message
   self.identifier = '393'
   self.postfixes = 1
   parameters :users # users format: %-8s %-9s %-8s
 end
 
-class IRCParser::Messages::EndOfUsersReply < IRCParser::Message
+class IRCParser::Messages::RplEndOfUsers < IRCParser::Message
   self.identifier = '394'
   parameters "End of users"
 end
 
-class IRCParser::Messages::NoUsersReply < IRCParser::Message
+class IRCParser::Messages::RplNoUsers < IRCParser::Message
   self.identifier = '395'
   parameters "Nobody logged in"
 end
 
-class IRCParser::Messages::TraceLinkReply < IRCParser::Message
+class IRCParser::Messages::RplTraceLink < IRCParser::Message
   self.identifier = '200'
   parameters "Link", :version, :destination, :next_server
 end
 
-class IRCParser::Messages::TraceConnectingReply < IRCParser::Message
+class IRCParser::Messages::RplTraceConnecting < IRCParser::Message
   self.identifier = '201'
   parameters "Try.", :klass, :server
 end
 
-class IRCParser::Messages::TraceHandshakeReply < IRCParser::Message
+class IRCParser::Messages::RplTraceHandshake < IRCParser::Message
   self.identifier = '202'
   parameters "H.S.", :klass, :server
 end
 
-class IRCParser::Messages::TraceUnknownReply < IRCParser::Message
+class IRCParser::Messages::RplTraceUnknown < IRCParser::Message
   self.identifier = '203'
   parameters "????", :klass, :ip_address
 end
 
-class IRCParser::Messages::TraceOperatorReply < IRCParser::Message
+class IRCParser::Messages::RplTraceOperator < IRCParser::Message
   self.identifier = '204'
   parameters "Oper", :klass, :nick
 end
 
-class IRCParser::Messages::TraceUserReply < IRCParser::Message
+class IRCParser::Messages::RplTraceUser < IRCParser::Message
   self.identifier = '205'
   parameters "User", :klass, :nick
 end
 
-class IRCParser::Messages::TraceServerReply < IRCParser::Message
+class IRCParser::Messages::RplTraceServer < IRCParser::Message
   self.identifier = '206'
   parameters "Serv", :klass, :intS, :intC, :server, :identity
 end
 
-class IRCParser::Messages::TraceNewTypeReply < IRCParser::Message
+class IRCParser::Messages::RplTraceNewType < IRCParser::Message
   self.identifier = '208'
   parameters :new_type, "0", :client_name
 end
 
-class IRCParser::Messages::TraceLogReply < IRCParser::Message
+class IRCParser::Messages::RplTraceLog < IRCParser::Message
   self.identifier = '261'
   parameters "File", :logfile, :debug_level
 end
 
-class IRCParser::Messages::StatsLinkInfoReply < IRCParser::Message
+class IRCParser::Messages::RplStatsLinkInfo < IRCParser::Message
   self.identifier = '211'
   parameters :linkname, :sendq, :sent_messages, :sent_bytes, :received_messages, :received_bytes, :time_open
 end
 
-class IRCParser::Messages::StatsCommandsReply < IRCParser::Message
+class IRCParser::Messages::RplStatsCommands < IRCParser::Message
   self.identifier = '212'
   parameters :command, :count
 end
 
-class IRCParser::Messages::StatsCLineReply < IRCParser::Message
+class IRCParser::Messages::RplStatsCLine < IRCParser::Message
   self.identifier = '213'
   parameters "C", :host, "*", :name_param, :port, :klass
 end
 
-class IRCParser::Messages::StatsNLineReply < IRCParser::Message
+class IRCParser::Messages::RplStatsNLine < IRCParser::Message
   self.identifier = '214'
   parameters "N", :host, "*", :name_param, :port, :klass
 end
 
-class IRCParser::Messages::StatsILineReply < IRCParser::Message
+class IRCParser::Messages::RplStatsILine < IRCParser::Message
   self.identifier = '215'
   parameters "I", :host, "*", :second_host, :port, :klass
 end
 
-class IRCParser::Messages::StatsKLineReply < IRCParser::Message
+class IRCParser::Messages::RplStatsKLine < IRCParser::Message
   self.identifier = '216'
   parameters "K", :host, "*", :username, :port, :klass
 end
 
-class IRCParser::Messages::StatsYLineReply < IRCParser::Message
+class IRCParser::Messages::RplStatsYLine < IRCParser::Message
   self.identifier = '218'
   parameters "Y", :klass, :ping_frequency, :connect_frequency, :max_sendq
 end
 
-class IRCParser::Messages::StatsOLineReply < IRCParser::Message
+class IRCParser::Messages::RplStatsOLine < IRCParser::Message
   self.identifier = '243'
   parameters "O", :host_mask, "*",  :name_param
 end
 
-class IRCParser::Messages::StatsHLineReply < IRCParser::Message
+class IRCParser::Messages::RplStatsHLine < IRCParser::Message
   self.identifier = '244'
   parameters "H", :host_mask, "*",  :server_name
 end
 
-class IRCParser::Messages::StatsLLineReply < IRCParser::Message
+class IRCParser::Messages::RplStatsLLine < IRCParser::Message
   self.identifier = '241'
   parameters "L", :host_mask, "*", :server_name, :max_depth
 end
 
-class IRCParser::Messages::EndOfStatsReply < IRCParser::Message
+class IRCParser::Messages::RplEndOfStats < IRCParser::Message
   self.identifier = '219'
   parameters :stats_letter, "End of /STATS report"
 end
 
-class IRCParser::Messages::StatsUptimeReply < IRCParser::Message
+class IRCParser::Messages::RplStatsUptime < IRCParser::Message
   self.identifier = '242'
   parameters ["Server Up", :days, "days", :time] # time format : %d:%02d:%02d
 
@@ -490,13 +490,13 @@ class IRCParser::Messages::StatsUptimeReply < IRCParser::Message
   end
 end
 
-class IRCParser::Messages::UModeIsReply < IRCParser::Message
+class IRCParser::Messages::RplUModeIs < IRCParser::Message
   self.identifier = '221'
   parameters :nick
   parameters :flags
 end
 
-class IRCParser::Messages::LUserClientReply < IRCParser::Message
+class IRCParser::Messages::RplLUserClient < IRCParser::Message
   self.identifier = '251'
   parameters ["There are", :users_count, "users and", :invisible_count, "invisible on", :servers, "servers"]
 
@@ -506,22 +506,22 @@ class IRCParser::Messages::LUserClientReply < IRCParser::Message
   end
 end
 
-class IRCParser::Messages::LUserOpReply < IRCParser::Message
+class IRCParser::Messages::RplLUserOp < IRCParser::Message
   self.identifier = '252'
   parameters :operator_count, "operator(s) online"
 end
 
-class IRCParser::Messages::LUserUnknownReply < IRCParser::Message
+class IRCParser::Messages::RplLUserUnknown < IRCParser::Message
   self.identifier = '253'
   parameters :connections, "unknown connection(s)"
 end
 
-class IRCParser::Messages::LUserChannelsReply < IRCParser::Message
+class IRCParser::Messages::RplLUserChannels < IRCParser::Message
   self.identifier = '254'
   parameters :channels_count, "channels formed"
 end
 
-class IRCParser::Messages::LUserMeReply < IRCParser::Message
+class IRCParser::Messages::RplLUserMe < IRCParser::Message
   self.identifier = '255'
 
   parameters ["I have", :clients_count, "clients and", :servers_count, "servers"]
@@ -532,40 +532,40 @@ class IRCParser::Messages::LUserMeReply < IRCParser::Message
   end
 end
 
-class IRCParser::Messages::AdminMeReply < IRCParser::Message
+class IRCParser::Messages::RplAdminMe < IRCParser::Message
   self.identifier = '256'
   parameters :server, "Administrative info"
 end
 
-class IRCParser::Messages::AdminLoc1Reply < IRCParser::Message
+class IRCParser::Messages::RplAdminLoc1 < IRCParser::Message
   self.identifier = '257'
   self.postfixes = 1
   parameters :info
 end
 
-class IRCParser::Messages::AdminLoc2Reply < IRCParser::Message
+class IRCParser::Messages::RplAdminLoc2 < IRCParser::Message
   self.identifier = '258'
   self.postfixes = 1
   parameters :info
 end
 
-class IRCParser::Messages::AdminEmailReply < IRCParser::Message
+class IRCParser::Messages::RplAdminEmail < IRCParser::Message
   self.identifier = '259'
   self.postfixes = 1
   parameters :info
 end
 
 # Not Used / Reserved ( http://tools.ietf.org/html/rfc1459#section-6.3
-# class IRCParser::Messages::TraceClass       # '209'
-# class IRCParser::Messages::StatsQLine       # '217'
-# class IRCParser::Messages::ServiceInfo      # '231'
-# class IRCParser::Messages::EndOfServices    # '232'
-# class IRCParser::Messages::Service          # '233'
-# class IRCParser::Messages::ServList         # '234'
-# class IRCParser::Messages::ServListend      # '235'
-# class IRCParser::Messages::WhoIsChanOp      # '316'
-# class IRCParser::Messages::KillDone         # '361'
-# class IRCParser::Messages::Closing          # '362'
-# class IRCParser::Messages::Closeend         # '363'
-# class IRCParser::Messages::InfoStart        # '373'
-# class IRCParser::Messages::MyPortIs         # '384'
+# class IRCParser::Messages::RplTraceClass    # '209'
+# class IRCParser::Messages::RplStatsQLine    # '217'
+# class IRCParser::Messages::RplServiceInfo   # '231'
+# class IRCParser::Messages::RplEndOfServices # '232'
+# class IRCParser::Messages::RplService       # '233'
+# class IRCParser::Messages::RplServList      # '234'
+# class IRCParser::Messages::RplServListend   # '235'
+# class IRCParser::Messages::RplWhoIsChanOp   # '316'
+# class IRCParser::Messages::RplKillDone      # '361'
+# class IRCParser::Messages::RplClosing       # '362'
+# class IRCParser::Messages::RplCloseend      # '363'
+# class IRCParser::Messages::RplInfoStart     # '373'
+# class IRCParser::Messages::RplMyPortIs      # '384'

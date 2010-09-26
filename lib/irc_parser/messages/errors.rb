@@ -1,44 +1,44 @@
-class IRCParser::Messages::NoSuchNickError < IRCParser::Message
+class IRCParser::Messages::ErrNoSuchNick < IRCParser::Message
   self.identifier = "401"
   parameters :nick, "No such nick/channel"
 end
 
-class IRCParser::Messages::NoSuchServerError < IRCParser::Message
+class IRCParser::Messages::ErrNoSuchServer < IRCParser::Message
   self.identifier = "402"
   parameters :server, "No such server"
 end
 
-class IRCParser::Messages::NoSuchChannelError < IRCParser::Message
+class IRCParser::Messages::ErrNoSuchChannel < IRCParser::Message
   self.identifier = "403"
   parameters :channel, "No such channel"
 end
 
-class IRCParser::Messages::CannotSendToChanError < IRCParser::Message
+class IRCParser::Messages::ErrCannotSendToChan < IRCParser::Message
   self.identifier = "404"
   parameters :channel, "Cannot send to channel"
 end
 
-class IRCParser::Messages::TooManyChannelsError < IRCParser::Message
+class IRCParser::Messages::ErrTooManyChannels < IRCParser::Message
   self.identifier = "405"
   parameters :channel, "You have joined too many channels"
 end
 
-class IRCParser::Messages::WasNoSuchNickError < IRCParser::Message
+class IRCParser::Messages::ErrWasNoSuchNick < IRCParser::Message
   self.identifier = "406"
   parameters :nick, "There was no such nickname"
 end
 
-class IRCParser::Messages::TooManyTargetsError < IRCParser::Message
+class IRCParser::Messages::ErrTooManyTargets < IRCParser::Message
   self.identifier = "407"
   parameters :target, "Duplicate recipients. No message delivered"
 end
 
-class IRCParser::Messages::NoOriginError < IRCParser::Message
+class IRCParser::Messages::ErrNoOrigin < IRCParser::Message
   self.identifier = "409"
   parameters "No origin specified"
 end
 
-class IRCParser::Messages::NoRecipientError < IRCParser::Message
+class IRCParser::Messages::ErrNoRecipient < IRCParser::Message
   self.identifier = "411"
   parameters "No recipient given (", :command, ")" do
   end
@@ -54,37 +54,37 @@ class IRCParser::Messages::NoRecipientError < IRCParser::Message
   alias_method :to_s, :to_str
 end
 
-class IRCParser::Messages::NoTextToSendError < IRCParser::Message
+class IRCParser::Messages::ErrNoTextToSend < IRCParser::Message
   self.identifier = "412"
   parameters "No text to send"
 end
 
-class IRCParser::Messages::NoTopLevelError < IRCParser::Message
+class IRCParser::Messages::ErrNoTopLevel < IRCParser::Message
   self.identifier = "413"
   parameters :mask, "No toplevel domain specified"
 end
 
-class IRCParser::Messages::WildTopLevelError < IRCParser::Message
+class IRCParser::Messages::ErrWildTopLevel < IRCParser::Message
   self.identifier = "414"
   parameters :mask, "Wildcard in toplevel domain"
 end
 
-class IRCParser::Messages::UnknownCommandError < IRCParser::Message
+class IRCParser::Messages::ErrUnknownCommand < IRCParser::Message
   self.identifier = "421"
   parameters :command, "Unknown command"
 end
 
-class IRCParser::Messages::NoMotdError < IRCParser::Message
+class IRCParser::Messages::ErrNoMotd < IRCParser::Message
   self.identifier = "422"
   parameters "MOTD File is missing"
 end
 
-class IRCParser::Messages::NoAdminInfoError < IRCParser::Message
+class IRCParser::Messages::ErrNoAdminInfo < IRCParser::Message
   self.identifier = "423"
   parameters :server, "No administrative info available"
 end
 
-class IRCParser::Messages::FileErrorError < IRCParser::Message
+class IRCParser::Messages::ErrFileError < IRCParser::Message
   self.identifier = "424"
   parameters "File error doing", :file_op, "on", :file do
   end
@@ -100,142 +100,142 @@ class IRCParser::Messages::FileErrorError < IRCParser::Message
   alias_method :to_s, :to_str
 end
 
-class IRCParser::Messages::NoNickNameGivenError < IRCParser::Message
+class IRCParser::Messages::ErrNoNickNameGiven < IRCParser::Message
   self.identifier = "431"
   parameters "No nickname given"
 end
 
-class IRCParser::Messages::ErroneusNickNameError < IRCParser::Message
+class IRCParser::Messages::ErrErroneusNickName < IRCParser::Message
   self.identifier = "432"
   parameters :nick, "Erroneus nickname"
 end
 
-class IRCParser::Messages::NickNameInUseError < IRCParser::Message
+class IRCParser::Messages::ErrNickNameInUse < IRCParser::Message
   self.identifier = '433'
   parameters :nick, "Nickname is already in use"
 end
 
-class IRCParser::Messages::NickCollisionError < IRCParser::Message
+class IRCParser::Messages::ErrNickCollision < IRCParser::Message
   self.identifier = '436'
   parameters :nick, "Nickname collision KILL"
 end
 
-class IRCParser::Messages::UserNotInChannelError < IRCParser::Message
+class IRCParser::Messages::ErrUserNotInChannel < IRCParser::Message
   self.identifier = '441'
   parameters :nick, :channel, "They aren't on that channel"
 end
 
-class IRCParser::Messages::NotOnChannelError < IRCParser::Message
+class IRCParser::Messages::ErrNotOnChannel < IRCParser::Message
   self.identifier = '442'
   parameters :channel, "You're not on that channel"
 end
 
-class IRCParser::Messages::UserOnChannelError < IRCParser::Message
+class IRCParser::Messages::ErrUserOnChannel < IRCParser::Message
   self.identifier = '443'
   parameters :user, :channel, "is already on channel"
 end
 
-class IRCParser::Messages::NoLoginError < IRCParser::Message
+class IRCParser::Messages::ErrNoLogin < IRCParser::Message
   self.identifier = '444'
   parameters :user, "User not logged in"
 end
 
-class IRCParser::Messages::SummonDisabledError < IRCParser::Message
+class IRCParser::Messages::ErrSummonDisabled < IRCParser::Message
   self.identifier = '445'
   parameters "SUMMON has been disabled"
 end
 
-class IRCParser::Messages::UsersDisabledError < IRCParser::Message
+class IRCParser::Messages::ErrUsersDisabled < IRCParser::Message
   self.identifier = '446'
   parameters "USERS has been disabled"
 end
 
-class IRCParser::Messages::NotRegisteredError < IRCParser::Message
+class IRCParser::Messages::ErrNotRegistered < IRCParser::Message
   self.identifier = '451'
   parameters "You have not registered"
 end
 
-class IRCParser::Messages::NeedMoreParamsError < IRCParser::Message
+class IRCParser::Messages::ErrNeedMoreParams < IRCParser::Message
   self.identifier = '461'
   parameters :command, "Not enough parameters"
 end
 
-class IRCParser::Messages::AlreadyRegistredError < IRCParser::Message
+class IRCParser::Messages::ErrAlreadyRegistred < IRCParser::Message
   self.identifier = '462'
   parameters "You may not reregister"
 end
 
-class IRCParser::Messages::NoPermForHostError < IRCParser::Message
+class IRCParser::Messages::ErrNoPermForHost < IRCParser::Message
   self.identifier = '463'
   parameters "Your host isn't among the privileged"
 end
 
-class IRCParser::Messages::PasswdMismatchError < IRCParser::Message
+class IRCParser::Messages::ErrPasswdMismatch < IRCParser::Message
   self.identifier = '464'
   parameters "Password incorrect"
 end
 
-class IRCParser::Messages::YouReBannedCreepError < IRCParser::Message
+class IRCParser::Messages::ErrYouReBannedCreep < IRCParser::Message
   self.identifier = '465'
   parameters "You are banned from this server"
 end
 
-class IRCParser::Messages::KeySetError < IRCParser::Message
+class IRCParser::Messages::ErrKeySet < IRCParser::Message
   self.identifier = '467'
   parameters :channel, "Channel key already set"
 end
 
-class IRCParser::Messages::ChannelIsFullError < IRCParser::Message
+class IRCParser::Messages::ErrChannelIsFull < IRCParser::Message
   self.identifier = '471'
   parameters :channel, "Cannot join channel (+l)"
 end
 
-class IRCParser::Messages::UnknownModeError < IRCParser::Message
+class IRCParser::Messages::ErrUnknownMode < IRCParser::Message
   self.identifier = '472'
   parameters :char, "is unknown mode char to me"
 end
 
-class IRCParser::Messages::InviteOnLYChanError < IRCParser::Message
+class IRCParser::Messages::ErrInviteOnLYChan < IRCParser::Message
   self.identifier = '473'
   parameters :channel, "Cannot join channel (+i)"
 end
 
-class IRCParser::Messages::BannedFromChanError < IRCParser::Message
+class IRCParser::Messages::ErrBannedFromChan < IRCParser::Message
   self.identifier = '474'
   parameters :channel, "Cannot join channel (+b)"
 end
 
-class IRCParser::Messages::BadChannelKeyError < IRCParser::Message
+class IRCParser::Messages::ErrBadChannelKey < IRCParser::Message
   self.identifier = '475'
   parameters :channel, "Cannot join channel (+k)"
 end
 
-class IRCParser::Messages::NoPrivilegesError < IRCParser::Message
+class IRCParser::Messages::ErrNoPrivileges < IRCParser::Message
   self.identifier = '481'
   parameters "Permission Denied- You're not an IRC operator"
 end
 
-class IRCParser::Messages::ChanOPrivsNeededError < IRCParser::Message
+class IRCParser::Messages::ErrChanOPrivsNeeded < IRCParser::Message
   self.identifier = '482'
   parameters :channel, "You're not channel operator"
 end
 
-class IRCParser::Messages::CantKillServerError < IRCParser::Message
+class IRCParser::Messages::ErrCantKillServer < IRCParser::Message
   self.identifier = '483'
   parameters "You cant kill a server!"
 end
 
-class IRCParser::Messages::NoOperHostError < IRCParser::Message
+class IRCParser::Messages::ErrNoOperHost < IRCParser::Message
   self.identifier = '491'
   parameters "No O-lines for your host"
 end
 
-class IRCParser::Messages::UModeUnknownFlagError < IRCParser::Message
+class IRCParser::Messages::ErrUModeUnknownFlag < IRCParser::Message
   self.identifier = '501'
   parameters "Unknown MODE flag"
 end
 
-class IRCParser::Messages::UsersDontMatchError < IRCParser::Message
+class IRCParser::Messages::ErrUsersDontMatch < IRCParser::Message
   self.identifier = '502'
   parameters "Cant change mode for other users"
 end
