@@ -1,6 +1,6 @@
 class IRCParser::Messages::ErrNoSuchNick < IRCParser::Message
   self.identifier = "401"
-  parameters :nick, "No such nick/channel"
+  parameters :nick, :user_nick, "No such nick/channel"
 end
 
 class IRCParser::Messages::ErrNoSuchServer < IRCParser::Message
@@ -40,8 +40,7 @@ end
 
 class IRCParser::Messages::ErrNoRecipient < IRCParser::Message
   self.identifier = "411"
-  parameters "No recipient given (", :command, ")" do
-  end
+  parameters "No recipient given (", :command, ")"
 
   def initialize(prefix, *params)
     super(prefix, [])

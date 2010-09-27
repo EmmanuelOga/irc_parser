@@ -102,7 +102,7 @@ end
 class IRCParser::Messages::RplWhoIsUser < IRCParser::Message
   self.identifier = '311'
   self.postfixes = 1
-  parameters :nick, :user, :host, :ip, :real_name
+  parameters :nick, :user_nick, :user, :ip, "*", :real_name
 end
 
 class IRCParser::Messages::RplWhoIsServer < IRCParser::Message
@@ -132,7 +132,7 @@ end
 
 class IRCParser::Messages::RplEndOfWhoIs < IRCParser::Message
   self.identifier = '318'
-  parameters :nick, "End of /WHOIS list"
+  parameters :nick, :user_nick, "End of /WHOIS list"
 end
 
 class IRCParser::Messages::RplWhoWasUser < IRCParser::Message
@@ -163,7 +163,7 @@ end
 
 class IRCParser::Messages::RplChannelModeIs < IRCParser::Message
   self.identifier = '324'
-  parameters :nick, :channel, :mode, :flags
+  parameters :nick, :channel, :mode
 end
 
 class IRCParser::Messages::RplNoTopic < IRCParser::Message
@@ -191,8 +191,9 @@ class IRCParser::Messages::RplVersion < IRCParser::Message
   parameters :nick, :version, :server, :comments
 end
 
-
 # http://www.mirc.net/raws/?view=352
+# Example:
+# :osmotic.oftc.net 352 weechat #canal ~emmanuelo 190.190.190.190 osmotic.oftc.net weechat H@ :0 Emmanuel
 class IRCParser::Messages::RplWhoReply < IRCParser::Message
   self.identifier = "352"
 
@@ -246,15 +247,10 @@ class IRCParser::Messages::RplEndOfWho < IRCParser::Message
   parameters :nick, :pattern, "End of /WHO list"
 end
 
-
 class IRCParser::Messages::RplNamReply < IRCParser::Message
   self.identifier = '353'
-
-  parameters :nick, :channel, :nicks # each nick should include flags [[@|+]#{nick}
-
-  def nicks
-    super.to_s.split(/\s+/)
-  end
+  parameters :nick, :channel
+  parameter :nicks_with_flags, :csv => true, :separator => " " # each nick should include flags [[@|+]#{nick}
 end
 
 class IRCParser::Messages::RplEndOfNames < IRCParser::Message

@@ -55,10 +55,10 @@ describe IRCParser, "command responses" do
   # name indicate whether a client is a channel operator or has been granted
   # permission to speak on a moderated channel.  The ENDOFWHOIS reply is used
   # to mark the end of processing a WHOIS message.
-  it_parses "311 nick user host 192.168.0.1 :real name" do |message|
-    message.nick.should == "nick"
+  it_parses "311 Emmanuel nick user 192.168.0.1 * :real name" do |message|
+    message.nick.should == "Emmanuel"
+    message.user_nick.should == "nick"
     message.user.should == "user"
-    message.host.should == "host"
     message.ip.should   == "192.168.0.1"
     message.real_name.should ==  "real name"
   end
@@ -80,8 +80,9 @@ describe IRCParser, "command responses" do
     message.seconds.should ==  "10"
   end
 
-  it_parses "318 nick :End of /WHOIS list" do |message|
-    message.nick.should ==  "nick"
+  it_parses "318 Emmanuel nick :End of /WHOIS list" do |message|
+    message.nick.should ==  "Emmanuel"
+    message.user_nick.should ==  "nick"
   end
 
   # {[@|+]<channel><space>}
@@ -126,7 +127,6 @@ describe IRCParser, "command responses" do
     message.nick.should == "Emmanuel"
     message.channel.should ==  "#channel"
     message.mode.should ==  "o"
-    message.flags.should ==  "params"
   end
 
   # When sending a TOPIC message to determine the channel topic, one of two
@@ -199,7 +199,7 @@ describe IRCParser, "command responses" do
   it_parses "353 Emmanuel #channel :@nick1 +nick2 nick3" do |message|
     message.nick.should == "Emmanuel"
     message.channel.should ==  "#channel"
-    message.nicks.should ==  %w|@nick1 +nick2 nick3|
+    message.nicks_with_flags.should ==  %w|@nick1 +nick2 nick3|
   end
 
   it_parses "366 Emmanuel #channel :End of /NAMES list" do |message|
@@ -528,11 +528,12 @@ describe IRCParser, "command responses" do
     message.nick = "Emmanuel"
   end
 
-  it_generates IRCParser::Messages::RplWhoIsUser, "311 nick user host * :real name" do |message|
-    message.nick = "nick"
+  it_generates IRCParser::Messages::RplWhoIsUser, "311 Emmanuel nick user 192.192.192.192 * :real name" do |message|
+    message.nick = "Emmanuel"
+    message.user_nick = "nick"
     message.user = "user"
-    message.host = "host"
     message.real_name = "real name"
+    message.ip = "192.192.192.192"
   end
 
   it_generates IRCParser::Messages::RplWhoIsServer, "312 nick user server :server info" do |message|
@@ -553,8 +554,9 @@ describe IRCParser, "command responses" do
     message.seconds = "10"
   end
 
-  it_generates IRCParser::Messages::RplEndOfWhoIs, "318 nick :End of /WHOIS list" do |message|
-    message.nick = "nick"
+  it_generates IRCParser::Messages::RplEndOfWhoIs, "318 Emmanuel nick :End of /WHOIS list" do |message|
+    message.nick = "Emmanuel"
+    message.user_nick = "nick"
   end
 
   it_generates IRCParser::Messages::RplWhoIsChannels, "319 nick user :@channel1 +channel2 #channel3" do |message|
@@ -589,11 +591,10 @@ describe IRCParser, "command responses" do
     message.nick = "Emmanuel"
   end
 
-  it_generates IRCParser::Messages::RplChannelModeIs, "324 Emmanuel #channel o params" do |message|
+  it_generates IRCParser::Messages::RplChannelModeIs, "324 Emmanuel #channel o" do |message|
     message.nick = "Emmanuel"
     message.channel = "#channel"
     message.mode = "o"
-    message.flags = "params"
   end
 
   it_generates IRCParser::Messages::RplNoTopic, "331 Emmanuel #channel :No topic is set" do |message|
@@ -646,9 +647,9 @@ describe IRCParser, "command responses" do
   end
 
   it_generates IRCParser::Messages::RplNamReply, "353 Emmanuel #channel :@nick1 +nick2 nick3" do |message|
-    message.nick = "Emmanuel"
-    message.channel = "#channel"
-    message.nicks = %w|@nick1 +nick2 nick3|
+    message.nick= "Emmanuel"
+    message.channel=  "#channel"
+    message.nicks_with_flags= %w|@nick1 +nick2 nick3|
   end
 
   it_generates IRCParser::Messages::RplEndOfNames, "366 Emmanuel #channel :End of /NAMES list" do |message|
