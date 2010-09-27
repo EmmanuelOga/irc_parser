@@ -29,13 +29,15 @@ module IRCParser
         end
       METHODS
 
+      sep = ( options[:separator] ? options[:separator] : "," ).inspect if options[:csv]
+
       include Module.new.tap {|m| m.module_eval(<<-METHODS, __FILE__, __LINE__) } if options[:csv]
         def #{name}
-          (val = super) ? val.split(",") : Array.new
+          (val = super) ? val.split(#{sep}) : Array.new
         end
 
         def #{name}=(val)
-          super((val = Array(val).join(",")) == "" ? nil : val)
+          super((val = Array(val).join(#{sep})) == "" ? nil : val)
         end
       METHODS
 

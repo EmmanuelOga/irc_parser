@@ -23,6 +23,14 @@ module IRCParser
       name.split("::").last
     end
 
+    def self.is_reply?
+      class_name =~ /^Rpl[A-Z]/
+    end
+
+    def self.is_error?
+      class_name =~ /^Err[A-Z]/
+    end
+
     def self.inherited(klass)
       ident = klass.class_name
       symbol = IRCParser::Helper.underscore(ident).to_sym
@@ -49,6 +57,8 @@ module IRCParser
       yield self if block_given?
     end
 
+    #class_method_accessor :class_name, :identifier, :default_parameters, :postfixes, :is_reply?, :is_error?, :to_sym
+
     def class_name
       self.class.class_name
     end
@@ -63,6 +73,14 @@ module IRCParser
 
     def postfixes
       self.class.postfixes
+    end
+
+    def self.is_reply?
+      self.class.is_reply?
+    end
+
+    def self.is_error?
+      self.class.is_error?
     end
 
     def to_sym

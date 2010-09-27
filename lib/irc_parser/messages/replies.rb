@@ -65,47 +65,38 @@ end
 
 class IRCParser::Messages::RplNone < IRCParser::Message
   self.identifier = '300'
+  parameter :nick
 end
 
 class IRCParser::Messages::RplUserHost < IRCParser::Message
   self.identifier = "302"
-  parameters :nicks_and_hosts # format: <nick>['*'] '=' <'+'|'-'><hostname>
+  self.postfixes = 3
+
+  parameter :nick
+  parameter :nicks, :csv => true, :separator => " "
+  parameter "="
+  parameter :host_with_sign
 end
 
 class IRCParser::Messages::RplIsOn < IRCParser::Message
   self.identifier = "303"
-
-  def initialize(prefix, *params)
-    super(prefix)
-    self.nicks = params.flatten.join.split(/\s*,\s*|\s+/)
-  end
-
-  def postfixes
-    parameters.length
-  end
-
-  def nicks=(vals)
-    parameters.replace(Array(vals))
-  end
-
-  def nicks
-    parameters
-  end
+  parameter :nick
+  parameter :nicks, :csv => true, :separator => " "
 end
 
 class IRCParser::Messages::RplAway < IRCParser::Message
   self.identifier = "301"
-  parameters :nick, :message
+  parameters :nick, :away_nick, :message
 end
 
 class IRCParser::Messages::RplUnAway < IRCParser::Message
   self.identifier = '305'
-  parameters "You are no longer marked as being away"
+  parameters :nick, "You are no longer marked as being away"
 end
 
 class IRCParser::Messages::RplNowAway < IRCParser::Message
   self.identifier = '306'
-  parameters "You have been marked as being away"
+  parameters :nick, "You have been marked as being away"
 end
 
 class IRCParser::Messages::RplWhoIsUser < IRCParser::Message
@@ -156,7 +147,7 @@ end
 
 class IRCParser::Messages::RplListStart < IRCParser::Message
   self.identifier = '321'
-  parameters "Channel", "Users  Name"
+  parameters :nick, "Channel", "Users  Name"
 end
 
 class IRCParser::Messages::RplList < IRCParser::Message
@@ -167,17 +158,17 @@ end
 
 class IRCParser::Messages::RplListEnd < IRCParser::Message
   self.identifier = '323'
-  parameters "End of /LIST"
+  parameters :nick, "End of /LIST"
 end
 
 class IRCParser::Messages::RplChannelModeIs < IRCParser::Message
   self.identifier = '324'
-  parameters :channel, :mode, :mode_params
+  parameters :nick, :channel, :mode, :flags
 end
 
 class IRCParser::Messages::RplNoTopic < IRCParser::Message
   self.identifier = '331'
-  parameters :channel, "No topic is set"
+  parameters :nick, :channel, "No topic is set"
 end
 
 class IRCParser::Messages::RplTopic < IRCParser::Message
@@ -187,26 +178,25 @@ end
 
 class IRCParser::Messages::RplInviting < IRCParser::Message
   self.identifier = '341'
-  parameters :channel, :nick
+  parameters :nick, :channel, :nick_inv
 end
 
 class IRCParser::Messages::RplSummoning < IRCParser::Message
   self.identifier = '342'
-  parameters :user, "Summoning user to IRC"
+  parameters :nick, :user, "Summoning user to IRC"
 end
 
 class IRCParser::Messages::RplVersion < IRCParser::Message
   self.identifier = '351'
-  parameters :version, :server, :comments
+  parameters :nick, :version, :server, :comments
 end
 
+
 # http://www.mirc.net/raws/?view=352
-# nick0: added cause freenode's server sends it
 class IRCParser::Messages::RplWhoReply < IRCParser::Message
   self.identifier = "352"
 
-  # nick0 was added to mimic freenode's 352 definition
-  parameters :nick0, :channel, :user, :host, :server, :nick, :flags, [:hopcount, :real_name] # Flags: <H|G>[*][@|+] (here, gone)
+  parameters :nick, :channel, :user, :host, :server, :user_nick, :flags, [:hopcount, :real_name] # Flags: <H|G>[*][@|+] (here, gone)
 
   FLAGS_INDEX_ON_PARAMS = 6
 
@@ -245,12 +235,6 @@ class IRCParser::Messages::RplWhoReply < IRCParser::Message
     end
   end
 
-  def nick=(val)
-    self.nick0 = val
-    super(val)
-  end
-  private :nick0=, :nick0
-
   def update_flags(index, val)
     @flags[index] = val; @parameters[FLAGS_INDEX_ON_PARAMS] = @flags.join
   end
@@ -259,14 +243,14 @@ end
 
 class IRCParser::Messages::RplEndOfWho < IRCParser::Message
   self.identifier = '315'
-  parameters :pattern, "End of /WHO list"
+  parameters :nick, :pattern, "End of /WHO list"
 end
+
 
 class IRCParser::Messages::RplNamReply < IRCParser::Message
   self.identifier = '353'
-  self.postfixes = 1
 
-  parameters "=", :channel, :nicks # each nick should include flags [[@|+]#{nick}
+  parameters :nick, :channel, :nicks # each nick should include flags [[@|+]#{nick}
 
   def nicks
     super.to_s.split(/\s+/)
@@ -275,12 +259,12 @@ end
 
 class IRCParser::Messages::RplEndOfNames < IRCParser::Message
   self.identifier = '366'
-  parameters :channel, "End of /NAMES list"
+  parameters :nick, :channel, "End of /NAMES list"
 end
 
 class IRCParser::Messages::RplLinks < IRCParser::Message
   self.identifier = '364'
-  parameters :mask, :server, [:hopcount, :server_info]
+  parameters :nick, :mask, :server, [:hopcount, :server_info]
 
   def initialize(prefix, *params)
     super(prefix, *params)
@@ -290,33 +274,33 @@ end
 
 class IRCParser::Messages::RplEndOfLinks < IRCParser::Message
   self.identifier = '365'
-  parameters :mask, "End of /LINKS list"
+  parameters :nick, :mask, "End of /LINKS list"
 end
 
 class IRCParser::Messages::RplBanList < IRCParser::Message
   self.identifier = '367'
-  parameters :channel, :ban_id
+  parameters :nick, :channel, :ban_id
 end
 
 class IRCParser::Messages::RplEndOfBanList < IRCParser::Message
   self.identifier = '368'
-  parameters :channel, "End of channel ban list"
+  parameters :nick, :channel, "End of channel ban list"
 end
 
 class IRCParser::Messages::RplInfo < IRCParser::Message
   self.identifier = '371'
-  parameters :info
+  parameters :nick, :info
 end
 
 class IRCParser::Messages::RplEndOfInfo < IRCParser::Message
   self.identifier = '374'
-  parameters "End of /INFO list"
+  parameters :nick, "End of /INFO list"
 end
 
 class IRCParser::Messages::RplMotdStart < IRCParser::Message
   self.identifier = '375'
   self.postfixes = 3
-  parameters "-", :server, "Message of the day -"
+  parameters :nick, "-", :server, "Message of the day -"
 
   def initialize(prefix, *params)
     super(prefix)
@@ -328,7 +312,7 @@ class IRCParser::Messages::RplMotd < IRCParser::Message
   self.identifier = '372'
   self.postfixes = 2
 
-  parameters "-", :motd
+  parameters :nick, "-", :motd
 
   def initialize(prefix, *params)
     super(prefix)
@@ -338,150 +322,150 @@ end
 
 class IRCParser::Messages::RplEndOfMotd < IRCParser::Message
   self.identifier = '376'
-  parameters "End of /MOTD command"
+  parameters :nick, "End of /MOTD command"
 end
 
 class IRCParser::Messages::RplYouReOper < IRCParser::Message
   self.identifier = '381'
-  parameters "You are now an IRC operator"
+  parameters :nick, "You are now an IRC operator"
 end
 
 class IRCParser::Messages::RplRehashing < IRCParser::Message
   self.identifier = '382'
   self.postfixes = 1
-  parameters :config_file, "Rehashing"
+  parameters :nick, :config_file, "Rehashing"
 end
 
 class IRCParser::Messages::RplTime < IRCParser::Message
   self.identifier = '391'
   self.postfixes = 1
-  parameters :server, :local_time
+  parameters :nick, :server, :local_time
 end
 
 class IRCParser::Messages::RplUsersStart < IRCParser::Message
   self.identifier = '392'
-  parameters "UserID   Terminal  Host"
+  parameters :nick, "UserID   Terminal  Host"
 end
 
 class IRCParser::Messages::RplUsers < IRCParser::Message
   self.identifier = '393'
   self.postfixes = 1
-  parameters :users # users format: %-8s %-9s %-8s
+  parameters :nick, :users # users format: %-8s %-9s %-8s
 end
 
 class IRCParser::Messages::RplEndOfUsers < IRCParser::Message
   self.identifier = '394'
-  parameters "End of users"
+  parameters :nick, "End of users"
 end
 
 class IRCParser::Messages::RplNoUsers < IRCParser::Message
   self.identifier = '395'
-  parameters "Nobody logged in"
+  parameters :nick, "Nobody logged in"
 end
 
 class IRCParser::Messages::RplTraceLink < IRCParser::Message
   self.identifier = '200'
-  parameters "Link", :version, :destination, :next_server
+  parameters :nick, "Link", :version, :destination, :next_server
 end
 
 class IRCParser::Messages::RplTraceConnecting < IRCParser::Message
   self.identifier = '201'
-  parameters "Try.", :klass, :server
+  parameters :nick, "Try.", :klass, :server
 end
 
 class IRCParser::Messages::RplTraceHandshake < IRCParser::Message
   self.identifier = '202'
-  parameters "H.S.", :klass, :server
+  parameters :nick, "H.S.", :klass, :server
 end
 
 class IRCParser::Messages::RplTraceUnknown < IRCParser::Message
   self.identifier = '203'
-  parameters "????", :klass, :ip_address
+  parameters :nick, "????", :klass, :ip_address
 end
 
 class IRCParser::Messages::RplTraceOperator < IRCParser::Message
   self.identifier = '204'
-  parameters "Oper", :klass, :nick
+  parameters :nick, "Oper", :klass, :user_nick
 end
 
 class IRCParser::Messages::RplTraceUser < IRCParser::Message
   self.identifier = '205'
-  parameters "User", :klass, :nick
+  parameters :nick, "User", :klass, :user_nick
 end
 
 class IRCParser::Messages::RplTraceServer < IRCParser::Message
   self.identifier = '206'
-  parameters "Serv", :klass, :intS, :intC, :server, :identity
+  parameters :nick, "Serv", :klass, :intS, :intC, :server, :identity
 end
 
 class IRCParser::Messages::RplTraceNewType < IRCParser::Message
   self.identifier = '208'
-  parameters :new_type, "0", :client_name
+  parameters :nick, :new_type, "0", :client_name
 end
 
 class IRCParser::Messages::RplTraceLog < IRCParser::Message
   self.identifier = '261'
-  parameters "File", :logfile, :debug_level
+  parameters :nick, "File", :logfile, :debug_level
 end
 
 class IRCParser::Messages::RplStatsLinkInfo < IRCParser::Message
   self.identifier = '211'
-  parameters :linkname, :sendq, :sent_messages, :sent_bytes, :received_messages, :received_bytes, :time_open
+  parameters :nick, :linkname, :sendq, :sent_messages, :sent_bytes, :received_messages, :received_bytes, :time_open
 end
 
 class IRCParser::Messages::RplStatsCommands < IRCParser::Message
   self.identifier = '212'
-  parameters :command, :count
+  parameters :nick, :command, :count
 end
 
 class IRCParser::Messages::RplStatsCLine < IRCParser::Message
   self.identifier = '213'
-  parameters "C", :host, "*", :name_param, :port, :klass
+  parameters :nick, "C", :host, "*", :name_param, :port, :klass
 end
 
 class IRCParser::Messages::RplStatsNLine < IRCParser::Message
   self.identifier = '214'
-  parameters "N", :host, "*", :name_param, :port, :klass
+  parameters :nick, "N", :host, "*", :name_param, :port, :klass
 end
 
 class IRCParser::Messages::RplStatsILine < IRCParser::Message
   self.identifier = '215'
-  parameters "I", :host, "*", :second_host, :port, :klass
+  parameters :nick, "I", :host, "*", :second_host, :port, :klass
 end
 
 class IRCParser::Messages::RplStatsKLine < IRCParser::Message
   self.identifier = '216'
-  parameters "K", :host, "*", :username, :port, :klass
+  parameters :nick, "K", :host, "*", :username, :port, :klass
 end
 
 class IRCParser::Messages::RplStatsYLine < IRCParser::Message
   self.identifier = '218'
-  parameters "Y", :klass, :ping_frequency, :connect_frequency, :max_sendq
+  parameters :nick, "Y", :klass, :ping_frequency, :connect_frequency, :max_sendq
 end
 
 class IRCParser::Messages::RplStatsOLine < IRCParser::Message
   self.identifier = '243'
-  parameters "O", :host_mask, "*",  :name_param
+  parameters :nick, "O", :host_mask, "*",  :name_param
 end
 
 class IRCParser::Messages::RplStatsHLine < IRCParser::Message
   self.identifier = '244'
-  parameters "H", :host_mask, "*",  :server_name
+  parameters :nick, "H", :host_mask, "*",  :server_name
 end
 
 class IRCParser::Messages::RplStatsLLine < IRCParser::Message
   self.identifier = '241'
-  parameters "L", :host_mask, "*", :server_name, :max_depth
+  parameters :nick, "L", :host_mask, "*", :server_name, :max_depth
 end
 
 class IRCParser::Messages::RplEndOfStats < IRCParser::Message
   self.identifier = '219'
-  parameters :stats_letter, "End of /STATS report"
+  parameters :nick, :stats_letter, "End of /STATS report"
 end
 
 class IRCParser::Messages::RplStatsUptime < IRCParser::Message
   self.identifier = '242'
-  parameters ["Server Up", :days, "days", :time] # time format : %d:%02d:%02d
+  parameters :nick, ["Server Up", :days, "days", :time] # time format : %d:%02d:%02d
 
   def initialize(prefix, *params)
     super(prefix)
@@ -498,7 +482,7 @@ end
 
 class IRCParser::Messages::RplLUserClient < IRCParser::Message
   self.identifier = '251'
-  parameters ["There are", :users_count, "users and", :invisible_count, "invisible on", :servers, "servers"]
+  parameters :nick, ["There are", :users_count, "users and", :invisible_count, "invisible on", :servers, "servers"]
 
   def initialize(prefix, *params)
     super(prefix)
@@ -508,23 +492,23 @@ end
 
 class IRCParser::Messages::RplLUserOp < IRCParser::Message
   self.identifier = '252'
-  parameters :operator_count, "operator(s) online"
+  parameters :nick, :operator_count, "operator(s) online"
 end
 
 class IRCParser::Messages::RplLUserUnknown < IRCParser::Message
   self.identifier = '253'
-  parameters :connections, "unknown connection(s)"
+  parameters :nick, :connections, "unknown connection(s)"
 end
 
 class IRCParser::Messages::RplLUserChannels < IRCParser::Message
   self.identifier = '254'
-  parameters :channels_count, "channels formed"
+  parameters :nick, :channels_count, "channels formed"
 end
 
 class IRCParser::Messages::RplLUserMe < IRCParser::Message
   self.identifier = '255'
 
-  parameters ["I have", :clients_count, "clients and", :servers_count, "servers"]
+  parameters :nick, ["I have", :clients_count, "clients and", :servers_count, "servers"]
 
   def initialize(prefix, *params)
     super(prefix)
@@ -534,25 +518,25 @@ end
 
 class IRCParser::Messages::RplAdminMe < IRCParser::Message
   self.identifier = '256'
-  parameters :server, "Administrative info"
+  parameters :nick, :server, "Administrative info"
 end
 
 class IRCParser::Messages::RplAdminLoc1 < IRCParser::Message
   self.identifier = '257'
   self.postfixes = 1
-  parameters :info
+  parameters :nick, :info
 end
 
 class IRCParser::Messages::RplAdminLoc2 < IRCParser::Message
   self.identifier = '258'
   self.postfixes = 1
-  parameters :info
+  parameters :nick, :info
 end
 
 class IRCParser::Messages::RplAdminEmail < IRCParser::Message
   self.identifier = '259'
   self.postfixes = 1
-  parameters :info
+  parameters :nick, :info
 end
 
 # Not Used / Reserved ( http://tools.ietf.org/html/rfc1459#section-6.3
