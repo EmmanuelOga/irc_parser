@@ -57,35 +57,7 @@ module IRCParser
       yield self if block_given?
     end
 
-    #class_method_accessor :class_name, :identifier, :default_parameters, :postfixes, :is_reply?, :is_error?, :to_sym
-
-    def class_name
-      self.class.class_name
-    end
-
-    def identifier
-      self.class.identifier
-    end
-
-    def default_parameters
-      self.class.default_parameters
-    end
-
-    def postfixes
-      self.class.postfixes
-    end
-
-    def self.is_reply?
-      self.class.is_reply?
-    end
-
-    def self.is_error?
-      self.class.is_error?
-    end
-
-    def to_sym
-      self.class.to_sym
-    end
+    class_method_accessor :class_name, :identifier, :default_parameters, :postfixes, :is_reply?, :is_error?, :to_sym
 
     def to_str
       "#{prefix ? ":#{prefix}" : nil} #{identifier} #{parameters.to_s(postfixes)}".strip << "\r\n"

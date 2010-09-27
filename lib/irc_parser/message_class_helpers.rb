@@ -10,6 +10,17 @@ module IRCParser
       end
     end
 
+    def class_method_accessor(*accessors)
+      methods = accessors.map do |meth|
+        <<-METHODS
+          def #{meth}
+            self.class.#{meth}
+          end
+        METHODS
+      end
+      include Module.new.tap {|m| m.module_eval(methods.join(" "), __FILE__, __LINE__) }
+    end
+
     def parameter(name, options = {})
       parameter_index = default_parameters.length
 
