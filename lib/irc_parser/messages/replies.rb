@@ -166,6 +166,22 @@ class IRCParser::Messages::RplChannelModeIs < IRCParser::Message
   parameters :nick, :channel, :mode
 end
 
+# http://www.mirc.net/raws/?view=328
+# This is sent to you by ChanServ when you join a registered channel.
+# :services. 328 emmanueloga #chef :http://www.opscode.com
+class IRCParser::Messages::RplChannelServices < IRCParser::Message
+  self.identifier = '328'
+  parameters :nick, :channel, :comment
+end
+
+# http://www.mirc.net/raws/?view=329
+# name given by me. This does not appear in the rfcs.
+# :gibson.freenode.net 329 emmanueloga #canal 1263942709
+class IRCParser::Messages::RplChannelTimestamp < IRCParser::Message
+  self.identifier = '329'
+  parameters :nick, :channel, :timestamp
+end
+
 class IRCParser::Messages::RplNoTopic < IRCParser::Message
   self.identifier = '331'
   parameters :nick, :channel, "No topic is set"
@@ -174,6 +190,15 @@ end
 class IRCParser::Messages::RplTopic < IRCParser::Message
   self.identifier = '332'
   parameters :nick, :channel, :topic
+end
+
+# Raw Numeric 333
+# This is returned for a TOPIC request or when you JOIN, if the channel has a topic.
+# :gibson.freenode.net 333 emmanuel_oga #RubyOnRails wmoxam!~wmoxam@cmr-208-124-190-170.cr.net.cable.rogers.com 1285016759
+# http://www.mirc.net/raws/?view=333
+class IRCParser::Messages::RplInviting < IRCParser::Message
+  self.identifier = '333'
+  parameters :nick, :channel, :inviter_prefix, :timestamp
 end
 
 class IRCParser::Messages::RplInviting < IRCParser::Message
@@ -474,6 +499,25 @@ class IRCParser::Messages::RplUModeIs < IRCParser::Message
   self.identifier = '221'
   parameters :nick
   parameters :flags
+end
+
+class IRCParser::Messages::RplStatsDLine < IRCParser::Message
+  self.identifier = '250'
+  parameters :nick, ["Highest connection count:", :connections, "(", :clients, ") (", :connections_received, "connections received"]
+end
+
+# Name given by me, this message does not appear in the RFCs
+# http://www.mirc.net/raws/?view=265
+class IRCParser::Messages::RplLUserCount < IRCParser::Message
+  self.identifier = '265'
+  parameters :nick, :current, :max, ["Current local users"]
+end
+
+# Name given by me, this message does not appear in the RFCs
+# http://www.mirc.net/raws/?view=266
+class IRCParser::Messages::RplGlobalLUserCount < IRCParser::Message
+  self.identifier = '266'
+  parameters :nick, :current, :max, ["Current global users"]
 end
 
 class IRCParser::Messages::RplLUserClient < IRCParser::Message
