@@ -14,7 +14,7 @@ module IRCParser
 
     klass = Messages::ALL[identifier.upcase]
 
-    raise IRCParser::Parser::Error.new(message, prefix, identifier, params) unless klass
+    raise IRCParser::Parser::Error.new("looking up message class", message, prefix, identifier, params) unless klass
 
     klass.new(prefix, *params)
   end

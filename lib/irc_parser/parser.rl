@@ -10,7 +10,7 @@
   crlf = CR LF;
   comma = ',';
   nonwhite = ascii -- (SPACE | NUL | CR | LF);
-  special = ('_' | '-' | '[' | ']' | '\\' | '`' | '^' | '{' | '}');
+  special = ('_' | '-' | '[' | ']' | '\\' | '`' | '^' | '{' | '}' | '~');
 
   chstring = ascii -- (SPACE | BELL | NUL | CR | LF | comma);
   mask = ('#' | '$') chstring;
@@ -42,12 +42,12 @@ module IRCParser
     class Error < RuntimeError
       attr_accessor :source, :prefix, :identifier, :params
 
-      def initialize(source, prefix, identifier, params)
-        @source, @prefix, @identifier, @params = source, prefix, identifier, params
+      def initialize(from, source, prefix, identifier, params)
+        @from, @source, @prefix, @identifier, @params = from, source, prefix, identifier, params
       end
 
       def to_s
-        "Failed to parse #{source.inspect}"
+        "While #{@from}: #{source.inspect}"
       end
       alias_method :message, :to_s
     end
@@ -70,7 +70,7 @@ module IRCParser
         params = params.map { |a| a.pack("c*") } if params
         return prefix, command, *params
       else
-        raise IRCParser::Parser::Error.new(message, prefix, command, params)
+        raise IRCParser::Parser::Error.new("parsing", message, prefix, command, params)
       end
     end
 
