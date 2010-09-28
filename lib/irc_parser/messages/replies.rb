@@ -196,7 +196,7 @@ end
 # This is returned for a TOPIC request or when you JOIN, if the channel has a topic.
 # :gibson.freenode.net 333 emmanuel_oga #RubyOnRails wmoxam!~wmoxam@cmr-208-124-190-170.cr.net.cable.rogers.com 1285016759
 # http://www.mirc.net/raws/?view=333
-class IRCParser::Messages::RplInviting < IRCParser::Message
+class IRCParser::Messages::RplTopicWithTimestamp < IRCParser::Message
   self.identifier = '333'
   parameters :nick, :channel, :inviter_prefix, :timestamp
 end
