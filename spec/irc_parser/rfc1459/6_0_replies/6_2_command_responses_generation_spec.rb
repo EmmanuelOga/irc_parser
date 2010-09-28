@@ -440,9 +440,10 @@ describe IRCParser, "command responses" do
     message.server_name.should ==  "servername"
   end
 
-  it_parses ":server 221 Wiz +i" do |message|
+  it_parses ":server 221 Wiz nick +i" do |message|
     message.prefix.should == "server"
     message.nick.should ==  "Wiz"
+    message.user_nick.should ==  "nick"
     message.flags.should ==  "+i"
   end
 
@@ -881,9 +882,10 @@ describe IRCParser, "command responses" do
     message.server_name = "servername"
   end
 
-  it_generates IRCParser::Messages::RplUModeIs, ":server 221 Wiz +i" do |message|
+  it_generates IRCParser::Messages::RplUModeIs, ":server 221 Wiz nick +i" do |message|
     message.prefix = "server"
     message.nick   = "Wiz"
+    message.user_nick = "nick"
     message.flags  = "+i"
   end
 

@@ -498,6 +498,7 @@ end
 class IRCParser::Messages::RplUModeIs < IRCParser::Message
   self.identifier = '221'
   parameters :nick
+  parameters :user_nick
   parameters :flags
 end
 
