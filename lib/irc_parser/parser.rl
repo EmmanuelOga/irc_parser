@@ -12,6 +12,11 @@
   nonwhite = ascii -- (SPACE | NUL | CR | LF);
   special = ('_' | '-' | '[' | ']' | '\\' | '`' | '^' | '{' | '}' | '~');
 
+  unicode = (0x01..0x1f | 0x7f)                         |
+            (0xc2..0xdf 0x80..0xbf)                     |
+            (0xe0..0xef 0x80..0xbf 0x80..0xbf)          |
+            (0xf0..0xf4 0x80..0xbf 0x80..0xbf 0x80..0xbf);
+
   chstring = ascii -- (SPACE | BELL | NUL | CR | LF | comma);
   mask = ('#' | '$') chstring;
   nick = alpha (alpha | digit | special)*;
@@ -27,7 +32,7 @@
   action command { command = data[mark..(p-1)] }
   action params { params << data[mark..(p-1)] }
 
-  trailing = ( ascii -- (NUL | CR | LF) )* >mark %params;
+  trailing = ( ( ascii | unicode ) -- (NUL | CR | LF) )* >mark %params;
   middle = ( (nonwhite - ':') nonwhite* ) >mark %params;
   params = SPACE? (SPACE middle)* (SPACE ':' trailing)?;
   command = (alpha+ | digit digit digit) >mark %command;
