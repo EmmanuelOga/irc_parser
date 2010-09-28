@@ -4,8 +4,9 @@ describe IRCParser, "error replies" do
   include IRCParser
 
   # Used to indicate the nickname parameter supplied to a command is currently unused.
-  it_parses "401 Tony :No such nick/channel" do |message|
-    message.nick.should == "Tony"
+  it_parses "401 Wiz Tony :No such nick/channel" do |message|
+    message.nick.should == "Wiz"
+    message.user_nick.should == "Tony"
   end
 
   # Used to indicate the server name given currently doesn't exist.
@@ -240,8 +241,9 @@ describe IRCParser, "error replies" do
 
   #------------------------------------------------------------------------------
 
-  it_generates IRCParser::Messages::ErrNoSuchNick, "401 Tony :No such nick/channel" do |message|
-    message.nick= "Tony"
+  it_generates IRCParser::Messages::ErrNoSuchNick, "401 Wiz Tony :No such nick/channel" do |message|
+    message.nick= "Wiz"
+    message.user_nick= "Tony"
   end
 
   it_generates IRCParser::Messages::ErrNoSuchServer, "402 oga.com :No such server" do |message|
