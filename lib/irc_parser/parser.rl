@@ -12,6 +12,8 @@
   nonwhite = ascii -- (SPACE | NUL | CR | LF);
   special = ('_' | '-' | '[' | ']' | '\\' | '`' | '^' | '{' | '}' | '~');
 
+  # unicode sequences taken from Wincent.com 's wikitext
+  # http://git.wincent.com/wikitext.git/blob/HEAD:/ext/wikitext_ragel.rl#l459
   unicode = (0x01..0x1f | 0x7f)                         |
             (0xc2..0xdf 0x80..0xbf)                     |
             (0xe0..0xef 0x80..0xbf 0x80..0xbf)          |
