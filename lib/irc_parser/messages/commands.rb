@@ -193,8 +193,8 @@ end
 
 class IRCParser::Messages::User < IRCParser::Message
   parameter :user
-  parameter :mode, :aliases => [:hostname] # rfc 1459, deprecated
-  parameter :unused, :aliases => [:servername] # rfc 1459, deprecated
+  parameter :mode, :aliases => [:hostname], :default => "*" # rfc 1459, deprecated
+  parameter :servername, :default => "*" # rfc 1459, deprecated
   parameter :real_name
 end
 
