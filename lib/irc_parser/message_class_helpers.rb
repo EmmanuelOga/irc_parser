@@ -28,15 +28,11 @@ module IRCParser
 
       include Module.new.tap {|m| m.module_eval(<<-METHODS, __FILE__, __LINE__) }
         def #{name}
-          ( val = @parameters[#{parameter_index}] ) == IRCParser::Params::PLACEHOLDER ? nil : val
+          @parameters[#{parameter_index}]
         end
 
         def #{name}=(val)
           @parameters[#{parameter_index}] = val
-        end
-
-        def #{name}_given?
-          @parameters[#{parameter_index}] != IRCParser::Params::PLACEHOLDER
         end
       METHODS
 
@@ -44,7 +40,7 @@ module IRCParser
 
       include Module.new.tap {|m| m.module_eval(<<-METHODS, __FILE__, __LINE__) } if options[:csv]
         def #{name}
-          (val = super) ? val.split(#{sep}) : Array.new
+          (val = super) ? val.split(#{sep}) : []
         end
 
         def #{name}=(val)
@@ -52,18 +48,9 @@ module IRCParser
         end
       METHODS
 
-      if options[:aliases]
-        alias_attr_accessor(name => options[:aliases])
-        options[:aliases].each { |alias_name| alias_method("#{alias_name}_given?", "#{name}_given?") }
-      end
+      alias_attr_accessor(name => options[:aliases]) if options[:aliases]
 
-      if options.member?(:default)
-        default_parameters << options[:default]
-      elsif options[:csv]
-        default_parameters << nil
-      else
-        default_parameters << IRCParser::Params::PLACEHOLDER
-      end
+      default_parameters << (options.member?(:default) ? options[:default] : nil)
     end
 
     def parameters(*names)

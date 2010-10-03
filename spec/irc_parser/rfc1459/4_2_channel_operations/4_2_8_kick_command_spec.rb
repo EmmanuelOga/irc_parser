@@ -43,9 +43,9 @@ describe IRCParser, "parsing kick command" do
   end
 
   it_generates IRCParser::Messages::Kick, "KICK #Finnish John :Speaking English" do |message|
-    message.channels= ["#Finnish"]
-    message.users= ["John"]
-    message.kick_message= "Speaking English"
+    message.channels = "#Finnish"
+    message.users = "John"
+    message.kick_message = "Speaking English"
   end
 
   it_generates IRCParser::Messages::Kick, ":WiZ KICK #Finnish John" do |message|

@@ -36,6 +36,7 @@ module IRCParser
       symbol = IRCParser::Helper.underscore(ident).to_sym
 
       klass.class_eval do
+        self.postfixes  = 0
         self.identifier = ident
         self.identifier = ident.upcase
         self.identifier = symbol
@@ -49,7 +50,7 @@ module IRCParser
     end
 
     def self.default_parameters
-      @predefined_params ||= Array.new
+      @predefined_params ||= []
     end
 
     def initialize(prefix = nil, *params)

@@ -1,6 +1,10 @@
 module IRCParser
   class Params < Array
-    PLACEHOLDER = Class.new { def inspect; '<PLACEHOLDER>'; end }.new
+
+    PLACEHOLDER = Class.new do
+      def inspect; '<PLACEHOLDER>'; end
+      def to_s; '*'; end
+    end.new
 
     # Params is an array of values
     def initialize(defaults, *params)
@@ -8,23 +12,22 @@ module IRCParser
       params.each_with_index { |elem, index| self[index] = elem }
     end
 
+    def minimum_postfixes(minimum_requested)
+      index_first_space = each_with_index { |val, index| break index if !val.nil? && val.to_s.index(" ") }
+      mandatory_postfixes = index_first_space.is_a?(Numeric) ? (length - index_first_space) : 0
+      minimum_requested > mandatory_postfixes ? minimum_requested : mandatory_postfixes
+    end
+
     # Postfixes is the number of paremeters used to build the last parameter
     # The message has a number of postfixes, which are the paremeters to be
     # joined in the last parameter. This is because the RFC protocol only
     # allows blank on the last param.  All the parameters are joined by a
     # space.
-    def to_s(postfixes = 0)
-      return "" if empty? || (length == 1 && (first.nil? || first == ""))
-
-      parameters = reject {|elem| elem.nil? }
-      parameters.pop while parameters.last == PLACEHOLDER # don't send unneeded wildcards
-      parameters = parameters.map { |val| val == PLACEHOLDER ? "*" : val }
-
-      split_index = postfixes.nil? || postfixes == 0 ? 1 : postfixes
-      parameters, last = parameters[0...-split_index], parameters[-split_index..-1].flatten.join(" ")
-      parameters.push(last == "" || last.nil? || last =~ /\s+/ || (postfixes && postfixes > 0) ? ":#{last}" : last)
-
-      parameters.join(" ")
+    def to_s(minimum_postfixes_requested = 0)
+      postfixes = minimum_postfixes(minimum_postfixes_requested)
+      prefix, postfix = self[0..(-1 - postfixes)], self[-postfixes, postfixes]
+      prefix.delete(nil); postfix.delete(nil)
+      "#{ prefix.join(" ") } #{ ":#{ postfix.join(" ") }" unless postfix.empty? }".strip
     end
   end
 end

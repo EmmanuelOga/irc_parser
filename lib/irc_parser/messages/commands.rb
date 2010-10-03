@@ -6,8 +6,8 @@ end
 class IRCParser::Messages::Mode < IRCParser::Message
   parameter :channel  , :aliases => [:nick]
   parameter :flags
-  parameter :limit    , :default => nil, :aliases => [:key]
-  parameter :user     , :default => nil
+  parameter :limit    , :aliases => [:key]
+  parameter :user
   parameter :ban_mask
 
   # Damned rfc.
@@ -228,7 +228,7 @@ class IRCParser::Messages::Stats < IRCParser::Message
 end
 
 class IRCParser::Messages::Links < IRCParser::Message
-  parameter :remote_server, :default => nil
+  parameter :remote_server
   parameter :server_mask
 
   def initialize(prefix, *params, &block)
@@ -242,7 +242,7 @@ class IRCParser::Messages::Links < IRCParser::Message
 end
 
 class IRCParser::Messages::Time < IRCParser::Message
-  parameter :for_server, :default => nil
+  parameter :for_server
 end
 
 class IRCParser::Messages::Connect < IRCParser::Message
@@ -269,7 +269,7 @@ class IRCParser::Messages::Admin < IRCParser::Message
 end
 
 class IRCParser::Messages::Info < IRCParser::Message
-  parameter :server, :default => nil, :aliases => [:server_for_nick]
+  parameter :server, :aliases => [:server_for_nick]
 end
 
 module IRCParser::Messages::MesageMan
@@ -334,12 +334,12 @@ class IRCParser::Messages::Who < IRCParser::Message
 end
 
 class IRCParser::Messages::WhoIs < IRCParser::Message
-  parameter :target, :default => nil
+  parameter :target
   parameter :pattern
 
   def initialize(prefix, *params, &block)
     super
-    self.target, self.pattern = nil, self.target if parameters[1] == IRCParser::Params::PLACEHOLDER
+    self.target, self.pattern = nil, self.target if params.length == 1
   end
 
   def regexp
@@ -373,7 +373,7 @@ class IRCParser::Messages::Pong < IRCParser::Message
 end
 
 class IRCParser::Messages::Error < IRCParser::Message
-  parameter :nick, :default => nil
+  parameter :nick
   parameter :error_message
 
   def initialize(prefix, *params, &block)
@@ -387,7 +387,7 @@ class IRCParser::Messages::Error < IRCParser::Message
 end
 
 class IRCParser::Messages::Away < IRCParser::Message
-  parameter :away_message, :default => nil
+  parameter :away_message
 end
 
 class IRCParser::Messages::Rehash < IRCParser::Message

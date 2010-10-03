@@ -5,7 +5,6 @@ describe IRCParser, "parsing whois query" do
 
   # ; return available user information about nick WiZ
   it_parses "WHOIS wiz" do |message|
-    ap message
     message.pattern.should == "wiz"
   end
 

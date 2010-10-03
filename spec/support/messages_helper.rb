@@ -9,9 +9,15 @@ module ParsingHelper
 
   def it_generates(klass, gen_message, &block)
     it("generates #{gen_message}") do
-      message = klass.new(nil)
-      instance_exec(message, &block)
-      message.to_s.should == "#{gen_message}\r\n"
+      begin
+        message = klass.new(nil)
+        instance_exec(message, &block)
+        message.to_s.should == "#{gen_message}\r\n"
+      rescue => e
+        puts e
+        puts e.backtrace.join("\n")
+        raise e
+      end
     end
   end
 

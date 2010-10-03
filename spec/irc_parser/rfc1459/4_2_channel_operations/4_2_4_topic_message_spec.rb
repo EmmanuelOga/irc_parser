@@ -17,18 +17,6 @@ describe IRCParser, "parsing topic message" do
     message.topic.should be_nil
   end
 
-  it_parses "TOPIC #test" do |message|
-    message.should_not be_topic_given
-  end
-
-  it_parses "TOPIC #test :Hola Manola" do |message|
-    message.should be_topic_given
-  end
-
-  it_parses "TOPIC #test :" do |message|
-    message.should be_topic_given
-  end
-
   #------------------------------------------------------------------------------
 
   it_generates IRCParser::Messages::Topic, ":Wiz TOPIC #test :New topic" do |message| # ;User Wiz setting the topic.
