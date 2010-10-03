@@ -1,7 +1,7 @@
 
 # line 1 "lib/irc_parser/parser.rl"
 
-# line 43 "lib/irc_parser/parser.rl"
+# line 45 "lib/irc_parser/parser.rl"
 
 
 module IRCParser
@@ -345,7 +345,7 @@ end
 self.irc_parser_en_main = 1;
 
 
-# line 61 "lib/irc_parser/parser.rl"
+# line 63 "lib/irc_parser/parser.rl"
 
     def self.run(message)
       data = message.unpack("c*") if message.is_a?(String)
@@ -362,7 +362,7 @@ begin
 	cs = irc_parser_start
 end
 
-# line 70 "lib/irc_parser/parser.rl"
+# line 72 "lib/irc_parser/parser.rl"
       
 # line 2 "lib/irc_parser/parser.rb"
 begin
@@ -401,26 +401,26 @@ begin
 	if _irc_parser_trans_actions[_trans] != 0
 	case _irc_parser_trans_actions[_trans]
 	when 1 then
-# line 30 "lib/irc_parser/parser.rl"
+# line 32 "lib/irc_parser/parser.rl"
 		begin
  mark = p 		end
 	when 5 then
-# line 31 "lib/irc_parser/parser.rl"
+# line 33 "lib/irc_parser/parser.rl"
 		begin
  prefix = data[mark..(p-1)] 		end
 	when 2 then
-# line 32 "lib/irc_parser/parser.rl"
+# line 34 "lib/irc_parser/parser.rl"
 		begin
  command = data[mark..(p-1)] 		end
 	when 3 then
-# line 33 "lib/irc_parser/parser.rl"
+# line 35 "lib/irc_parser/parser.rl"
 		begin
  params << data[mark..(p-1)] 		end
 	when 4 then
-# line 30 "lib/irc_parser/parser.rl"
+# line 32 "lib/irc_parser/parser.rl"
 		begin
  mark = p 		end
-# line 33 "lib/irc_parser/parser.rl"
+# line 35 "lib/irc_parser/parser.rl"
 		begin
  params << data[mark..(p-1)] 		end
 # line 2 "lib/irc_parser/parser.rb"
@@ -446,13 +446,13 @@ begin
 end
 	end
 
-# line 71 "lib/irc_parser/parser.rl"
+# line 73 "lib/irc_parser/parser.rl"
 
       if cs >= irc_parser_first_final
         prefix = prefix.pack("c*") if prefix
         command = command.pack("c*") if command
         params = params.map { |a| a.pack("c*") } if params
-        return prefix, command, *params
+        return prefix, command, params
       else
         raise IRCParser::Parser::Error.new("parsing", message, prefix, command, params)
       end

@@ -42,9 +42,9 @@ class IRCParser::Messages::ErrNoRecipient < IRCParser::Message
   self.identifier = "411"
   parameters :nick, "No recipient given (", :command, ")"
 
-  def initialize(prefix, *params)
+  def initialize(prefix, params = nil)
     super
-    self.command = ( params.to_s =~ /\(([^\)]+)\)/ && $1 )
+    self.command = ( params.to_s =~ /\(([^\)]+)\)/ && $1 ) if params
   end
 
   def to_str
@@ -87,9 +87,9 @@ class IRCParser::Messages::ErrFileError < IRCParser::Message
   self.identifier = "424"
   parameters :nick, ["File error doing", :file_op, "on", :file]
 
-  def initialize(prefix, *params)
+  def initialize(prefix, params = nil)
     super
-    self.file_op, self.file = $1, $2 if params.join(" ") =~ /File error doing\s*([^ ]+)\s*on\s*([^ ]+)/
+    self.file_op, self.file = $1, $2 if params && params.join(" ") =~ /File error doing\s*([^ ]+)\s*on\s*([^ ]+)/
   end
 end
 

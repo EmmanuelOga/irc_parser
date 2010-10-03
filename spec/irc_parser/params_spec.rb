@@ -6,7 +6,7 @@ describe IRCParser::Params do
   end
 
   it "accepts other parameters" do
-    IRCParser::Params.new([1,2,3], 4, 5).should == [4,5,3]
+    IRCParser::Params.new([1,2,3], [4, 5]).should == [4,5,3]
   end
 
   it "generates an empty string for empty params" do

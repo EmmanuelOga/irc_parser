@@ -13,10 +13,10 @@ class IRCParser::Messages::Mode < IRCParser::Message
   # Damned rfc.
   # Channel Parameters: <channel> {[+|-]|o|p|s|i|t|n|b|v} [<limit>] [<user>] [<ban mask>]
   # User Parameters: <nickname> {[+|-]|i|w|s|o}
-  def initialize(prefix, *params, &block)
+  def initialize(prefix, params = nil, &block)
     super
 
-    return if params.length <= 1
+    return if params == nil || params.length <= 1
 
     if params.length != 5 && params.length != 2
       self.channel = params[0]
@@ -29,7 +29,6 @@ class IRCParser::Messages::Mode < IRCParser::Message
           self.ban_mask = remaining.first
         else
           self.user, self.ban_mask = *remaining
-          self.ban_mask = IRCParser::Params::PLACEHOLDER if self.ban_mask.nil?
         end
       end
     end
@@ -231,12 +230,14 @@ class IRCParser::Messages::Links < IRCParser::Message
   parameter :remote_server
   parameter :server_mask
 
-  def initialize(prefix, *params, &block)
+  def initialize(prefix, params = nil, &block)
     super(prefix)
 
-    case params.length
-    when 1 then self.server_mask = params.first
-    when 2 then self.remote_server, self.server_mask = *params
+    if params
+      case params.length
+      when 1 then self.server_mask = params.first
+      when 2 then self.remote_server, self.server_mask = *params
+      end
     end
   end
 end
@@ -250,12 +251,14 @@ class IRCParser::Messages::Connect < IRCParser::Message
   parameter :port
   parameter :remote_server
 
-  def initialize(prefix, *params, &block)
+  def initialize(prefix, params = nil, &block)
     super(prefix)
-    case params.length
-    when 1 then self.target_server = params.first
-    when 2 then self.target_server, self.remote_server = *params
-    when 3 then self.target_server, self.port, self.remote_server = *params
+    if params
+      case params.length
+      when 1 then self.target_server = params.first
+      when 2 then self.target_server, self.remote_server = *params
+      when 3 then self.target_server, self.port, self.remote_server = *params
+      end
     end
   end
 end
@@ -337,9 +340,9 @@ class IRCParser::Messages::WhoIs < IRCParser::Message
   parameter :target
   parameter :pattern
 
-  def initialize(prefix, *params, &block)
+  def initialize(prefix, params = nil, &block)
     super
-    self.target, self.pattern = nil, self.target if params.length == 1
+    self.target, self.pattern = nil, self.target if params && params.length == 1
   end
 
   def regexp
@@ -376,12 +379,15 @@ class IRCParser::Messages::Error < IRCParser::Message
   parameter :nick
   parameter :error_message
 
-  def initialize(prefix, *params, &block)
+  def initialize(prefix, params = nil, &block)
     super(prefix)
-    if params.length == 2
-      self.nick, self.error_message = *params
-    else
-      self.error_message = params.first
+
+    if params
+      if params.length == 2
+        self.nick, self.error_message = *params
+      else
+        self.error_message = params.first
+      end
     end
   end
 end

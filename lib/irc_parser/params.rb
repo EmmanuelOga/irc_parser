@@ -1,15 +1,10 @@
 module IRCParser
   class Params < Array
 
-    PLACEHOLDER = Class.new do
-      def inspect; '<PLACEHOLDER>'; end
-      def to_s; '*'; end
-    end.new
-
     # Params is an array of values
-    def initialize(defaults, *params)
+    def initialize(defaults, params = nil)
       replace(defaults)
-      params.each_with_index { |elem, index| self[index] = elem }
+      params.each_with_index { |elem, index| self[index] = elem } if params
     end
 
     def minimum_postfixes(minimum_requested)

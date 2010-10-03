@@ -60,8 +60,8 @@ module IRCParser
       @predefined_params ||= []
     end
 
-    def initialize(prefix = nil, *params)
-      self.prefix, @parameters = prefix, Params.new(default_parameters, *params)
+    def initialize(prefix = nil, params = nil)
+      self.prefix, @parameters = prefix, Params.new(default_parameters, params)
       yield self if block_given?
     end
 

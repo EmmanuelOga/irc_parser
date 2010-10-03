@@ -10,22 +10,22 @@ module IRCParser
   autoload :Messages, 'irc_parser/messages'
 
   def parse(message)
-    prefix, identifier, *params = Parser.run(message)
+    prefix, identifier, params = Parser.run(message)
 
     klass = Messages::ALL[identifier.upcase]
 
     raise IRCParser::Parser::Error.new("looking up message class", message, prefix, identifier, params) unless klass
 
-    klass.new(prefix, *params)
+    klass.new(prefix, params)
   end
 
-  def message(reference, prefix = nil, *params, &block)
-    message_class(reference).new(prefix, *params, &block)
+  def message(identifier, prefix = nil, params = nil, &block)
+    message_class(identifier).new(prefix, params, &block)
   end
 
-  def message_class(reference)
-    klass = Messages::ALL[reference]
-    raise ArgumentError.new("no message with reference #{reference.inspect}") unless klass
+  def message_class(identifier)
+    klass = Messages::ALL[identifier]
+    raise ArgumentError.new("no message with identifier #{identifier.inspect}") unless klass
     klass
   end
 end

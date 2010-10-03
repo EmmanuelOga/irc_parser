@@ -75,7 +75,7 @@ module IRCParser
         prefix = prefix.pack("c*") if prefix
         command = command.pack("c*") if command
         params = params.map { |a| a.pack("c*") } if params
-        return prefix, command, *params
+        return prefix, command, params
       else
         raise IRCParser::Parser::Error.new("parsing", message, prefix, command, params)
       end

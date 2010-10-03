@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe IRCParser do
   it "provides a helper method to generate messages" do
-    IRCParser.message("MODE", nil, "nick").to_s.should == "MODE nick\r\n"
+    IRCParser.message("MODE", nil, ["nick"]).to_s.should == "MODE nick\r\n"
     IRCParser.message("MODE") { |msg| msg.nick = "nick" }.to_s.should == "MODE nick\r\n"
   end
 
