@@ -1,6 +1,6 @@
 module IRCParser
   class Params < Array
-    PLACEHOLDER = Object.new.tap {|o| def o.inspect; "<PLACEHOLDER>"; end }.freeze
+    PLACEHOLDER = Class.new { def inspect; '<PLACEHOLDER>'; end }.new
 
     # Params is an array of values
     def initialize(defaults, *params)
@@ -21,10 +21,10 @@ module IRCParser
       parameters = parameters.map { |val| val == PLACEHOLDER ? "*" : val }
 
       split_index = postfixes.nil? || postfixes == 0 ? 1 : postfixes
-      parameters, last = Array(parameters[0...-split_index]), Array(parameters[-split_index..-1]).flatten.join(" ")
+      parameters, last = parameters[0...-split_index], parameters[-split_index..-1].flatten.join(" ")
       parameters.push(last == "" || last.nil? || last =~ /\s+/ || (postfixes && postfixes > 0) ? ":#{last}" : last)
 
-      parameters.join(" ") || ""
+      parameters.join(" ")
     end
   end
 end

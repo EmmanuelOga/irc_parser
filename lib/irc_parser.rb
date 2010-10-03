@@ -24,8 +24,8 @@ module IRCParser
   end
 
   def message_class(reference)
-    Messages::ALL[reference].tap do |klass|
-      raise ArgumentError.new("no message with reference #{reference.inspect}") unless klass
-    end
+    klass = Messages::ALL[reference]
+    raise ArgumentError.new("no message with reference #{reference.inspect}") unless klass
+    klass
   end
 end
