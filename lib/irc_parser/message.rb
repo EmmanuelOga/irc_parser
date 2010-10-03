@@ -35,7 +35,14 @@ module IRCParser
       ident = klass.class_name
       symbol = IRCParser::Helper.underscore(ident).to_sym
 
+      # used to hold the accessors created by the #parameter class helper
+      # that way we can redefine the parameters in each class an still be
+      # able to call super
+      klass.const_set("ParameterHelpers", Module.new)
+
       klass.class_eval do
+        include ParameterHelpers
+
         self.postfixes  = 0
         self.identifier = ident
         self.identifier = ident.upcase

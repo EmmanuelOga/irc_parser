@@ -1,4 +1,6 @@
 module IRCParser
+  # This class methods generate helpers that are added to the
+  # ParameterHelpers module created each time IRCParser::Message is inherited
   module MessageClassHelpers
 
     def alias_attr_accessor(aliases)
@@ -11,14 +13,13 @@ module IRCParser
     end
 
     def class_method_accessor(*accessors)
-      methods = accessors.map do |meth|
-        <<-METHODS
+      accessors.each do |meth|
+        class_eval(<<-METHODS, __FILE__, __LINE__)
           def #{meth}
             self.class.#{meth}
           end
         METHODS
       end
-      include Module.new.tap {|m| m.module_eval(methods.join(" "), __FILE__, __LINE__) }
     end
 
     def parameter(name, options = {})
@@ -26,27 +27,29 @@ module IRCParser
 
       default_parameters << name and return unless name.is_a?(Symbol)
 
-      include Module.new.tap {|m| m.module_eval(<<-METHODS, __FILE__, __LINE__) }
-        def #{name}
-          @parameters[#{parameter_index}]
-        end
+      if options[:csv]
+        sep = ( options[:separator] ? options[:separator] : "," ).inspect
 
-        def #{name}=(val)
-          @parameters[#{parameter_index}] = val
-        end
-      METHODS
+        const_get("ParameterHelpers").module_eval(<<-METHODS, __FILE__, __LINE__)
+          def #{name}
+            (val = @parameters[#{parameter_index}]) ? val.split(#{sep}) : []
+          end
 
-      sep = ( options[:separator] ? options[:separator] : "," ).inspect if options[:csv]
+          def #{name}=(val)
+            @parameters[#{parameter_index}] = Array(val).join(#{sep})
+          end
+        METHODS
+      else
+        const_get("ParameterHelpers").module_eval(<<-METHODS, __FILE__, __LINE__)
+          def #{name}
+            @parameters[#{parameter_index}]
+          end
 
-      include Module.new.tap {|m| m.module_eval(<<-METHODS, __FILE__, __LINE__) } if options[:csv]
-        def #{name}
-          (val = super) ? val.split(#{sep}) : []
-        end
-
-        def #{name}=(val)
-          super((val = Array(val).join(#{sep})) == "" ? nil : val)
-        end
-      METHODS
+          def #{name}=(val)
+            @parameters[#{parameter_index}] = val
+          end
+        METHODS
+      end
 
       alias_attr_accessor(name => options[:aliases]) if options[:aliases]
 
