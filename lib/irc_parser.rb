@@ -7,7 +7,6 @@ module IRCParser
   autoload :Helper, "irc_parser/helper"
   autoload :Params, 'irc_parser/params'
   autoload :Message, 'irc_parser/message'
-  autoload :Messages, 'irc_parser/messages'
 
   def parse(message)
     prefix, identifier, params = Parser.run(message)
@@ -29,3 +28,5 @@ module IRCParser
     klass
   end
 end
+
+require 'irc_parser/messages'
