@@ -20,7 +20,7 @@ module IRCParser
         mandatory_postfixes = index_first_space.is_a?(Numeric) ? (length - index_first_space) : 0
         postfixes = minimum_postfixes > mandatory_postfixes ? minimum_postfixes : mandatory_postfixes
 
-        prefix, postfix = self[0..(-1 - postfixes)], self[-postfixes, postfixes]
+        prefix, postfix = self[0, length - postfixes], self[-postfixes, postfixes]
         prefix.delete(nil); postfix.delete(nil)
 
         "#{" " unless prefix.empty?}#{prefix.join(" ")}#{" :" unless postfix.empty?}#{postfix.join(" ")}"
