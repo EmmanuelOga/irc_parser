@@ -67,9 +67,9 @@ module IRCParser
 
     class_method_accessor :class_name, :identifier, :default_parameters, :postfixes, :is_reply?, :is_error?, :to_sym
 
-    def to_str
-      "#{prefix ? ":#{prefix}" : nil} #{identifier} #{parameters.to_s(postfixes)}".strip << "\r\n"
+    def to_s
+      "#{prefix ? ":#{prefix} " : nil}#{identifier}#{parameters.to_s(postfixes)}\r\n"
     end
-    alias_method :to_s, :to_str
+    alias_method :to_str, :to_s
   end
 end

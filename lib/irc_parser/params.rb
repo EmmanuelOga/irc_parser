@@ -13,16 +13,18 @@ module IRCParser
     # allows blank on the last param.  All the parameters are joined by a
     # space.
     def to_s(minimum_postfixes = 0)
-      index_first_space = each_with_index { |val, index| break index if !val.nil? && val.to_s.index(" ") }
-      mandatory_postfixes = index_first_space.is_a?(Numeric) ? (length - index_first_space) : 0
-      postfixes = minimum_postfixes > mandatory_postfixes ? minimum_postfixes : mandatory_postfixes
+      if empty? || (self == [nil]) || (self == [""])
+        ""
+      else
+        index_first_space = each_with_index { |val, index| break index if !val.nil? && val.to_s.index(" ") }
+        mandatory_postfixes = index_first_space.is_a?(Numeric) ? (length - index_first_space) : 0
+        postfixes = minimum_postfixes > mandatory_postfixes ? minimum_postfixes : mandatory_postfixes
 
-      prefix, postfix = self[0..(-1 - postfixes)], self[-postfixes, postfixes]
-      prefix.delete(nil); postfix.delete(nil)
+        prefix, postfix = self[0..(-1 - postfixes)], self[-postfixes, postfixes]
+        prefix.delete(nil); postfix.delete(nil)
 
-      result = "#{ prefix.join(" ") } #{ ":#{ postfix.join(" ") }" unless postfix.empty? }"
-      result.strip!
-      result
+        "#{" " unless prefix.empty?}#{prefix.join(" ")}#{" :" unless postfix.empty?}#{postfix.join(" ")}"
+      end
     end
   end
 end

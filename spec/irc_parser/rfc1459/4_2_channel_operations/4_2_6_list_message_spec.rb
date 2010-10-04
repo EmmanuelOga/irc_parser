@@ -15,7 +15,6 @@ describe IRCParser, "parsing list message" do
   #------------------------------------------------------------------------------
 
   it_generates IRCParser::Messages::List, "LIST" do |message|
-    message.channels= []
   end
 
   it_generates IRCParser::Messages::List, "LIST #twilight_zone,#42"  do |message|

@@ -21,6 +21,5 @@ describe IRCParser, "parsing names message" do
 
   # ; list all visible channels and users
   it_generates IRCParser::Messages::Names, "NAMES" do |message|
-    message.channels= []
   end
 end

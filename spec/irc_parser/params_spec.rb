@@ -14,9 +14,9 @@ describe IRCParser::Params do
   end
 
   it "generates a string based on the number of postfixes" do
-    IRCParser::Params.new([1,2,3]).to_s.should == "1 2 3"
-    IRCParser::Params.new([1,2,3]).to_s(1).should == "1 2 :3"
-    IRCParser::Params.new([1,2,3]).to_s(2).should == "1 :2 3"
-    IRCParser::Params.new([1,2,3]).to_s(3).should == ":1 2 3"
+    IRCParser::Params.new([1,2,3]).to_s.should    == " 1 2 3"
+    IRCParser::Params.new([1,2,3]).to_s(1).should == " 1 2 :3"
+    IRCParser::Params.new([1,2,3]).to_s(2).should == " 1 :2 3"
+    IRCParser::Params.new([1,2,3]).to_s(3).should == " :1 2 3"
   end
 end

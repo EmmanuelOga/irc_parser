@@ -60,7 +60,6 @@ describe IRCParser, "parsing join message" do
 
   it_generates IRCParser::Messages::Join, ":WiZ JOIN #Twilight_zone" do |message|
     message.channels= ["#Twilight_zone"]
-    message.keys= []
     message.from= "WiZ"
   end
 end
