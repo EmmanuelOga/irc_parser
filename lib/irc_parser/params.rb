@@ -4,7 +4,11 @@ module IRCParser
     # Params is an array of values
     def initialize(defaults, params = nil)
       replace(defaults)
-      params.each_with_index { |elem, index| self[index] = elem } if params
+
+      if params
+        length = params.length
+        self[length] = params[length] while (length -= 1) >= 0
+      end
     end
 
     # Postfixes is the number of paremeters used to build the last parameter
@@ -13,18 +17,19 @@ module IRCParser
     # allows blank on the last param.  All the parameters are joined by a
     # space.
     def to_s(minimum_postfixes = 0)
-      if empty? || (self == [nil]) || (self == [""])
+      if empty? || self == EMPTY_PARAM
         ""
       else
-        index_first_space = each_with_index { |val, index| break index if !val.nil? && val.to_s.index(" ") }
-        mandatory_postfixes = index_first_space.is_a?(Numeric) ? (length - index_first_space) : 0
-        postfixes = minimum_postfixes > mandatory_postfixes ? minimum_postfixes : mandatory_postfixes
+        postfixes = length
+        postfixes -= 1 while postfixes > minimum_postfixes && self[-postfixes].to_s !~ /\s/
 
         prefix, postfix = self[0, length - postfixes], self[-postfixes, postfixes]
         prefix.delete(nil); postfix.delete(nil)
 
-        "#{" " unless prefix.empty?}#{prefix.join(" ")}#{" :" unless postfix.empty?}#{postfix.join(" ")}"
+        "#{" #{prefix.join(" ")}" unless prefix.empty?}#{" :#{postfix.join(" ")}" unless postfix.empty?}"
       end
     end
+
+    EMPTY_PARAM = [""].freeze
   end
 end
