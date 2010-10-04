@@ -20,15 +20,15 @@ module IRCParser
     end
 
     def self.class_name
-      name.split("::").last
+      @_class_name ||= name.split("::").last
     end
 
     def self.is_reply?
-      class_name =~ /^Rpl[A-Z]/
+      @_is_reply ||= class_name =~ /^Rpl[A-Z]/
     end
 
     def self.is_error?
-      class_name =~ /^Err[A-Z]/
+      @_is_error ||= class_name =~ /^Err[A-Z]/
     end
 
     def self.inherited(klass)

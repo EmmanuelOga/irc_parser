@@ -16,7 +16,7 @@ module IRCParser
       accessors.each do |meth|
         class_eval(<<-METHODS, __FILE__, __LINE__)
           def #{meth}
-            self.class.#{meth}
+            @_#{meth.to_s.sub(/!$/, "_bang").sub(/\?$/, "_query")} ||= self.class.#{meth}
           end
         METHODS
       end
