@@ -46,12 +46,6 @@ end
 class IRCParser::Messages::RplMyInfo < IRCParser::Message
   self.identifier = "004"
   parameters :nick, :server_name, :version, :available_user_modes, :available_channel_modes
-
-  def initialize(prefix, params = nil)
-    super(prefix)
-    self.nick = params.first if params
-    super
-  end
 end
 
 class IRCParser::Messages::RplBounce < IRCParser::Message
@@ -131,10 +125,8 @@ end
 class IRCParser::Messages::RplWhoIsChannels < IRCParser::Message
   self.identifier = "319"
   self.postfixes = 1
-  parameters :nick, :user, :channels # flags: [@|+]
-  def channels
-    super.to_s.split(/\s+/)
-  end
+  parameters :nick, :user
+  parameter :channels, :csv => true, :separator => " " # flags: [@|+]
 end
 
 class IRCParser::Messages::RplEndOfWhoIs < IRCParser::Message

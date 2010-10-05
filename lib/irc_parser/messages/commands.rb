@@ -4,9 +4,9 @@ class IRCParser::Messages::Join < IRCParser::Message
 end
 
 class IRCParser::Messages::Mode < IRCParser::Message
-  parameter :channel  , :aliases => [:nick]
+  parameter :channel, :aliases => [:nick]
   parameter :flags
-  parameter :limit    , :aliases => [:key]
+  parameter :limit, :aliases => [:key]
   parameter :user
   parameter :ban_mask
 
@@ -34,10 +34,6 @@ class IRCParser::Messages::Mode < IRCParser::Message
     end
 
     self.flags = self.flags.downcase if self.flags
-  end
-
-  def flags
-    super || ( self.flags = "" )
   end
 
   def for_channel?
@@ -69,7 +65,7 @@ class IRCParser::Messages::Mode < IRCParser::Message
   }
 
   def negative_flags?
-    flags[0,1] == "-"
+    flags && ( flags[0,1] == "-" )
   end
 
   def positive_flags?
@@ -77,6 +73,8 @@ class IRCParser::Messages::Mode < IRCParser::Message
   end
 
   def negative_flags!
+    self.flags ||= ""
+
     case flags[0,1]
     when "-" then # Do nothing
     when "+" then self.flags[0] = "-"
@@ -86,6 +84,8 @@ class IRCParser::Messages::Mode < IRCParser::Message
   end
 
   def positive_flags!
+    self.flags ||= ""
+
     case flags[0,1]
     when "+" then # Do nothing
     when "-" then self.flags[0] = "+"
@@ -96,14 +96,15 @@ class IRCParser::Messages::Mode < IRCParser::Message
 
   CHANNEL_MODES.each do |name, flag|
     define_method("chan_flags_include_#{name}?") do
-      for_channel? && flags.include?(flag)
+      flags && for_channel? && flags.include?(flag)
     end
 
     define_method("chan_#{name}?") do
-      for_channel? && flags.include?(flag) && positive_flags?
+      flags && for_channel? && flags.include?(flag) && positive_flags?
     end
 
     define_method("chan_#{name}!") do
+      self.flags ||= ""
       self.flags = flags + flag unless flags.include?(flag)
     end
   end
@@ -120,14 +121,15 @@ class IRCParser::Messages::Mode < IRCParser::Message
 
   USER_MODES.each do |name, flag|
     define_method("user_flags_include_#{name}?") do
-      for_user? && flags.include?(flag)
+      flags && for_user? && flags.include?(flag)
     end
 
     define_method("user_#{name}?") do
-      for_user? && flags.include?(flag) && positive_flags?
+      flags && for_user? && flags.include?(flag) && positive_flags?
     end
 
     define_method("user_#{name}!") do
+      self.flags ||= ""
       self.flags = flags + flag unless self.flags.include?(flag)
     end
   end

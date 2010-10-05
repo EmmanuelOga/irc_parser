@@ -1,6 +1,4 @@
 module IRCParser
-  # This class methods generate helpers that are added to the
-  # ParameterHelpers module created each time IRCParser::Message is inherited
   module MessageClassHelpers
 
     def alias_attr_accessor(aliases)
@@ -30,7 +28,7 @@ module IRCParser
       if options[:csv]
         sep = ( options[:separator] ? options[:separator] : "," ).inspect
 
-        const_get("ParameterHelpers").module_eval(<<-METHODS, __FILE__, __LINE__)
+        class_eval(<<-METHODS, __FILE__, __LINE__)
           def #{name}
             (val = @parameters[#{parameter_index}]) ? val.split(#{sep}) : []
           end
@@ -40,7 +38,7 @@ module IRCParser
           end
         METHODS
       else
-        const_get("ParameterHelpers").module_eval(<<-METHODS, __FILE__, __LINE__)
+        class_eval(<<-METHODS, __FILE__, __LINE__)
           def #{name}
             @parameters[#{parameter_index}]
           end
