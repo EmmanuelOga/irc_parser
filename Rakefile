@@ -43,17 +43,22 @@ end
 #
 #############################################################################
 
-require 'spec/rake/spectask'
+require 'rspec/core/rake_task'
 
-Spec::Rake::SpecTask.new(:spec) do |spec|
-  spec.libs << 'lib' << 'spec'
-  spec.spec_files = FileList['spec/**/*_spec.rb']
+RSpec::Core::RakeTask.new(:spec) do |spec|
+  spec.ruby_opts = '-Ilib/ -Ispec/'
+  spec.pattern = 'spec/**/*_spec.rb'
 end
 
-Spec::Rake::SpecTask.new(:rcov) do |spec|
-  spec.libs << 'lib' << 'spec'
-  spec.pattern = 'spec/**/*_spec.rb'
-  spec.rcov = true
+begin
+  require 'simplecov'
+rescue LoadError
+  puts "simplecov gem is not available. Install it to get coverage reports"
+else
+  RSpec::Core::RakeTask.new(:simplecov) do |spec|
+    spec.ruby_opts = '-I lib -I spec/ -rspec/support/simplecov'
+    spec.pattern = 'spec/**/*_spec.rb'
+  end
 end
 
 task :default => :spec

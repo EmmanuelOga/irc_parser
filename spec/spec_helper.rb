@@ -1,13 +1,12 @@
-$LOAD_PATH.unshift(File.dirname(__FILE__))
-$LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
+$LOAD_PATH.unshift(File.expand_path(File.dirname(__FILE__)))
+$LOAD_PATH.unshift(File.expand_path(File.join(File.dirname(__FILE__), '..', 'lib')))
 
 require 'irc_parser'
 
 require 'ap'
-require 'spec'
-require 'spec/autorun'
-require 'spec/support/messages_helper.rb'
+require 'rspec'
+require 'support/messages_helper.rb'
 
-Spec::Runner.configure do |config|
-  config.extend ParsingHelper
+RSpec.configure do |c|
+  c.extend ParsingHelper
 end
