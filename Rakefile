@@ -56,7 +56,7 @@ rescue LoadError
   puts "simplecov gem is not available. Install it to get coverage reports"
 else
   RSpec::Core::RakeTask.new(:simplecov) do |spec|
-    spec.ruby_opts = '-I lib -I spec/ -rspec/support/simplecov'
+    spec.ruby_opts = '-I. -Ilib/ -Ispec/ -rspec/support/simplecov'
     spec.pattern = 'spec/**/*_spec.rb'
   end
 end
