@@ -26,7 +26,7 @@ Gem::Specification.new do |s|
   # s.default_executable = 'name'
 
   s.rdoc_options = ["--charset=UTF-8"]
-  s.extra_rdoc_files = %w[README LICENSE]
+  s.extra_rdoc_files = %w[README.rdoc LICENSE]
 
   # s.add_dependency('DEPNAME', [">= 1.1.0", "< 2.0.0"])
 
