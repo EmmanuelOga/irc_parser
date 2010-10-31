@@ -13,8 +13,8 @@ module IRCParser
     def class_method_accessor(*accessors)
       accessors.each do |meth|
         class_eval(<<-METHODS, __FILE__, __LINE__)
-          def #{meth}
-            @_#{meth.to_s.sub(/!$/, "_bang").sub(/\?$/, "_query")} ||= self.class.#{meth}
+          def #{meth}(*args, &block)
+            self.class.#{meth}(*args, &block)
           end
         METHODS
       end
