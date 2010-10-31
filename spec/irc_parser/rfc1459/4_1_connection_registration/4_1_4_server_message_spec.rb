@@ -1,33 +1,33 @@
 require 'spec_helper'
 
-describe IRCParser, "parsing server message" do
+describe IRCParser, "parsing server msg" do
 
-  it_parses "SERVER test.oulu.fi 1 :[tolsun.oulu.fi] Experimental server" do |message|
-    message.server.should == "test.oulu.fi"
-    message.hopcount.should == 1
-    message.info.should == "[tolsun.oulu.fi] Experimental server"
+  it_parses "SERVER test.oulu.fi 1 :[tolsun.oulu.fi] Experimental server" do |msg|
+    msg.server.should == "test.oulu.fi"
+    msg.hopcount.should == 1
+    msg.info.should == "[tolsun.oulu.fi] Experimental server"
   end
 
-  it_parses ":tolsun.oulu.fi SERVER csd.bu.edu 5 :BU Central Server" do |message|
-    message.prefix.should == "tolsun.oulu.fi"
-    message.server.should == "csd.bu.edu"
-    message.hopcount.should == 5
-    message.info.should == "BU Central Server"
+  it_parses ":tolsun.oulu.fi SERVER csd.bu.edu 5 :BU Central Server" do |msg|
+    msg.prefix.should == "tolsun.oulu.fi"
+    msg.server.should == "csd.bu.edu"
+    msg.hopcount.should == 5
+    msg.info.should == "BU Central Server"
   end
 
   #------------------------------------------------------------------------------
 
-  it_generates IRCParser::Messages::Server, "SERVER test.oulu.fi 1 :[tolsun.oulu.fi] Experimental server" do |message|
-    message.server= "test.oulu.fi"
-    message.hopcount= 1
-    message.info= "[tolsun.oulu.fi] Experimental server"
+  it_generates IRCParser::Messages::Server, "SERVER test.oulu.fi 1 :[tolsun.oulu.fi] Experimental server" do |msg|
+    msg.server= "test.oulu.fi"
+    msg.hopcount= 1
+    msg.info= "[tolsun.oulu.fi] Experimental server"
   end
 
-  it_generates IRCParser::Messages::Server, ":tolsun.oulu.fi SERVER csd.bu.edu 5 :BU Central Server" do |message|
-    message.prefix= "tolsun.oulu.fi"
-    message.server= "csd.bu.edu"
-    message.hopcount= 5
-    message.info= "BU Central Server"
+  it_generates IRCParser::Messages::Server, ":tolsun.oulu.fi SERVER csd.bu.edu 5 :BU Central Server" do |msg|
+    msg.prefix= "tolsun.oulu.fi"
+    msg.server= "csd.bu.edu"
+    msg.hopcount= 5
+    msg.info= "BU Central Server"
   end
 
 end

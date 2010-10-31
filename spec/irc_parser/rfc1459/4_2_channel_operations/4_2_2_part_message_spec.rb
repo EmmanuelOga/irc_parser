@@ -1,23 +1,23 @@
 require 'spec_helper'
 
-describe IRCParser, "parsing part message" do
+describe IRCParser, "parsing part msg" do
 
-  it_parses "PART #twilight_zone" do |message|
-    message.channels.should == ["#twilight_zone"]
+  it_parses "PART #twilight_zone" do |msg|
+    msg.channels.should == ["#twilight_zone"]
   end
 
-  it_parses "PART #oz-ops,&group5" do |message|
-    message.channels.should == ["#oz-ops", "&group5"]
+  it_parses "PART #oz-ops,&group5" do |msg|
+    msg.channels.should == ["#oz-ops", "&group5"]
   end
 
   #-------------------------------------------------------------------------------
 
-  it_generates IRCParser::Messages::Part,  "PART #twilight_zone" do |message|
-    message.channels= ["#twilight_zone"]
+  it_generates IRCParser::Messages::Part,  "PART #twilight_zone" do |msg|
+    msg.channels= ["#twilight_zone"]
   end
 
-  it_generates IRCParser::Messages::Part,  "PART #oz-ops,&group5" do |message|
-    message.channels= ["#oz-ops", "&group5"]
+  it_generates IRCParser::Messages::Part,  "PART #oz-ops,&group5" do |msg|
+    msg.channels= ["#oz-ops", "&group5"]
   end
 
 end

@@ -1,9 +1,9 @@
 require 'spec_helper'
 
-describe IRCParser, "parsing rehash message" do
+describe IRCParser, "parsing rehash msg" do
   # Parameters: None
 
-  # ; message from client with operator status to server asking it to reread its configuration file.
+  # ; msg from client with operator status to server asking it to reread its configuration file.
   it_parses "REHASH" do
   end
 

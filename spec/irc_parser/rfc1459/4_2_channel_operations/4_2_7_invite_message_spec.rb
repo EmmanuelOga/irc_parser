@@ -1,31 +1,31 @@
 require 'spec_helper'
 
-describe IRCParser, "parsing invite message" do
+describe IRCParser, "parsing invite msg" do
 
   # ; User Angel inviting WiZ to channel #Dust
-  it_parses ":Angel INVITE Wiz #Dust" do |message|
-    message.channel.should == "#Dust"
-    message.prefix.should == "Angel"
-    message.to_nick.should == "Wiz"
+  it_parses ":Angel INVITE Wiz #Dust" do |msg|
+    msg.channel.should == "#Dust"
+    msg.prefix.should == "Angel"
+    msg.to_nick.should == "Wiz"
   end
 
   # ; Command to invite WiZ to #Twilight_zone
-  it_parses "INVITE Wiz #Twilight_Zone"  do |message|
-    message.channel.should == "#Twilight_Zone"
-    message.prefix.should be_nil
-    message.to_nick.should == "Wiz"
+  it_parses "INVITE Wiz #Twilight_Zone"  do |msg|
+    msg.channel.should == "#Twilight_Zone"
+    msg.prefix.should be_nil
+    msg.to_nick.should == "Wiz"
   end
 
   #------------------------------------------------------------------------------
 
-  it_generates IRCParser::Messages::Invite, ":Angel INVITE Wiz #Dust" do |message|
-    message.channel= "#Dust"
-    message.prefix= "Angel"
-    message.to_nick= "Wiz"
+  it_generates IRCParser::Messages::Invite, ":Angel INVITE Wiz #Dust" do |msg|
+    msg.channel= "#Dust"
+    msg.prefix= "Angel"
+    msg.to_nick= "Wiz"
   end
 
-  it_generates IRCParser::Messages::Invite, "INVITE Wiz #Twilight_Zone"  do |message|
-    message.channel= "#Twilight_Zone"
-    message.to_nick= "Wiz"
+  it_generates IRCParser::Messages::Invite, "INVITE Wiz #Twilight_Zone"  do |msg|
+    msg.channel= "#Twilight_Zone"
+    msg.to_nick= "Wiz"
   end
 end

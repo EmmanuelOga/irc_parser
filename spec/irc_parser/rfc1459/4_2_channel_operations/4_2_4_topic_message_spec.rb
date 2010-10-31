@@ -1,36 +1,36 @@
 require 'spec_helper'
 
-describe IRCParser, "parsing topic message" do
+describe IRCParser, "parsing topic msg" do
 
-  it_parses ":Wiz TOPIC #test :New topic" do |message| # ;User Wiz setting the topic.
-    message.channel.should == "#test"
-    message.topic.should == "New topic"
+  it_parses ":Wiz TOPIC #test :New topic" do |msg| # ;User Wiz setting the topic.
+    msg.channel.should == "#test"
+    msg.topic.should == "New topic"
   end
 
-  it_parses "TOPIC #test :another topic" do |message| # ;set the topic on #test to "anothe topic".
-    message.channel.should == "#test"
-    message.topic.should == "another topic"
+  it_parses "TOPIC #test :another topic" do |msg| # ;set the topic on #test to "anothe topic".
+    msg.channel.should == "#test"
+    msg.topic.should == "another topic"
   end
 
-  it_parses "TOPIC #test" do |message| # ; check the topic for #test.
-    message.channel.should == "#test"
-    message.topic.should be_nil
+  it_parses "TOPIC #test" do |msg| # ; check the topic for #test.
+    msg.channel.should == "#test"
+    msg.topic.should be_nil
   end
 
   #------------------------------------------------------------------------------
 
-  it_generates IRCParser::Messages::Topic, ":Wiz TOPIC #test :New topic" do |message| # ;User Wiz setting the topic.
-    message.prefix= "Wiz"
-    message.channel= "#test"
-    message.topic= "New topic"
+  it_generates IRCParser::Messages::Topic, ":Wiz TOPIC #test :New topic" do |msg| # ;User Wiz setting the topic.
+    msg.prefix= "Wiz"
+    msg.channel= "#test"
+    msg.topic= "New topic"
   end
 
-  it_generates IRCParser::Messages::Topic, "TOPIC #test :another topic" do |message| # ;set the topic on #test to "anothe topic".
-    message.channel= "#test"
-    message.topic= "another topic"
+  it_generates IRCParser::Messages::Topic, "TOPIC #test :another topic" do |msg| # ;set the topic on #test to "anothe topic".
+    msg.channel= "#test"
+    msg.topic= "another topic"
   end
 
-  it_generates IRCParser::Messages::Topic, "TOPIC #test" do |message| # ; check the topic for #test.
-    message.channel= "#test"
+  it_generates IRCParser::Messages::Topic, "TOPIC #test" do |msg| # ; check the topic for #test.
+    msg.channel= "#test"
   end
 end
