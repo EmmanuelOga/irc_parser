@@ -4,35 +4,35 @@ describe IRCParser, "parsing info command" do
 
   # ; request an INFO reply from csd.bu.edu
   it_parses "INFO csd.bu.edu" do |msg|
-    msg.server.should == "csd.bu.edu"
+    msg.target.should == "csd.bu.edu"
   end
 
-  # ; INFO request from Avalon for first server found to match *.fi.
+  # ; INFO request from Avalon for first target found to match *.fi.
   it_parses ":Avalon INFO *.fi" do |msg|
     msg.prefix.should == "Avalon"
-    msg.server.should == "*.fi"
+    msg.target.should == "*.fi"
   end
 
-  # ; request info from the server that Angel is connected to.
+  # ; request info from the target that Angel is connected to.
   it_parses "INFO Angel" do |msg|
-    msg.server_for_nick.should == "Angel"
+    msg.target.should == "Angel"
   end
 
   #------------------------------------------------------------------------------
 
   # ; request an INFO reply from csd.bu.edu
   it_generates IRCParser::Messages::Info, "INFO csd.bu.edu" do |msg|
-    msg.server= "csd.bu.edu"
+    msg.target= "csd.bu.edu"
   end
 
-  # ; INFO request from Avalon for first server found to match *.fi.
+  # ; INFO request from Avalon for first target found to match *.fi.
   it_generates IRCParser::Messages::Info, ":Avalon INFO *.fi" do |msg|
     msg.prefix= "Avalon"
-    msg.server= "*.fi"
+    msg.target= "*.fi"
   end
 
-  # ; request info from the server that Angel is connected to.
+  # ; request info from the target that Angel is connected to.
   it_generates IRCParser::Messages::Info, "INFO Angel" do |msg|
-    msg.server_for_nick= "Angel"
+    msg.target= "Angel"
   end
 end

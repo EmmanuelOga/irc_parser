@@ -4,7 +4,7 @@ describe IRCParser, "parsing channel modes" do
 
   # ; Makes #Finnish channel moderated and 'invite-only'.
   it_parses "MODE #Finnish +im" do |msg|
-    msg.channel.should == "#Finnish"
+    msg.target.should == "#Finnish"
     msg.user.should be_nil
 
     msg.flags.should == "+im"
@@ -16,7 +16,7 @@ describe IRCParser, "parsing channel modes" do
 
   # ; Gives 'chanop' privileges to Kilroy on channel #Finnish.
   it_parses "MODE #Finnish +o Kilroy" do |msg|
-    msg.channel.should == "#Finnish"
+    msg.target.should == "#Finnish"
     msg.user.should == "Kilroy"
 
     msg.flags.should == "+o"
@@ -26,7 +26,7 @@ describe IRCParser, "parsing channel modes" do
 
   # ; Allow WiZ to speak on #Finnish.
   it_parses "MODE #Finnish +v Wiz" do |msg|
-    msg.channel.should == "#Finnish"
+    msg.target.should == "#Finnish"
     msg.user.should == "Wiz"
 
     msg.flags.should == "+v"
@@ -36,7 +36,7 @@ describe IRCParser, "parsing channel modes" do
 
   # ; Removes 'secret' flag from channel #Fins.
   it_parses "MODE #Fins -s" do |msg|
-    msg.channel.should == "#Fins"
+    msg.target.should == "#Fins"
     msg.user.should be_nil
 
     msg.flags.should == "-s"
@@ -44,10 +44,10 @@ describe IRCParser, "parsing channel modes" do
     msg.should_not be_chan_secret
   end
 
-  # ; Set the channel key to "oulu".
+  # ; Set the channel limit to "oulu".
   it_parses "MODE #42 +k oulu" do |msg|
-    msg.channel.should == "#42"
-    msg.key.should == "oulu"
+    msg.target.should == "#42"
+    msg.limit.should == "oulu"
 
     msg.flags.should == "+k"
     msg.should be_chan_flags_include_password
@@ -56,7 +56,7 @@ describe IRCParser, "parsing channel modes" do
 
   # ; Set the limit for the number of users on channel to 10.
   it_parses "MODE #eu-opers +l 10" do |msg|
-    msg.channel.should == "#eu-opers"
+    msg.target.should == "#eu-opers"
     msg.limit.should == "10"
 
     msg.flags.should == "+l"
@@ -64,9 +64,9 @@ describe IRCParser, "parsing channel modes" do
     msg.should be_chan_users_limit
   end
 
-  # ; list ban masks set for channel.
+  # ; list ban masks set for target.
   it_parses "MODE &oulu +b" do |msg|
-    msg.channel.should == "&oulu"
+    msg.target.should == "&oulu"
     msg.limit.should be_nil
 
     msg.flags.should == "+b"
@@ -76,7 +76,7 @@ describe IRCParser, "parsing channel modes" do
 
   # ; prevent all users from joining.
   it_parses "MODE &oulu +b *!*@*" do |msg|
-    msg.channel.should == "&oulu"
+    msg.target.should == "&oulu"
     msg.ban_mask.should == "*!*@*"
 
     msg.flags.should == "+b"
@@ -86,7 +86,7 @@ describe IRCParser, "parsing channel modes" do
 
   # ; prevent any user from a hostname matching *.edu from joining.
   it_parses "MODE &oulu +b *!*@*.edu" do |msg|
-    msg.channel.should == "&oulu"
+    msg.target.should == "&oulu"
     msg.ban_mask.should == "*!*@*.edu"
 
     msg.flags.should == "+b"
@@ -97,62 +97,62 @@ describe IRCParser, "parsing channel modes" do
   #-------------------------------------------------------------------------------
 
   it_generates IRCParser::Messages::Mode, "MODE #Finnish +im" do |msg|
-    msg.channel= "#Finnish"
+    msg.target = "#Finnish"
     msg.positive_flags!
     msg.chan_invite_only!
     msg.chan_moderated!
   end
 
   it_generates IRCParser::Messages::Mode, "MODE #Finnish +o Kilroy" do |msg|
-    msg.channel= "#Finnish"
+    msg.target = "#Finnish"
     msg.user= "Kilroy"
     msg.positive_flags!
     msg.chan_operator!
   end
 
   it_generates IRCParser::Messages::Mode, "MODE #Finnish +v Wiz" do |msg|
-    msg.channel= "#Finnish"
+    msg.target = "#Finnish"
     msg.user= "Wiz"
     msg.positive_flags!
     msg.chan_speaker!
   end
 
   it_generates IRCParser::Messages::Mode, "MODE #Fins -s" do |msg|
-    msg.channel= "#Fins"
+    msg.target = "#Fins"
     msg.negative_flags!
     msg.chan_secret!
   end
 
   it_generates IRCParser::Messages::Mode, "MODE #42 +k oulu" do |msg|
-    msg.channel= "#42"
-    msg.key= "oulu"
+    msg.target = "#42"
+    msg.limit= "oulu"
     msg.positive_flags!
     msg.chan_password!
   end
 
   it_generates IRCParser::Messages::Mode, "MODE #eu-opers +l 10" do |msg|
-    msg.channel= "#eu-opers"
+    msg.target = "#eu-opers"
     msg.limit= "10"
     msg.positive_flags!
     msg.chan_users_limit!
   end
 
   it_generates IRCParser::Messages::Mode, "MODE &oulu +b" do |msg|
-    msg.channel= "&oulu"
+    msg.target = "&oulu"
     msg.positive_flags!
     msg.chan_ban_mask!
   end
 
   it_generates IRCParser::Messages::Mode, "MODE &oulu +b *!*@*" do |msg|
-    msg.channel= "&oulu"
-    msg.limit= "*!*@*"
+    msg.target = "&oulu"
+    msg.ban_mask= "*!*@*"
     msg.positive_flags!
     msg.chan_ban_mask!
   end
 
   it_generates IRCParser::Messages::Mode, "MODE &oulu +b *!*@*.edu" do |msg|
-    msg.channel= "&oulu"
-    msg.limit= "*!*@*.edu"
+    msg.target = "&oulu"
+    msg.ban_mask= "*!*@*.edu"
     msg.positive_flags!
     msg.chan_ban_mask!
   end

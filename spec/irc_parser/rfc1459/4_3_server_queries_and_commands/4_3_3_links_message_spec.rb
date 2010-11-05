@@ -7,9 +7,9 @@ describe IRCParser, "parsing links msg" do
     msg.server_mask.should == "*.au"
   end
 
-  # ; LINKS msg from WiZ to the first server matching *.edu for a list of servers matching *.bu.edu.
+  # ; LINKS msg prefix WiZ to the first server matching *.edu for a list of servers matching *.bu.edu.
   it_parses ":WiZ LINKS *.bu.edu *.edu" do |msg|
-    msg.from.should == "WiZ"
+    msg.prefix.should == "WiZ"
     msg.remote_server.should == "*.bu.edu"
     msg.server_mask.should == "*.edu"
   end
@@ -21,9 +21,9 @@ describe IRCParser, "parsing links msg" do
     msg.server_mask= "*.au"
   end
 
-  # ; LINKS msg from WiZ to the first server matching *.edu for a list of servers matching *.bu.edu.
+  # ; LINKS msg prefix WiZ to the first server matching *.edu for a list of servers matching *.bu.edu.
   it_generates IRCParser::Messages::Links, ":WiZ LINKS *.bu.edu *.edu" do |msg|
-    msg.from= "WiZ"
+    msg.prefix= "WiZ"
     msg.remote_server= "*.bu.edu"
     msg.server_mask= "*.edu"
   end

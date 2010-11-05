@@ -3,7 +3,7 @@ require 'spec_helper'
 describe IRCParser, "parsing user modes" do
 
   it_parses "MODE WiZ -w" do |msg| # ; turns reception of WALLOPS messages off for WiZ.
-    msg.nick.should == "WiZ"
+    msg.target.should == "WiZ"
 
     msg.flags.should == "-w"
     msg.should be_user_flags_include_wallops_receptor
@@ -11,7 +11,7 @@ describe IRCParser, "parsing user modes" do
   end
 
   it_parses ":Angel MODE Angel +i" do |msg| # ; Message from Angel to make themselves invisible.
-    msg.nick.should == "Angel"
+    msg.target.should == "Angel"
     msg.prefix.should == "Angel"
 
     msg.flags.should == "+i"
@@ -22,7 +22,7 @@ describe IRCParser, "parsing user modes" do
   # ; WiZ 'deopping' (removing operator status).  The plain reverse of this command
   # ("MODE WiZ +o") must not be allowed from users since would bypass the OPER command.
   it_parses "MODE WiZ -o" do |msg|
-    msg.nick.should == "WiZ"
+    msg.target.should == "WiZ"
 
     msg.flags.should == "-o"
     msg.should be_user_flags_include_operator
@@ -32,21 +32,21 @@ describe IRCParser, "parsing user modes" do
   #------------------------------------------------------------------------------
 
   it_generates IRCParser::Messages::Mode, "MODE WiZ -w" do |msg| # ; turns reception of WALLOPS messages off for WiZ.
-    msg.nick= "WiZ"
+    msg.target= "WiZ"
     msg.negative_flags!
     msg.user_wallops_receptor!
   end
 
   it_generates IRCParser::Messages::Mode, ":Angel MODE Angel +i" do |msg| # ; Message from Angel to make themselves invisible.
     msg.prefix = "Angel"
-    msg.nick= "Angel"
+    msg.target= "Angel"
 
     msg.positive_flags!
     msg.user_invisible!
   end
 
   it_generates IRCParser::Messages::Mode, "MODE WiZ -o" do |msg|
-    msg.nick= "WiZ"
+    msg.target= "WiZ"
 
     msg.negative_flags!
     msg.user_operator!

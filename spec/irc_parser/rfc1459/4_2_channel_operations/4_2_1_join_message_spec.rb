@@ -30,7 +30,7 @@ describe IRCParser, "parsing join msg" do
   it_parses ":WiZ JOIN #Twilight_zone" do |msg|
     msg.channels.should == ["#Twilight_zone"]
     msg.keys.should == []
-    msg.from.should == "WiZ"
+    msg.prefix.should == "WiZ"
   end
 
   #-------------------------------------------------------------------------------
@@ -60,6 +60,6 @@ describe IRCParser, "parsing join msg" do
 
   it_generates IRCParser::Messages::Join, ":WiZ JOIN #Twilight_zone" do |msg|
     msg.channels= ["#Twilight_zone"]
-    msg.from= "WiZ"
+    msg.prefix= "WiZ"
   end
 end

@@ -1,15 +1,6 @@
 module IRCParser
   module MessageClassHelpers
 
-    def alias_attr_accessor(aliases)
-      aliases.each do |meth, aliases_collection|
-        aliases_collection.each do |alias_name|
-          alias_method(alias_name, meth)
-          alias_method("#{alias_name}=", "#{meth}=")
-        end
-      end
-    end
-
     def class_method_accessor(*accessors)
       accessors.each do |meth|
         class_eval(<<-METHODS, __FILE__, __LINE__)
@@ -48,8 +39,6 @@ module IRCParser
           end
         METHODS
       end
-
-      alias_attr_accessor(name => options[:aliases]) if options[:aliases]
 
       default_parameters << (options.member?(:default) ? options[:default] : nil)
     end

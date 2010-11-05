@@ -10,7 +10,7 @@ describe IRCParser, "parsing server quit msg" do
   it_parses ":Trillian SQUIT cm22.eng.umd.edu :Server out of control" do |msg|
     msg.server.should == "cm22.eng.umd.edu"
     msg.reason.should == "Server out of control"
-    msg.from.should == "Trillian"
+    msg.prefix.should == "Trillian"
     msg.server.should == "cm22.eng.umd.edu"
     msg.reason.should == "Server out of control"
   end
@@ -25,7 +25,7 @@ describe IRCParser, "parsing server quit msg" do
   it_generates IRCParser::Messages::SQuit, ":Trillian SQUIT cm22.eng.umd.edu :Server out of control" do |msg|
     msg.server= "cm22.eng.umd.edu"
     msg.reason= "Server out of control"
-    msg.from= "Trillian"
+    msg.prefix= "Trillian"
     msg.server= "cm22.eng.umd.edu"
     msg.reason= "Server out of control"
   end

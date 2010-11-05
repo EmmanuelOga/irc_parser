@@ -4,9 +4,9 @@ class IRCParser::Messages::Join < IRCParser::Message
 end
 
 class IRCParser::Messages::Mode < IRCParser::Message
-  parameter :channel, :aliases => [:nick]
+  parameter :target
   parameter :flags
-  parameter :limit, :aliases => [:key]
+  parameter :limit
   parameter :user
   parameter :ban_mask
 
@@ -19,7 +19,7 @@ class IRCParser::Messages::Mode < IRCParser::Message
     return if params == nil || params.length <= 1
 
     if params.length != 5 && params.length != 2
-      self.channel = params[0]
+      self.target = params[0]
       self.flags = params[1]
 
       if remaining = params[2..-1]
@@ -195,9 +195,9 @@ end
 
 class IRCParser::Messages::User < IRCParser::Message
   parameter :user
-  parameter :mode, :aliases => [:hostname], :default => "*" # rfc 1459, deprecated
+  parameter :mode,       :default => "*" # rfc 1459, deprecated
   parameter :servername, :default => "*" # rfc 1459, deprecated
-  parameter :real_name
+  parameter :realname
 end
 
 class IRCParser::Messages::Names < IRCParser::Message
@@ -266,15 +266,15 @@ class IRCParser::Messages::Connect < IRCParser::Message
 end
 
 class IRCParser::Messages::Trace < IRCParser::Message
-  parameter :server, :aliases => [:to_nick]
+  parameter :target
 end
 
 class IRCParser::Messages::Admin < IRCParser::Message
-  parameter :server
+  parameter :target
 end
 
 class IRCParser::Messages::Info < IRCParser::Message
-  parameter :server, :aliases => [:server_for_nick]
+  parameter :target
 end
 
 module IRCParser::Messages::MesageMan
@@ -320,7 +320,7 @@ class IRCParser::Messages::Notice < IRCParser::Message
 end
 
 class IRCParser::Messages::Who < IRCParser::Message
-  parameter :pattern, :aliases => [:channel]
+  parameter :pattern
   parameter :operator
 
   alias_method :operator?, :operator
@@ -418,7 +418,7 @@ class IRCParser::Messages::Summon < IRCParser::Message
 end
 
 class IRCParser::Messages::Users < IRCParser::Message
-  parameter :of_server
+  parameter :target
 end
 
 class IRCParser::Messages::WallOps < IRCParser::Message

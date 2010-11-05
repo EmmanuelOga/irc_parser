@@ -6,8 +6,6 @@ module IRCParser
     attr_accessor :prefix
     attr_reader :parameters
 
-    alias_attr_accessor :prefix => [:from, :who, :target]
-
     class << self
       attr_reader :identifier
       attr_accessor :postfixes, :to_sym
