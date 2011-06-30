@@ -25,6 +25,7 @@ message constructed from those parts.
 The parser is quite strict so it will expect the IRC delimiters in all
 messages to parse (i.e. all messages must end with '\r\n').
 
+```ruby
   require 'irc_parser'
   IRCParser::Parser.run(":Angel PRIVMSG Wiz :Hello are you receiving this message?\r\n") # notice final \r\n
   # ["Angel", "PRIVMSG", "Wiz", "Hello are you receiving this message ?"]
@@ -42,17 +43,21 @@ And, to get a subclass of IRCParser::Message instead of an array of components:
   msg.from       # => "Angel"
   msg.target     # => "Wiz"
   msg.body       # => "Hello are you receiving this message?"
+```
 
 ## Generating Messages
 
+```ruby
   msg = IRCParser::Messages::PrivMsg.new
   msg.from   = "Wiz"
   msg.target = "Angel"
   msg.body   = "Hello World!"
   msg.to_s   # => ":Wiz PRIVMSG Angel :Hello World!\r\n"
+```
 
 There is also a shortcut:
 
+```ruby
   require 'irc_parser/messages'
   msg = IRCParser.message(:privmsg) do |m|
     msg.from   = "Wiz"
@@ -60,6 +65,7 @@ There is also a shortcut:
     msg.body   = "Hello World!"
   end
   msg.to_s # => ":Wiz PRIVMSG Angel :Hello World!\r\n"
+```
 
 ## TODO
 
