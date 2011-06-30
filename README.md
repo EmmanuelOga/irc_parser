@@ -28,10 +28,13 @@ messages to parse (i.e. all messages must end with '\r\n').
 ```ruby
   require 'irc_parser'
   IRCParser::Parser.run(":Angel PRIVMSG Wiz :Hello are you receiving this message?\r\n") # notice final \r\n
-  # ["Angel", "PRIVMSG", "Wiz", "Hello are you receiving this message ?"]
+  # => ["Angel", "PRIVMSG", "Wiz", "Hello are you receiving this message ?"]
+```
 
-And, to get a subclass of IRCParser::Message instead of an array of components:
+And, to get a subclass of IRCParser::Message instead of an array of
+components:
 
+```ruby
   require 'irc_parser/messages'
   msg = IRCParser.parse(":Angel PRIVMSG Wiz :Hello are you receiving this message?\r\n")
   # <IRCParser::Messages::Privmsg:0x00000001476370 @params=["Wiz", "Hello are you receiving this message?"], @prefix="Angel">
