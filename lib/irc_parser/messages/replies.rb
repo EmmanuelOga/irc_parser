@@ -103,7 +103,7 @@ end
 class IRCParser::Messages::RplWhoIsUser < IRCParser::Message
   self.identifier = '311'
   self.postfixes = 1
-  parameters :nick, :user_nick, :user, :ip, "*", :real_name
+  parameters :nick, :user_nick, :user, :ip, "*", :realname
 end
 
 class IRCParser::Messages::RplWhoIsServer < IRCParser::Message
@@ -136,7 +136,7 @@ end
 
 class IRCParser::Messages::RplWhoWasUser < IRCParser::Message
   self.identifier = '314'
-  parameters :nick, :user, :host, "*", :real_name
+  parameters :nick, :user, :host, "*", :realname
 end
 
 class IRCParser::Messages::RplEndOfWhoWas < IRCParser::Message
@@ -221,7 +221,7 @@ end
 class IRCParser::Messages::RplWhoReply < IRCParser::Message
   self.identifier = "352"
 
-  parameters :nick, :channel, :user, :host, :server, :user_nick, :flags, [:hopcount, :real_name] # Flags: <H|G>[*][@|+] (here, gone)
+  parameters :nick, :channel, :user, :host, :server, :user_nick, :flags, [:hopcount, :realname] # Flags: <H|G>[*][@|+] (here, gone)
 
   FLAGS_INDEX_ON_PARAMS = 6
 
@@ -238,7 +238,7 @@ class IRCParser::Messages::RplWhoReply < IRCParser::Message
     @flags = Array.new(FLAGS.size)
 
     if params
-      self.hopcount, self.real_name = $1, $2.to_s.strip if params.last =~ /\s*(\d+)(.*)$/
+      self.hopcount, self.realname = $1, $2.to_s.strip if params.last =~ /\s*(\d+)(.*)$/
       original_flags = params[FLAGS_INDEX_ON_PARAMS] || ""
 
       FLAGS.each do |index, setters|

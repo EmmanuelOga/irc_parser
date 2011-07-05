@@ -144,7 +144,7 @@ class IRCParser::Messages::Nick < IRCParser::Message
   end
 
   def changing?
-    from.to_s =~ /\S/
+    prefix.to_s =~ /\S/
   end
 end
 
@@ -326,7 +326,7 @@ class IRCParser::Messages::Who < IRCParser::Message
   alias_method :operator?, :operator
 
   def for_channel?
-    IRCParser::Helper.valid_channel_name?(channel)
+    IRCParser::Helper.valid_channel_name?(pattern)
   end
 
   def operator!(true_or_false = true)

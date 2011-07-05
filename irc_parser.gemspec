@@ -17,14 +17,6 @@ Gem::Specification.new do |s|
 
   s.require_paths = %w[lib]
 
-  ## This sections is only necessary if you have C extensions.
-  # s.require_paths << 'ext'
-  # s.extensions = %w[ext/extconf.rb]
-
-  ## If your gem includes any executables, list them here.
-  # s.executables = ["name"]
-  # s.default_executable = 'name'
-
   s.rdoc_options = ["--charset=UTF-8"]
   s.extra_rdoc_files = %w[README.rdoc LICENSE]
 

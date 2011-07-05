@@ -60,7 +60,7 @@ describe IRCParser, "command responses" do
     msg.user_nick.should == "nick"
     msg.user.should == "user"
     msg.ip.should   == "192.168.0.1"
-    msg.real_name.should ==  "real name"
+    msg.realname.should ==  "real name"
   end
 
   it_parses "312 nick user server :server info" do |msg|
@@ -99,7 +99,7 @@ describe IRCParser, "command responses" do
     msg.nick.should ==  "nick"
     msg.user.should ==  "user"
     msg.host.should ==  "host"
-    msg.real_name.should ==  "real name"
+    msg.realname.should ==  "real name"
   end
 
   it_parses "369 nick :End of WHOWAS" do |msg|
@@ -182,7 +182,7 @@ describe IRCParser, "command responses" do
     msg.user_nick.should ==  "nick"
     msg.flags.should ==  "H*@"
     msg.hopcount.should ==  "10"
-    msg.real_name.should ==  "John B. Jovi"
+    msg.realname.should ==  "John B. Jovi"
   end
 
   it_parses "315 Wiz name :End of /WHO list" do |msg|
@@ -533,7 +533,7 @@ describe IRCParser, "command responses" do
     msg.nick = "Wiz"
     msg.user_nick = "nick"
     msg.user = "user"
-    msg.real_name = "real name"
+    msg.realname = "real name"
     msg.ip = "192.192.192.192"
   end
 
@@ -570,7 +570,7 @@ describe IRCParser, "command responses" do
     msg.nick = "nick"
     msg.user = "user"
     msg.host = "host"
-    msg.real_name = "real name"
+    msg.realname = "real name"
   end
 
   it_generates IRCParser::Messages::RplEndOfWhoWas, "369 nick :End of WHOWAS" do |msg|
@@ -639,7 +639,7 @@ describe IRCParser, "command responses" do
     msg.ircop! true
     msg.opped! true
     msg.hopcount = 10
-    msg.real_name = "John B. Jovi"
+    msg.realname = "John B. Jovi"
   end
 
   it_generates IRCParser::Messages::RplEndOfWho, "315 Wiz pattern :End of /WHO list" do |msg|
