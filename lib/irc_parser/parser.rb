@@ -14,13 +14,13 @@ module IRCParser
       end
 
       def to_s
-        "While #{@from}: #{source.inspect}"
+        "#{@from}: #{source.inspect}"
       end
       alias_method :message, :to_s
     end
 
     
-# line 2 "lib/irc_parser/parser.rb"
+# line 24 "lib/irc_parser/parser.rb"
 class << self
 	attr_accessor :_irc_parser_trans_keys
 	private :_irc_parser_trans_keys, :_irc_parser_trans_keys=
@@ -355,7 +355,7 @@ self.irc_parser_en_main = 1;
       params = []
 
       
-# line 2 "lib/irc_parser/parser.rb"
+# line 359 "lib/irc_parser/parser.rb"
 begin
 	p ||= 0
 	pe ||= data.length
@@ -364,7 +364,7 @@ end
 
 # line 72 "lib/irc_parser/parser.rl"
       
-# line 2 "lib/irc_parser/parser.rb"
+# line 368 "lib/irc_parser/parser.rb"
 begin
 	testEof = false
 	_slen, _trans, _keys, _inds, _acts, _nacts = nil
@@ -423,7 +423,7 @@ begin
 # line 35 "lib/irc_parser/parser.rl"
 		begin
  params << data[mark..(p-1)] 		end
-# line 2 "lib/irc_parser/parser.rb"
+# line 427 "lib/irc_parser/parser.rb"
 	end
 	end
 	end

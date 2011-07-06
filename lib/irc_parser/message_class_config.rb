@@ -14,6 +14,10 @@ module IRCParser
       @_is_error ||= class_name =~ /^Err[A-Z]/
     end
 
+    def is_command?
+      !(is_error? || is_reply?)
+    end
+
     def identify_as(ident)
       IRCParser::Messages::ALL[ident] = self
       @identifier = ident

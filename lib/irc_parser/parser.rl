@@ -54,7 +54,7 @@ module IRCParser
       end
 
       def to_s
-        "While #{@from}: #{source.inspect}"
+        "#{@from}: #{source.inspect}"
       end
       alias_method :message, :to_s
     end
