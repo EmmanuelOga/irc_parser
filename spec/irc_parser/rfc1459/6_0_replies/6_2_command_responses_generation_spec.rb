@@ -136,8 +136,7 @@ describe IRCParser, "command responses" do
     msg.channel.should ==  "#channel"
   end
 
-  it_parses "332 emmanuel #channel :the topic" do |msg|
-    msg.nick.should == "emmanuel"
+  it_parses "332 #channel :the topic" do |msg|
     msg.channel.should ==  "#channel"
     msg.topic.should ==  "the topic"
   end
@@ -173,8 +172,7 @@ describe IRCParser, "command responses" do
   # WHOREPLY is only sent if there is an appropriate match to the WHO query.
   # If there is a list of parameters supplied with a WHO msg, a ENDOFWHO
   # must be sent after processing each list item with <name> being the item.
-  it_parses "352 Wiz #channel user host server nick H*@ :10 John B. Jovi" do |msg| # <H|G>[*][@|+]
-    msg.nick.should == "Wiz"
+  it_parses "352 #channel user host server nick H*@ :10 John B. Jovi" do |msg| # <H|G>[*][@|+]
     msg.channel.should ==  "#channel"
     msg.user.should ==  "user"
     msg.host.should ==  "host"
@@ -601,8 +599,7 @@ describe IRCParser, "command responses" do
     msg.channel = "#channel"
   end
 
-  it_generates IRCParser::Messages::RplTopic, "332 emmanuel #channel :the topic" do |msg|
-    msg.nick = "emmanuel"
+  it_generates IRCParser::Messages::RplTopic, "332 #channel :the topic" do |msg|
     msg.channel = "#channel"
     msg.topic = "the topic"
   end
@@ -625,8 +622,7 @@ describe IRCParser, "command responses" do
     msg.comments = "the comments"
   end
 
-  it_generates IRCParser::Messages::RplWhoReply, "352 nick #channel user host server nick H*@ :10 John B. Jovi" do |msg| # <H|G>[*][@|+]
-    msg.nick = "nick"
+  it_generates IRCParser::Messages::RplWhoReply, "352 #channel user host server nick H*@ :10 John B. Jovi" do |msg| # <H|G>[*][@|+]
     msg.channel = "#channel"
     msg.user = "user"
     msg.host = "host"

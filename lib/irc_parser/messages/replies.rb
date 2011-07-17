@@ -186,9 +186,11 @@ class IRCParser::Messages::RplNoTopic < IRCParser::Message
   parameters :nick, :channel, "No topic is set"
 end
 
+# http://www.mirc.net/raws/?view=332
+# 332 #peace&protection :Peace & Protection 3.14abcd, it kicks more ass then that damn taco bell dog on speed
 class IRCParser::Messages::RplTopic < IRCParser::Message
   identify_as '332'
-  parameters :nick, :channel, :topic
+  parameters :channel, [:topic]
 end
 
 # Raw Numeric 333
@@ -217,11 +219,12 @@ end
 
 # http://www.mirc.net/raws/?view=352
 # Example:
-# :osmotic.oftc.net 352 weechat #canal ~emmanuelo 190.190.190.190 osmotic.oftc.net weechat H@ :0 Emmanuel
+# 352 channel           username   address                             server                          nick      flags :hops info
+# 352 #peace&protection IsaacHayes sdn-ar-004mokcitP324.dialsprint.net NewBrunswick.NJ.US.Undernet.Org DrDthmtch H+    :4    Isaac Hayes (QuickScript.ml.org)
 class IRCParser::Messages::RplWhoReply < IRCParser::Message
   identify_as "352"
 
-  parameters :nick, :channel, :user, :host, :server, :user_nick, :flags, [:hopcount, :realname] # Flags: <H|G>[*][@|+] (here, gone)
+  parameters :channel, :user, :host, :server, :user_nick, :flags, [:hopcount, :realname] # Flags: <H|G>[*][@|+] (here, gone)
 
   FLAGS_INDEX_ON_PARAMS = 6
 
