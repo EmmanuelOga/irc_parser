@@ -197,13 +197,11 @@ describe IRCParser, "command responses" do
   # all visible channels and contents are sent back in a series of NAMEREPLY
   # msgs with a ENDOFNAMES to mark the end.
   it_parses "353 Wiz #channel :@nick1 +nick2 nick3" do |msg|
-    msg.nick.should == "Wiz"
     msg.channel.should ==  "#channel"
     msg.nicks_with_flags.should ==  %w|@nick1 +nick2 nick3|
   end
 
-  it_parses "366 Wiz #channel :End of /NAMES list" do |msg|
-    msg.nick = "Wiz"
+  it_parses "366 #channel :End of /NAMES list" do |msg|
     msg.channel.should ==  "#channel"
   end
 
@@ -653,8 +651,13 @@ describe IRCParser, "command responses" do
     msg.nicks_with_flags= %w|@nick1 +nick2 nick3|
   end
 
-  it_generates IRCParser::Messages::RplEndOfNames, "366 Wiz #channel :End of /NAMES list" do |msg|
-    msg.nick = "Wiz"
+  it "can assign nicks to 353 replies", :focus => true do
+    m = IRCParser.message(:rpl_nam_reply) { |m| m.channel, m.nicks_with_flags = "#chan", "Emmanuel" }.to_s
+    m = IRCParser.parse(m.to_s)
+    m.nicks_with_flags.should == ["Emmanuel"]
+  end
+
+  it_generates IRCParser::Messages::RplEndOfNames, "366 #channel :End of /NAMES list" do |msg|
     msg.channel = "#channel"
   end
 

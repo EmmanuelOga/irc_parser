@@ -273,15 +273,19 @@ class IRCParser::Messages::RplEndOfWho < IRCParser::Message
   parameters :nick, :pattern, "End of /WHO list"
 end
 
+# http://www.mirc.net/raws/?view=353
 class IRCParser::Messages::RplNamReply < IRCParser::Message
   identify_as '353'
-  parameters :nick, :channel
+  parameter :nick, :default => "=";
+  parameter :channel
   parameter :nicks_with_flags, :csv => true, :separator => " " # each nick should include flags [[@|+]#{nick}
+  @postfixes = 1
 end
 
+# http://www.mirc.net/raws/?view=366
 class IRCParser::Messages::RplEndOfNames < IRCParser::Message
   identify_as '366'
-  parameters :nick, :channel, "End of /NAMES list"
+  parameters :channel, ["End of /NAMES list"]
 end
 
 class IRCParser::Messages::RplLinks < IRCParser::Message
