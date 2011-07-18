@@ -136,7 +136,8 @@ describe IRCParser, "command responses" do
     msg.channel.should ==  "#channel"
   end
 
-  it_parses "332 #channel :the topic" do |msg|
+  it_parses "332 nick #channel :the topic" do |msg|
+    msg.nick.should ==  "nick"
     msg.channel.should ==  "#channel"
     msg.topic.should ==  "the topic"
   end
@@ -194,7 +195,7 @@ describe IRCParser, "command responses" do
   # exception to this is when a NAMES msg is sent with no parameters and
   # all visible channels and contents are sent back in a series of NAMEREPLY
   # msgs with a ENDOFNAMES to mark the end.
-  it_parses "353 Wiz #channel :@nick1 +nick2 nick3" do |msg|
+  it_parses "353 Wiz @ #channel :@nick1 +nick2 nick3" do |msg|
     msg.channel.should ==  "#channel"
     msg.nicks_with_flags.should ==  %w|@nick1 +nick2 nick3|
   end
@@ -599,7 +600,8 @@ describe IRCParser, "command responses" do
     msg.channel = "#channel"
   end
 
-  it_generates IRCParser::Messages::RplTopic, "332 #channel :the topic" do |msg|
+  it_generates IRCParser::Messages::RplTopic, "332 nick #channel :the topic" do |msg|
+    msg.nick = "nick"
     msg.channel = "#channel"
     msg.topic = "the topic"
   end
@@ -641,7 +643,7 @@ describe IRCParser, "command responses" do
     msg.pattern = "pattern"
   end
 
-  it_generates IRCParser::Messages::RplNamReply, "353 Wiz #channel :@nick1 +nick2 nick3" do |msg|
+  it_generates IRCParser::Messages::RplNamReply, "353 Wiz @ #channel :@nick1 +nick2 nick3" do |msg|
     msg.nick= "Wiz"
     msg.channel=  "#channel"
     msg.nicks_with_flags= %w|@nick1 +nick2 nick3|

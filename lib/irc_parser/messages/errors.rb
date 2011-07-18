@@ -68,9 +68,11 @@ class IRCParser::Messages::ErrWildTopLevel < IRCParser::Message
   parameters :nick, :mask, "Wildcard in toplevel domain"
 end
 
+# http://www.mirc.net/raws/?view=421
+# 421 command :Unknown command
 class IRCParser::Messages::ErrUnknownCommand < IRCParser::Message
   identify_as "421"
-  parameters :nick, :command, "Unknown command"
+  parameters :command, ["Unknown command"]
 end
 
 class IRCParser::Messages::ErrNoMotd < IRCParser::Message

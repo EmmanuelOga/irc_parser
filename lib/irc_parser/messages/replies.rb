@@ -181,15 +181,21 @@ class IRCParser::Messages::RplChannelTimestamp < IRCParser::Message
   parameters :nick, :channel, :timestamp
 end
 
+# http://mirc.net/raws/?view=331
+# 331 nick #hello :No topic is set
+# Looks like the nick needs to be present on the message, despite what mirc.net says.
 class IRCParser::Messages::RplNoTopic < IRCParser::Message
   identify_as '331'
-  parameters :nick, :channel, "No topic is set"
+  parameter :nick, :default => "="
+  parameters :channel, "No topic is set"
 end
 
 # http://www.mirc.net/raws/?view=332
-# 332 #peace&protection :Peace & Protection 3.14abcd, it kicks more ass then that damn taco bell dog on speed
+# 332 nick #peace&protection :Peace & Protection 3.14abcd, it kicks more ass then that damn taco bell dog on speed
+# Looks like the nick needs to be present on the message, despite what mirc.net says.
 class IRCParser::Messages::RplTopic < IRCParser::Message
   identify_as '332'
+  parameter :nick, :default => "="
   parameters :channel, [:topic]
 end
 
@@ -277,15 +283,18 @@ class IRCParser::Messages::RplEndOfWho < IRCParser::Message
 end
 
 # http://www.mirc.net/raws/?view=353
+# :rpl_nam_reply >> :sendak.freenode.net 353 emmanuel @ #pipita2 :@emmanuel
 class IRCParser::Messages::RplNamReply < IRCParser::Message
   identify_as '353'
-  parameter :nick, :default => "=";
+  parameter :nick, :default => "="
+  parameter :padding, :default => "@"
   parameter :channel
   parameter :nicks_with_flags, :csv => true, :separator => " " # each nick should include flags [[@|+]#{nick}
   @postfixes = 1
 end
 
 # http://www.mirc.net/raws/?view=366
+# :rpl_end_of_names >> :sendak.freenode.net 366 emmanuel #pipita2 :End of /NAMES list.
 class IRCParser::Messages::RplEndOfNames < IRCParser::Message
   identify_as '366'
   parameters :channel, ["End of /NAMES list"]
