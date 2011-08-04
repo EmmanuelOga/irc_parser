@@ -40,16 +40,14 @@ module IRCParser
 
       default_parameters << name and return unless name.is_a?(Symbol)
 
-      if options[:csv]
-        sep = ( options[:separator] ? options[:separator] : "," ).inspect
-
+      if options.member?(:csv)
         class_eval(<<-METHODS, __FILE__, __LINE__)
           def #{name}
-            (val = @parameters[#{parameter_index}]) ? val.split(#{sep}) : []
+            (val = @parameters[#{parameter_index}]) ? val.split(#{options[:csv].inspect}) : []
           end
 
           def #{name}=(val)
-            @parameters[#{parameter_index}] = Array(val).join(#{sep})
+            @parameters[#{parameter_index}] = Array(val).join(#{options[:csv].inspect})
           end
         METHODS
       else

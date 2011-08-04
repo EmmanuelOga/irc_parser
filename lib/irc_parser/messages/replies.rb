@@ -74,7 +74,7 @@ class IRCParser::Messages::RplUserHost < IRCParser::Message
   @postfixes = 3
 
   parameter :nick
-  parameter :nicks, :csv => true, :separator => " "
+  parameter :nicks, :csv => " "
   parameter "="
   parameter :host_with_sign
 end
@@ -82,7 +82,7 @@ end
 class IRCParser::Messages::RplIsOn < IRCParser::Message
   identify_as "303"
   parameter :nick
-  parameter :nicks, :csv => true, :separator => " "
+  parameter :nicks, :csv => " "
 end
 
 class IRCParser::Messages::RplAway < IRCParser::Message
@@ -126,7 +126,7 @@ class IRCParser::Messages::RplWhoIsChannels < IRCParser::Message
   identify_as "319"
   @postfixes = 1
   parameters :nick, :user
-  parameter :channels, :csv => true, :separator => " " # flags: [@|+]
+  parameter :channels, :csv => " " # flags: [@|+]
 end
 
 class IRCParser::Messages::RplEndOfWhoIs < IRCParser::Message
@@ -289,7 +289,7 @@ class IRCParser::Messages::RplNamReply < IRCParser::Message
   parameter :nick, :default => "="
   parameter :padding, :default => "@"
   parameter :channel
-  parameter :nicks_with_flags, :csv => true, :separator => " " # each nick should include flags [[@|+]#{nick}
+  parameter :nicks_with_flags, :csv => " " # each nick should include flags [[@|+]#{nick}
   @postfixes = 1
 end
 

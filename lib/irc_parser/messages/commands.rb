@@ -1,6 +1,6 @@
 class IRCParser::Messages::Join < IRCParser::Message
-  parameter :channels , :csv => true
-  parameter :keys     , :csv => true
+  parameter :channels , :csv => ","
+  parameter :keys     , :csv => ","
 end
 
 class IRCParser::Messages::Mode < IRCParser::Message
@@ -154,7 +154,7 @@ class IRCParser::Messages::Oper < IRCParser::Message
 end
 
 class IRCParser::Messages::Part < IRCParser::Message
-  parameter :channels, :csv => true
+  parameter :channels, :csv => ","
   parameter :part_message
 end
 
@@ -201,11 +201,11 @@ class IRCParser::Messages::User < IRCParser::Message
 end
 
 class IRCParser::Messages::Names < IRCParser::Message
-  parameter :channels, :csv => true
+  parameter :channels, :csv => ","
 end
 
 class IRCParser::Messages::List < IRCParser::Message
-  parameter :channels, :csv => true
+  parameter :channels, :csv => ","
 end
 
 class IRCParser::Messages::Invite < IRCParser::Message
@@ -214,8 +214,8 @@ class IRCParser::Messages::Invite < IRCParser::Message
 end
 
 class IRCParser::Messages::Kick < IRCParser::Message
-  parameter :channels, :csv => true
-  parameter :users, :csv => true
+  parameter :channels, :csv => ","
+  parameter :users, :csv => ","
   parameter :kick_message
 end
 
