@@ -49,7 +49,7 @@ module IRCParser
       # Generate the class, inhereting from Struct, and generate its methods.
       # # #
 
-      klass = Struct.new(name.to_s, *([:prefix] + (arguments.map { |arg| arg[:name] } + [:postfix]))) do
+      klass = Struct.new("IRC#{name}", *([:prefix] + (arguments.map { |arg| arg[:name] } + [:postfix]))) do
         @name, @to_sym, @identifier, @postfix_format = name, to_sym, identifier, postfix_format
 
         extend ClassMethods
