@@ -4,21 +4,21 @@ Gem::Specification.new do |s|
   s.rubygems_version = '1.3.5'
 
   s.name              = 'irc_parser'
-  s.version           = '0.0.1'
-  s.date              = '2011-07-05'
+  s.version           = '0.1.0'
+  s.date              = '2011-08-08'
   s.rubyforge_project = 'irc_parser'
 
   s.summary     = "Parses and generates IRC protocol messages."
-  s.description = "Parses and generates IRC protocol messages."
+  s.description = "A ruby 1.9.x library to parse and generate IRC messages according to the IRC definition"
 
   s.authors  = ["Emmanuel Oga"]
   s.email    = 'EmmanuelOga@gmail.com'
-  s.homepage = 'http://github.com/emmanueloga'
+  s.homepage = 'http://github.com/EmmanuelOga/irc_parser'
 
   s.require_paths = %w[lib]
 
   s.rdoc_options = ["--charset=UTF-8"]
-  s.extra_rdoc_files = %w[README.rdoc LICENSE]
+  s.extra_rdoc_files = %w[README.md LICENSE]
 
   s.add_development_dependency('rspec', ["~> 2.0.0"])
 
@@ -27,23 +27,22 @@ Gem::Specification.new do |s|
     LICENSE
     README.md
     Rakefile
+    extra/benchmark.rb
     irc_parser.gemspec
     lib/irc_parser.rb
+    lib/irc_parser/factory.erb
     lib/irc_parser/helper.rb
-    lib/irc_parser/message.rb
-    lib/irc_parser/message_class_config.rb
     lib/irc_parser/messages.rb
     lib/irc_parser/messages/commands.rb
     lib/irc_parser/messages/errors.rb
     lib/irc_parser/messages/replies.rb
-    lib/irc_parser/params.rb
     lib/irc_parser/parser.rb
     lib/irc_parser/parser.rl
     spec/fixtures/from_weechat.rb
     spec/fixtures/inbound.log
     spec/irc_parser/helper_spec.rb
     spec/irc_parser/irc_parser_spec.rb
-    spec/irc_parser/params_spec.rb
+    spec/irc_parser/messages_spec.rb
     spec/irc_parser/parser_spec.rb
     spec/irc_parser/rfc1459/4_1_connection_registration/4_1_1_password_message_spec.rb
     spec/irc_parser/rfc1459/4_1_connection_registration/4_1_2_nick_message_spec.rb

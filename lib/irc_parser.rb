@@ -1,5 +1,5 @@
 module IRCParser
-  VERSION = "0.0.1"
+  VERSION = "0.1.0"
 
   autoload :Helper, 'irc_parser/helper'
   autoload :Params, 'irc_parser/params'

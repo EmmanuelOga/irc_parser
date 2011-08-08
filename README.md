@@ -13,8 +13,19 @@ again and again.
 IRCParser tackles that boring task so the hard work in making the RFC
 compliant IRC messages can be shared across projects.
 
-This gem does _not_ provide an irc server, and irc client or a DSL to
-implement IRC bots, etc.
+## Anatomy of an IRC message
+
+All irc messages have the same structure:
+
+  [optional prefix] COMMAND_NAME [optional_param [optional_param2, ...]] [optional postfix]
+
+* The prefix always denotes a server or user name, and starts with ':'.
+* The params are completely optional. IRCParser gives all params
+  apropriate names reflecting those found on the RFCs.
+* The postfix is the last parameter. IRCParser sometimes aliases the
+  postfix to something more readable for some messages (e.g. 'body' for
+  PRIVMSG). The only kind of parameters which can embed spaces are the
+  postfixes.
 
 ## Parsing Messages
 
@@ -27,12 +38,14 @@ messages to parse (i.e. all messages must end with '\r\n').
 
 ```ruby
   require 'irc_parser'
-  IRCParser::Parser.run(":Angel PRIVMSG Wiz :Hello are you receiving this message?\r\n") # notice final \r\n
-  # => ["Angel", "PRIVMSG", "Wiz", "Hello are you receiving this message ?"]
+
+  # returns prefix, command, params. Notice final \r\n
+  IRCParser.parse_raw(":Angel PRIVMSG Wiz :Hello are you receiving this message?\r\n")
+
+  # => ["Angel", "PRIVMSG", ["Wiz", "Hello are you receiving this message ?"]]
 ```
 
-And, to get a subclass of IRCParser::Message instead of an array of
-components:
+To get a subclass of IRCParser::Message instead of an array of components:
 
 ```ruby
   require 'irc_parser/messages'
@@ -85,8 +98,8 @@ There is also a shortcut:
 ## AUTHORS
 
 A lot of projects where reviewed while implementing this library.  I may
-or may not have stolen something from one of these, although I'm the
-only one to blame for the contents of this gem. If I forget about anyone
-please ping me so I can include you here.
+or may not have stolen something from one of these, although off course
+I'm the only one to blame for the contents of this gem. If I forget
+about anyone please ping me so I can include you here.
 
 * Ragel parser and other portions where taken from irk (brodock/irk)
