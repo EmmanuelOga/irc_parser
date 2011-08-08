@@ -4,7 +4,7 @@ describe IRCParser, "parsing links msg" do
 
   # ; list all servers which have a name that matches *.au;
   it_parses "LINKS *.au" do |msg|
-    msg.server_mask.should == "*.au"
+    msg.remote_server.should == "*.au"
   end
 
   # ; LINKS msg prefix WiZ to the first server matching *.edu for a list of servers matching *.bu.edu.

@@ -1,0 +1,53 @@
+#class Struct::<%= name %>
+
+  def initialize(prefix = nil, arguments = nil)
+    arguments ? super(prefix, *arguments) : super(prefix)
+
+  <% if @postfix_format %>
+    self.postfix ||= <%= @postfix_format.inspect %>
+  <% end %>
+
+  <% csv_arguments.each do |argument| %>
+    self[<%=argument[:name].inspect%>] = Array(self[<%=argument[:name].inspect%>]).join(<%=argument[:csv].inspect%>)
+  <% end %>
+
+    yield self if block_given?
+  end
+
+  def format_postfix(hash)
+    self.postfix = <%= @postfix_format.inspect %> % hash
+  end
+
+  EMPTY_STRING = "".freeze
+
+  # Generates the IRC message. It will have the form:
+  # ':prefix IDENTIFIER param1 param2 :postfix thay may have spaces\r\n'
+  def to_s
+    result = "#{prefix && prefix != EMPTY_STRING ? ":#{prefix} " : nil}<%= @identifier %>"
+
+  <% arguments.each_with_index do |argument, index| %>
+    part = self[<%= argument[:name].inspect %>]
+    <% if argument.member?(:default) %>
+    result << " " << ((part && part != EMPTY_STRING) ? part.to_s : <%= argument[:default].inspect %>)
+    <% else %>
+    result << " " << part.to_s if (part && part != EMPTY_STRING)
+    <% end %>
+  <% end %>
+
+    result << " :#{postfix}" if postfix && postfix != EMPTY_STRING
+    result << "\r\n"
+  end
+  alias_method :to_str, :to_s
+
+<% csv_arguments.each do |argument| %>
+  def <%=argument[:name]%>
+    self[<%=argument[:name].inspect%>].split(<%=argument[:csv].inspect%>)
+  end
+
+  def <%=argument[:name]%>=(val)
+    self[<%=argument[:name].inspect%>] = Array(val).join(<%=argument[:csv].inspect%>)
+  end
+<% end %>
+
+#end
+# vim: set ft=ruby ts=8 sw=2 tw=0 :

@@ -17,8 +17,7 @@ describe IRCParser, "command responses" do
   # set an AWAY msg or not respectively.
   it_parses "302 Wiz :user = +host" do |msg|
     msg.nick = "emmanuel"
-    msg.nicks = "user"
-    msg.host_with_sign = "+host"
+    msg.postfix.should == "user = +host"
   end
 
   # Reply format used by ISON to list replies to the query list.
@@ -180,8 +179,7 @@ describe IRCParser, "command responses" do
     msg.server.should ==  "server"
     msg.user_nick.should ==  "nick"
     msg.flags.should ==  "H*@"
-    msg.hopcount.should ==  "10"
-    msg.realname.should ==  "John B. Jovi"
+    msg.format_postfix(:hopcount => "10", :realname => "John B. Jovi")
   end
 
   it_parses "315 Wiz name :End of /WHO list" do |msg|
@@ -196,6 +194,7 @@ describe IRCParser, "command responses" do
   # all visible channels and contents are sent back in a series of NAMEREPLY
   # msgs with a ENDOFNAMES to mark the end.
   it_parses "353 Wiz @ #channel :@nick1 +nick2 nick3" do |msg|
+    msg.nick.should == "Wiz"
     msg.channel.should ==  "#channel"
     msg.nicks_with_flags.should ==  %w|@nick1 +nick2 nick3|
   end
@@ -210,8 +209,7 @@ describe IRCParser, "command responses" do
     msg.nick.should == "Wiz"
     msg.mask.should ==  "mask"
     msg.server.should ==  "server.com"
-    msg.hopcount.should ==  "10"
-    msg.server_info.should ==  "server info"
+    msg.postfix.should ==  "10 server info"
   end
 
   it_parses "365 Wiz mask :End of /LINKS list" do |msg|
@@ -247,11 +245,11 @@ describe IRCParser, "command responses" do
   # MOTD format replies.  These should be surrounded by a MOTDSTART (before the
   # MOTDs) and an ENDOFMOTD (after).
   it_parses "375 Wiz :- pepito.com Message of the day -" do |msg|
-    msg.server.should ==  "pepito.com"
+    msg.postfix.should ==  "- pepito.com Message of the day -"
   end
 
   it_parses "372 Wiz :- This is the very cool motd" do |msg|
-    msg.motd.should ==  "This is the very cool motd"
+    msg.postfix.should ==  "- This is the very cool motd"
   end
 
   it_parses "376 Wiz :End of /MOTD command" do |msg|
@@ -286,7 +284,7 @@ describe IRCParser, "command responses" do
   end
 
   it_parses "393 Wiz :012344567 012345678 01234567" do |msg|
-    msg.users.should ==  "012344567 012345678 01234567"
+    msg.postfix.should ==  "012344567 012345678 01234567"
   end
 
   it_parses "394 Wiz :End of users" do |msg|
@@ -423,8 +421,8 @@ describe IRCParser, "command responses" do
   end
 
   it_parses "242 Wiz :Server Up 20 days 10:30:30" do |msg|
-    msg.days.should ==  "20"
-    msg.time.should ==  "10:30:30"
+    msg.nick.should == "Wiz"
+    msg.postfix.should == "Server Up 20 days 10:30:30"
   end
 
   it_parses "243 Wiz O hostmask * name" do |msg|
@@ -450,9 +448,8 @@ describe IRCParser, "command responses" do
   # back LUSERCLIENT and LUSERME.  The other replies are only sent
   # back if a non-zero count is found for them.
   it_parses "251 Wiz :There are 10 users and 20 invisible on 30 servers" do |msg|
-    msg.users_count.should == "10"
-    msg.invisible_count.should == "20"
-    msg.servers.should == "30"
+    msg.nick.should == "Wiz"
+    msg.postfix.should == "There are 10 users and 20 invisible on 30 servers"
   end
 
   it_parses "252 Wiz 10 :operator(s) online" do |msg|
@@ -468,8 +465,8 @@ describe IRCParser, "command responses" do
   end
 
   it_parses "255 Wiz :I have 8 clients and 3 servers" do |msg|
-    msg.clients_count.should == "8"
-    msg.servers_count.should == "3"
+    msg.nick.should == "Wiz"
+    msg.postfix.should == "I have 8 clients and 3 servers"
   end
 
   # When replying to an ADMIN msg, a server is expected to use replies
@@ -502,8 +499,7 @@ describe IRCParser, "command responses" do
 
   it_generates IRCParser::Messages::RplUserHost, "302 Wiz :user = +host" do |msg|
     msg.nick = "Wiz"
-    msg.nicks = "user"
-    msg.host_with_sign = "+host"
+    msg.format_postfix(:users => "user", :host_with_sign => "+host")
   end
 
 
@@ -515,7 +511,7 @@ describe IRCParser, "command responses" do
   it_generates IRCParser::Messages::RplAway, "301 Wiz nick :away message" do |msg|
     msg.nick = "Wiz"
     msg.away_nick = "nick"
-    msg.message = "away message"
+    msg.postfix = "away message"
   end
 
   it_generates IRCParser::Messages::RplUnAway, "305 Wiz :You are no longer marked as being away" do |msg|
@@ -634,8 +630,7 @@ describe IRCParser, "command responses" do
     msg.here! true
     msg.ircop! true
     msg.opped! true
-    msg.hopcount = 10
-    msg.realname = "John B. Jovi"
+    msg.format_postfix(:hopcount => 10, :realname => "John B. Jovi")
   end
 
   it_generates IRCParser::Messages::RplEndOfWho, "315 Wiz pattern :End of /WHO list" do |msg|
@@ -650,7 +645,10 @@ describe IRCParser, "command responses" do
   end
 
   it "can assign nicks to 353 replies", :focus => true do
-    m = IRCParser.message(:rpl_nam_reply) { |m| m.channel, m.nicks_with_flags = "#chan", "Emmanuel" }.to_s
+    m = IRCParser.message(:rpl_nam_reply) do |m|
+      m.nick = "Wiz"
+      m.channel, m.nicks_with_flags = "#chan", "Emmanuel"
+    end.to_s
     m = IRCParser.parse(m.to_s)
     m.nicks_with_flags.should == ["Emmanuel"]
   end
@@ -663,8 +661,7 @@ describe IRCParser, "command responses" do
     msg.nick = "Wiz"
     msg.mask = "mask"
     msg.server = "server.com"
-    msg.hopcount = 10
-    msg.server_info = "server info"
+    msg.format_postfix(:hopcount => 10, :server_info => "server info")
   end
 
   it_generates IRCParser::Messages::RplEndOfLinks, "365 Wiz mask :End of /LINKS list" do |msg|
@@ -692,14 +689,14 @@ describe IRCParser, "command responses" do
     msg.nick = "Wiz"
   end
 
-  it_generates IRCParser::Messages::RplMotdStart, "375 Wiz :- pepito.com Message of the day -" do |msg|
+  it_generates IRCParser::Messages::RplMotdStart, "375 Wiz :-pepito.com Message of the day-" do |msg|
     msg.nick = "Wiz"
-    msg.server = "pepito.com"
+    msg.format_postfix(:server => "pepito.com", :message => "Message of the day")
   end
 
-  it_generates IRCParser::Messages::RplMotd, "372 Wiz :- This is the very cool motd" do |msg|
+  it_generates IRCParser::Messages::RplMotd, "372 Wiz :-This is the very cool motd" do |msg|
     msg.nick = "Wiz"
-    msg.motd = "This is the very cool motd"
+    msg.format_postfix(:motd => "This is the very cool motd")
   end
 
   it_generates IRCParser::Messages::RplEndOfMotd, "376 Wiz :End of /MOTD command" do |msg|
@@ -725,9 +722,9 @@ describe IRCParser, "command responses" do
     msg.nick = "Wiz"
   end
 
-  it_generates IRCParser::Messages::RplUsers, "393 Wiz :012344567 012345678 01234567" do |msg|
+  it_generates IRCParser::Messages::RplUsers, "393 Wiz :tony 42 fatso.com" do |msg|
     msg.nick = "Wiz"
-    msg.users = "012344567 012345678 01234567"
+    msg.format_postfix(:username => "tony", :ttyline => 42, :hostname => "fatso.com")
   end
 
   it_generates IRCParser::Messages::RplEndOfUsers, "394 Wiz :End of users" do |msg|
@@ -867,8 +864,7 @@ describe IRCParser, "command responses" do
 
   it_generates IRCParser::Messages::RplStatsUptime, "242 Wiz :Server Up 20 days 10:30:30" do |msg|
     msg.nick = "Wiz"
-    msg.days = "20"
-    msg.time = "10:30:30"
+    msg.format_postfix(:days => 20, :time => "10:30:30")
   end
 
   it_generates IRCParser::Messages::RplStatsOLine, "243 Wiz O hostmask * name" do |msg|
@@ -892,9 +888,7 @@ describe IRCParser, "command responses" do
 
   it_generates IRCParser::Messages::RplLUserClient, "251 Wiz :There are 10 users and 20 invisible on 30 servers" do |msg|
     msg.nick = "Wiz"
-    msg.users_count = 10
-    msg.invisible_count = 20
-    msg.servers = 30
+    msg.format_postfix(:users_count => 10, :invisible_count => 20, :servers => 30)
   end
 
   it_generates IRCParser::Messages::RplLUserOp, "252 Wiz 10 :operator(s) online" do |msg|
@@ -914,8 +908,7 @@ describe IRCParser, "command responses" do
 
   it_generates IRCParser::Messages::RplLUserMe, "255 Wiz :I have 8 clients and 3 servers" do |msg|
     msg.nick = "Wiz"
-    msg.clients_count = 8
-    msg.servers_count = 3
+    msg.format_postfix(:clients_count => 8, :servers_count => 3)
   end
 
   it_generates IRCParser::Messages::RplAdminMe, "256 Wiz server.com :Administrative info" do |msg|

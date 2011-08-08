@@ -30,9 +30,9 @@
   target = to_ (',' to_)*;
 
   action mark { mark = p }
-  action prefix { prefix = data[mark..(p-1)] }
-  action command { command = data[mark..(p-1)] }
-  action params { params << data[mark..(p-1)] }
+  action prefix { prefix = data[mark..(p-1)].pack("c*") }
+  action command { command = data[mark..(p-1)].pack("c*") }
+  action params { params << data[mark..(p-1)].pack("c*") }
 
   trailing = ( ( ascii | unicode ) -- (NUL | CR | LF) )* >mark %params;
   middle = ( (nonwhite - ':') nonwhite* ) >mark %params;
@@ -45,41 +45,45 @@
 }%%
 
 module IRCParser
-  class Parser
-    class Error < RuntimeError
-      attr_accessor :source, :prefix, :identifier, :params
+  class ParserError < RuntimeError; end
 
-      def initialize(from, source, prefix, identifier, params)
-        @from, @source, @prefix, @identifier, @params = from, source, prefix, identifier, params
-      end
+  %% write data;
 
-      def to_s
-        "#{@from}: #{source.inspect}"
-      end
-      alias_method :message, :to_s
+  CLASS_FROM_PARSE = Hash.new { |h,k| h[k] = Messages::ALL[k] } # This hash will be smaller than Messages::ALL, and hence faster.
+
+  def parse(message)
+    data = message.unpack("c*")
+
+    prefix, command, params = nil, nil, []
+
+    %% write init;
+    %% write exec;
+
+    if cs >= irc_parser_first_final
+      klass = CLASS_FROM_PARSE[command]
+      raise ParserError, "Message not recognized: #{message.inspect}" unless klass
+      klass.new(prefix, params)
+    elsif message !~ /\r\n$/
+      raise ParserError, "Message must finish with \\r\\n"
+    else
+      raise ParserError, message
     end
+  end
 
-    %% write data;
+  def parse_raw(message)
+    data = message.unpack("c*")
 
-    def self.run(message)
-      data = message.unpack("c*") if message.is_a?(String)
+    prefix, command, params = nil, nil, []
 
-      prefix = nil
-      command = nil
-      params = []
+    %% write init;
+    %% write exec;
 
-      %% write init;
-      %% write exec;
-
-      if cs >= irc_parser_first_final
-        prefix = prefix.pack("c*") if prefix
-        command = command.pack("c*") if command
-        params = params.map { |a| a.pack("c*") } if params
-        return prefix, command, params
-      else
-        raise IRCParser::Parser::Error.new("parsing", message, prefix, command, params)
-      end
+    if cs >= irc_parser_first_final
+      return prefix, command, params
+    elsif message !~ /\r\n$/
+      raise ParserError, "Message must finish with \\r\\n"
+    else
+      raise ParserError, message
     end
-
   end
 end

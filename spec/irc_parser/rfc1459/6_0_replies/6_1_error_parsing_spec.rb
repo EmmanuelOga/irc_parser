@@ -62,7 +62,7 @@ describe IRCParser, "error replies" do
   # #<host>" is attempted.
   it_parses "411 Wiz :No recipient given (PRIVMSG)" do |msg|
     msg.nick.should == "Wiz"
-    msg.command.should == "PRIVMSG"
+    msg.postfix.should == "No recipient given (PRIVMSG)"
   end
 
   it_parses "412 Wiz :No text to send" do |msg|
@@ -101,8 +101,7 @@ describe IRCParser, "error replies" do
   # processing of a msg.
   it_parses "424 Wiz :File error doing rm on readme.txt" do |msg|
     msg.nick.should == "Wiz"
-    msg.file_op.should == "rm"
-    msg.file.should == "readme.txt"
+    msg.postfix.should == "File error doing rm on readme.txt"
   end
 
   # Returned when a nickname parameter expected for a command and isn't found.
@@ -324,7 +323,7 @@ describe IRCParser, "error replies" do
 
   it_generates IRCParser::Messages::ErrNoRecipient, "411 Wiz :No recipient given (PRIVMSG)" do |msg|
     msg.nick= "Wiz"
-    msg.command= "PRIVMSG"
+    msg.format_postfix(:command => "PRIVMSG")
   end
 
   it_generates IRCParser::Messages::ErrNoTextToSend, "412 Wiz :No text to send" do |msg|
@@ -356,8 +355,7 @@ describe IRCParser, "error replies" do
 
   it_generates IRCParser::Messages::ErrFileError, "424 Wiz :File error doing rm on readme.txt" do |msg|
     msg.nick= "Wiz"
-    msg.file_op= "rm"
-    msg.file= "readme.txt"
+    msg.format_postfix(:fileop => "rm", :file => "readme.txt")
   end
 
   it_generates IRCParser::Messages::ErrNoNickNameGiven, "431 Wiz :No nickname given" do |msg|

@@ -5,22 +5,10 @@
 
 
 module IRCParser
-  class Parser
-    class Error < RuntimeError
-      attr_accessor :source, :prefix, :identifier, :params
+  class ParserError < RuntimeError; end
 
-      def initialize(from, source, prefix, identifier, params)
-        @from, @source, @prefix, @identifier, @params = from, source, prefix, identifier, params
-      end
-
-      def to_s
-        "#{@from}: #{source.inspect}"
-      end
-      alias_method :message, :to_s
-    end
-
-    
-# line 24 "lib/irc_parser/parser.rb"
+  
+# line 12 "lib/irc_parser/parser.rb"
 class << self
 	attr_accessor :_irc_parser_trans_keys
 	private :_irc_parser_trans_keys, :_irc_parser_trans_keys=
@@ -345,26 +333,26 @@ end
 self.irc_parser_en_main = 1;
 
 
-# line 63 "lib/irc_parser/parser.rl"
+# line 51 "lib/irc_parser/parser.rl"
 
-    def self.run(message)
-      data = message.unpack("c*") if message.is_a?(String)
+  CLASS_FROM_PARSE = Hash.new { |h,k| h[k] = Messages::ALL[k] } # This hash will be smaller than Messages::ALL, and hence faster.
 
-      prefix = nil
-      command = nil
-      params = []
+  def parse(message)
+    data = message.unpack("c*")
 
-      
-# line 359 "lib/irc_parser/parser.rb"
+    prefix, command, params = nil, nil, []
+
+    
+# line 347 "lib/irc_parser/parser.rb"
 begin
 	p ||= 0
 	pe ||= data.length
 	cs = irc_parser_start
 end
 
-# line 72 "lib/irc_parser/parser.rl"
-      
-# line 368 "lib/irc_parser/parser.rb"
+# line 60 "lib/irc_parser/parser.rl"
+    
+# line 356 "lib/irc_parser/parser.rb"
 begin
 	testEof = false
 	_slen, _trans, _keys, _inds, _acts, _nacts = nil
@@ -407,23 +395,23 @@ begin
 	when 5 then
 # line 33 "lib/irc_parser/parser.rl"
 		begin
- prefix = data[mark..(p-1)] 		end
+ prefix = data[mark..(p-1)].pack("c*") 		end
 	when 2 then
 # line 34 "lib/irc_parser/parser.rl"
 		begin
- command = data[mark..(p-1)] 		end
+ command = data[mark..(p-1)].pack("c*") 		end
 	when 3 then
 # line 35 "lib/irc_parser/parser.rl"
 		begin
- params << data[mark..(p-1)] 		end
+ params << data[mark..(p-1)].pack("c*") 		end
 	when 4 then
 # line 32 "lib/irc_parser/parser.rl"
 		begin
  mark = p 		end
 # line 35 "lib/irc_parser/parser.rl"
 		begin
- params << data[mark..(p-1)] 		end
-# line 427 "lib/irc_parser/parser.rb"
+ params << data[mark..(p-1)].pack("c*") 		end
+# line 415 "lib/irc_parser/parser.rb"
 	end
 	end
 	end
@@ -446,17 +434,124 @@ begin
 end
 	end
 
-# line 73 "lib/irc_parser/parser.rl"
+# line 61 "lib/irc_parser/parser.rl"
 
-      if cs >= irc_parser_first_final
-        prefix = prefix.pack("c*") if prefix
-        command = command.pack("c*") if command
-        params = params.map { |a| a.pack("c*") } if params
-        return prefix, command, params
-      else
-        raise IRCParser::Parser::Error.new("parsing", message, prefix, command, params)
-      end
+    if cs >= irc_parser_first_final
+      klass = CLASS_FROM_PARSE[command]
+      raise ParserError, "Message not recognized: #{message.inspect}" unless klass
+      klass.new(prefix, params)
+    elsif message !~ /\r\n$/
+      raise ParserError, "Message must finish with \\r\\n"
+    else
+      raise ParserError, message
     end
+  end
 
+  def parse_raw(message)
+    data = message.unpack("c*")
+
+    prefix, command, params = nil, nil, []
+
+    
+# line 457 "lib/irc_parser/parser.rb"
+begin
+	p ||= 0
+	pe ||= data.length
+	cs = irc_parser_start
+end
+
+# line 79 "lib/irc_parser/parser.rl"
+    
+# line 466 "lib/irc_parser/parser.rb"
+begin
+	testEof = false
+	_slen, _trans, _keys, _inds, _acts, _nacts = nil
+	_goto_level = 0
+	_resume = 10
+	_eof_trans = 15
+	_again = 20
+	_test_eof = 30
+	_out = 40
+	while true
+	if _goto_level <= 0
+	if p == pe
+		_goto_level = _test_eof
+		next
+	end
+	if cs == 0
+		_goto_level = _out
+		next
+	end
+	end
+	if _goto_level <= _resume
+	_keys = cs << 1
+	_inds = _irc_parser_index_offsets[cs]
+	_slen = _irc_parser_key_spans[cs]
+	_trans = if (   _slen > 0 && 
+			_irc_parser_trans_keys[_keys] <= data[p] && 
+			data[p] <= _irc_parser_trans_keys[_keys + 1] 
+		    ) then
+			_irc_parser_indicies[ _inds + data[p] - _irc_parser_trans_keys[_keys] ] 
+		 else 
+			_irc_parser_indicies[ _inds + _slen ]
+		 end
+	cs = _irc_parser_trans_targs[_trans]
+	if _irc_parser_trans_actions[_trans] != 0
+	case _irc_parser_trans_actions[_trans]
+	when 1 then
+# line 32 "lib/irc_parser/parser.rl"
+		begin
+ mark = p 		end
+	when 5 then
+# line 33 "lib/irc_parser/parser.rl"
+		begin
+ prefix = data[mark..(p-1)].pack("c*") 		end
+	when 2 then
+# line 34 "lib/irc_parser/parser.rl"
+		begin
+ command = data[mark..(p-1)].pack("c*") 		end
+	when 3 then
+# line 35 "lib/irc_parser/parser.rl"
+		begin
+ params << data[mark..(p-1)].pack("c*") 		end
+	when 4 then
+# line 32 "lib/irc_parser/parser.rl"
+		begin
+ mark = p 		end
+# line 35 "lib/irc_parser/parser.rl"
+		begin
+ params << data[mark..(p-1)].pack("c*") 		end
+# line 525 "lib/irc_parser/parser.rb"
+	end
+	end
+	end
+	if _goto_level <= _again
+	if cs == 0
+		_goto_level = _out
+		next
+	end
+	p += 1
+	if p != pe
+		_goto_level = _resume
+		next
+	end
+	end
+	if _goto_level <= _test_eof
+	end
+	if _goto_level <= _out
+		break
+	end
+end
+	end
+
+# line 80 "lib/irc_parser/parser.rl"
+
+    if cs >= irc_parser_first_final
+      return prefix, command, params
+    elsif message !~ /\r\n$/
+      raise ParserError, "Message must finish with \\r\\n"
+    else
+      raise ParserError, message
+    end
   end
 end

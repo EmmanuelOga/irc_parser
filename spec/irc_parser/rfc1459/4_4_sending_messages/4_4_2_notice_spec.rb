@@ -52,12 +52,12 @@ describe IRCParser, "parsing notice" do
   end
 
   it_generates IRCParser::Messages::Notice, "NOTICE $*.fi :Server tolsun.oulu.fi rebooting." do |msg|
-    msg.server_pattern= "$*.fi"
+    msg.target= "$*.fi"
     msg.body= "Server tolsun.oulu.fi rebooting."
   end
 
   it_generates IRCParser::Messages::Notice, "NOTICE #*.edu :NSFNet is undergoing work, expect interruptions" do |msg|
-    msg.host_pattern= "#*.edu"
+    msg.target= "#*.edu"
     msg.body= "NSFNet is undergoing work, expect interruptions"
   end
 end

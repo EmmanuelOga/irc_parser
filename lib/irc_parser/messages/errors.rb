@@ -1,241 +1,51 @@
-class IRCParser::Messages::ErrNoSuchNick < IRCParser::Message
-  identify_as "401"
-  parameters :nick, :error_nick, "No such nick/channel"
+module IRCParser::Messages
+  define_message :ErrNoSuchNick       , '401', :nick, :error_nick, "No such nick/channel"
+  define_message :ErrNoSuchServer     , '402', :nick, :server, "No such server"
+  define_message :ErrNoSuchChannel    , '403', :nick, :channel, "No such channel"
+  define_message :ErrCannotSendToChan , '404', :nick, :channel, "Cannot send to channel"
+  define_message :ErrTooManyChannels  , '405', :nick, :channel, "You have joined too many channels"
+  define_message :ErrWasNoSuchNick    , '406', :nick, :error_nick, "There was no such nickname"
+  define_message :ErrTooManyTargets   , '407', :nick, :target, "Duplicate recipients. No message delivered"
+  define_message :ErrNoOrigin         , '409', :nick, "No origin specified"
+  define_message :ErrNoRecipient      , '411', :nick, "No recipient given (%{command})"
+  define_message :ErrNoTextToSend     , '412', :nick, "No text to send"
+  define_message :ErrNoTopLevel       , '413', :nick, :mask, "No toplevel domain specified"
+  define_message :ErrWildTopLevel     , '414', :nick, :mask, "Wildcard in toplevel domain"
+  define_message :ErrUnknownCommand   , '421', :command, "Unknown command"
+  define_message :ErrNoMotd           , '422', :nick, "MOTD File is missing"
+  define_message :ErrNoAdminInfo      , '423', :nick, :server, "No administrative info available"
+  define_message :ErrFileError        , '424', :nick, "File error doing %{fileop} on %{file}"
+  define_message :ErrNoNickNameGiven  , '431', :nick, "No nickname given"
+  define_message :ErrErroneusNickName , '432', :nick, :error_nick, "Erroneus nickname"
+  define_message :ErrNickNameInUse    , '433', :nick, :error_nick, "Nickname is already in use"
+  define_message :ErrNickCollision    , '436', :nick, :error_nick, "Nickname collision KILL"
+  define_message :ErrUserNotInChannel , '441', :nick, :error_nick, :channel, "They aren't on that channel"
+  define_message :ErrNotOnChannel     , '442', :nick, :channel, "You're not on that channel"
+  define_message :ErrUserOnChannel    , '443', :nick, :user, :channel, "is already on channel"
+  define_message :ErrNoLogin          , '444', :nick, :user, "User not logged in"
+  define_message :ErrSummonDisabled   , '445', :nick, "SUMMON has been disabled"
+  define_message :ErrUsersDisabled    , '446', :nick, "USERS has been disabled"
+  define_message :ErrNotRegistered    , '451', :nick, "You have not registered"
+  define_message :ErrNeedMoreParams   , '461', :nick, :command, "Not enough parameters"
+  define_message :ErrAlreadyRegistred , '462', :nick, "You may not reregister"
+  define_message :ErrNoPermForHost    , '463', :nick, "Your host isn't among the privileged"
+  define_message :ErrPasswdMismatch   , '464', :nick, "Password incorrect"
+  define_message :ErrYouReBannedCreep , '465', :nick, "You are banned from this server"
+  define_message :ErrKeySet           , '467', :nick, :channel, "Channel key already set"
+  define_message :ErrChannelIsFull    , '471', :nick, :channel, "Cannot join channel (+l)"
+  define_message :ErrUnknownMode      , '472', :nick, :char, "is unknown mode char to me"
+  define_message :ErrInviteOnLYChan   , '473', :nick, :channel, "Cannot join channel (+i)"
+  define_message :ErrBannedFromChan   , '474', :nick, :channel, "Cannot join channel (+b)"
+  define_message :ErrBadChannelKey    , '475', :nick, :channel, "Cannot join channel (+k)"
+  define_message :ErrNoPrivileges     , '481', :nick, "Permission Denied- You're not an IRC operator"
+  define_message :ErrChanOPrivsNeeded , '482', :nick, :channel, "You're not channel operator"
+  define_message :ErrCantKillServer   , '483', :nick, "You cant kill a server!"
+  define_message :ErrNoOperHost       , '491', :nick, "No O-lines for your host"
+  define_message :ErrUModeUnknownFlag , '501', :nick, "Unknown MODE flag"
+  define_message :ErrUsersDontMatch   , '502', :nick, "Cant change mode for other users"
+
+  # Not Used / Reserved ( http://tools.ietf.org/html/rfc1459#section-6.3
+  # :YouWillBeBanned
+  # :BadChanMask
+  # :NoServiceHost
 end
-
-class IRCParser::Messages::ErrNoSuchServer < IRCParser::Message
-  identify_as "402"
-  parameters :nick, :server, "No such server"
-end
-
-class IRCParser::Messages::ErrNoSuchChannel < IRCParser::Message
-  identify_as "403"
-  parameters :nick, :channel, "No such channel"
-end
-
-class IRCParser::Messages::ErrCannotSendToChan < IRCParser::Message
-  identify_as "404"
-  parameters :nick, :channel, "Cannot send to channel"
-end
-
-class IRCParser::Messages::ErrTooManyChannels < IRCParser::Message
-  identify_as "405"
-  parameters :nick, :channel, "You have joined too many channels"
-end
-
-class IRCParser::Messages::ErrWasNoSuchNick < IRCParser::Message
-  identify_as "406"
-  parameters :nick, :error_nick, "There was no such nickname"
-end
-
-class IRCParser::Messages::ErrTooManyTargets < IRCParser::Message
-  identify_as "407"
-  parameters :nick, :target, "Duplicate recipients. No message delivered"
-end
-
-class IRCParser::Messages::ErrNoOrigin < IRCParser::Message
-  identify_as "409"
-  parameters :nick, "No origin specified"
-end
-
-class IRCParser::Messages::ErrNoRecipient < IRCParser::Message
-  identify_as "411"
-  parameters :nick, "No recipient given (", :command, ")"
-
-  def initialize(prefix, params = nil)
-    super
-    self.command = ( params.to_s =~ /\(([^\)]+)\)/ && $1 ) if params
-  end
-
-  def to_str
-    "#{self.class.identifier} #{nick} :No recipient given (#{command})\r\n"
-  end
-  alias_method :to_s, :to_str
-end
-
-class IRCParser::Messages::ErrNoTextToSend < IRCParser::Message
-  identify_as "412"
-  parameters :nick, "No text to send"
-end
-
-class IRCParser::Messages::ErrNoTopLevel < IRCParser::Message
-  identify_as "413"
-  parameters :nick, :mask, "No toplevel domain specified"
-end
-
-class IRCParser::Messages::ErrWildTopLevel < IRCParser::Message
-  identify_as "414"
-  parameters :nick, :mask, "Wildcard in toplevel domain"
-end
-
-# http://www.mirc.net/raws/?view=421
-# 421 command :Unknown command
-class IRCParser::Messages::ErrUnknownCommand < IRCParser::Message
-  identify_as "421"
-  parameters :command, ["Unknown command"]
-end
-
-class IRCParser::Messages::ErrNoMotd < IRCParser::Message
-  identify_as "422"
-  parameters :nick, "MOTD File is missing"
-end
-
-class IRCParser::Messages::ErrNoAdminInfo < IRCParser::Message
-  identify_as "423"
-  parameters :nick, :server, "No administrative info available"
-end
-
-class IRCParser::Messages::ErrFileError < IRCParser::Message
-  identify_as "424"
-  parameters :nick, ["File error doing", :file_op, "on", :file]
-
-  def initialize(prefix, params = nil)
-    super
-    self.file_op, self.file = $1, $2 if params && params.join(" ") =~ /File error doing\s*([^ ]+)\s*on\s*([^ ]+)/
-  end
-end
-
-class IRCParser::Messages::ErrNoNickNameGiven < IRCParser::Message
-  identify_as "431"
-  parameters :nick, "No nickname given"
-end
-
-class IRCParser::Messages::ErrErroneusNickName < IRCParser::Message
-  identify_as "432"
-  parameters :nick, :error_nick, "Erroneus nickname"
-end
-
-class IRCParser::Messages::ErrNickNameInUse < IRCParser::Message
-  identify_as '433'
-  parameters :nick, :error_nick, "Nickname is already in use"
-end
-
-class IRCParser::Messages::ErrNickCollision < IRCParser::Message
-  identify_as '436'
-  parameters :nick, :error_nick, "Nickname collision KILL"
-end
-
-class IRCParser::Messages::ErrUserNotInChannel < IRCParser::Message
-  identify_as '441'
-  parameters :nick, :error_nick, :channel, "They aren't on that channel"
-end
-
-class IRCParser::Messages::ErrNotOnChannel < IRCParser::Message
-  identify_as '442'
-  parameters :nick, :channel, "You're not on that channel"
-end
-
-class IRCParser::Messages::ErrUserOnChannel < IRCParser::Message
-  identify_as '443'
-  parameters :nick, :user, :channel, "is already on channel"
-end
-
-class IRCParser::Messages::ErrNoLogin < IRCParser::Message
-  identify_as '444'
-  parameters :nick, :user, "User not logged in"
-end
-
-class IRCParser::Messages::ErrSummonDisabled < IRCParser::Message
-  identify_as '445'
-  parameters :nick, "SUMMON has been disabled"
-end
-
-class IRCParser::Messages::ErrUsersDisabled < IRCParser::Message
-  identify_as '446'
-  parameters :nick, "USERS has been disabled"
-end
-
-class IRCParser::Messages::ErrNotRegistered < IRCParser::Message
-  identify_as '451'
-  parameters :nick, "You have not registered"
-end
-
-class IRCParser::Messages::ErrNeedMoreParams < IRCParser::Message
-  identify_as '461'
-  parameters :nick, :command, "Not enough parameters"
-end
-
-class IRCParser::Messages::ErrAlreadyRegistred < IRCParser::Message
-  identify_as '462'
-  parameters :nick, "You may not reregister"
-end
-
-class IRCParser::Messages::ErrNoPermForHost < IRCParser::Message
-  identify_as '463'
-  parameters :nick, "Your host isn't among the privileged"
-end
-
-class IRCParser::Messages::ErrPasswdMismatch < IRCParser::Message
-  identify_as '464'
-  parameters :nick, "Password incorrect"
-end
-
-class IRCParser::Messages::ErrYouReBannedCreep < IRCParser::Message
-  identify_as '465'
-  parameters :nick, "You are banned from this server"
-end
-
-class IRCParser::Messages::ErrKeySet < IRCParser::Message
-  identify_as '467'
-  parameters :nick, :channel, "Channel key already set"
-end
-
-class IRCParser::Messages::ErrChannelIsFull < IRCParser::Message
-  identify_as '471'
-  parameters :nick, :channel, "Cannot join channel (+l)"
-end
-
-class IRCParser::Messages::ErrUnknownMode < IRCParser::Message
-  identify_as '472'
-  parameters :nick, :char, "is unknown mode char to me"
-end
-
-class IRCParser::Messages::ErrInviteOnLYChan < IRCParser::Message
-  identify_as '473'
-  parameters :nick, :channel, "Cannot join channel (+i)"
-end
-
-class IRCParser::Messages::ErrBannedFromChan < IRCParser::Message
-  identify_as '474'
-  parameters :nick, :channel, "Cannot join channel (+b)"
-end
-
-class IRCParser::Messages::ErrBadChannelKey < IRCParser::Message
-  identify_as '475'
-  parameters :nick, :channel, "Cannot join channel (+k)"
-end
-
-class IRCParser::Messages::ErrNoPrivileges < IRCParser::Message
-  identify_as '481'
-  parameters :nick, "Permission Denied- You're not an IRC operator"
-end
-
-class IRCParser::Messages::ErrChanOPrivsNeeded < IRCParser::Message
-  identify_as '482'
-  parameters :nick, :channel, "You're not channel operator"
-end
-
-class IRCParser::Messages::ErrCantKillServer < IRCParser::Message
-  identify_as '483'
-  parameters :nick, "You cant kill a server!"
-end
-
-class IRCParser::Messages::ErrNoOperHost < IRCParser::Message
-  identify_as '491'
-  parameters :nick, "No O-lines for your host"
-end
-
-class IRCParser::Messages::ErrUModeUnknownFlag < IRCParser::Message
-  identify_as '501'
-  parameters :nick, "Unknown MODE flag"
-end
-
-class IRCParser::Messages::ErrUsersDontMatch < IRCParser::Message
-  identify_as '502'
-  parameters :nick, "Cant change mode for other users"
-end
-
-# Not Used / Reserved ( http://tools.ietf.org/html/rfc1459#section-6.3
-# IRCParser::Messages::YouWillBeBanned
-# IRCParser::Messages::BadChanMask
-# IRCParser::Messages::NoServiceHost
