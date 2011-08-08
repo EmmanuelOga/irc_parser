@@ -50,7 +50,7 @@ To get a subclass of IRCParser::Message instead of an array of components:
 ```ruby
   require 'irc_parser/messages'
   msg = IRCParser.parse(":Angel PRIVMSG Wiz :Hello are you receiving this message?\r\n")
-  # <IRCParser::Messages::Privmsg:0x00000001476370 @params=["Wiz", "Hello are you receiving this message?"], @prefix="Angel">
+  #<struct Struct::IRCPrivMsg prefix="Angel", target="Wiz", postfix="Hello are you receiving this message?">
 
   msg.identifier # => "PRIVMSG"
   msg.to_sym     # => :priv_msg
@@ -75,12 +75,11 @@ There is also a shortcut:
 
 ```ruby
   require 'irc_parser/messages'
-  msg = IRCParser.message(:privmsg) do |m|
-    msg.from   = "Wiz"
-    msg.target = "Angel"
-    msg.body   = "Hello World!"
-  end
-  msg.to_s # => ":Wiz PRIVMSG Angel :Hello World!\r\n"
+  IRCParser.message(:privmsg) do |m|
+    m.from   = "Wiz"
+    m.target = "Angel"
+    m.body   = "Hello World!"
+  end.to_s # => ":Wiz PRIVMSG Angel :Hello World!\r\n"
 ```
 
 ## TODO
