@@ -4,7 +4,7 @@ Gem::Specification.new do |s|
   s.rubygems_version = '1.3.5'
 
   s.name              = 'irc_parser'
-  s.version           = '0.1.1'
+  s.version           = '0.1.2'
   s.date              = '2011-08-08'
   s.rubyforge_project = 'irc_parser'
 
