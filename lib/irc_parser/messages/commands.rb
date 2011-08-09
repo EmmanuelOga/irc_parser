@@ -11,7 +11,7 @@ module IRCParser::Messages
   define_message :List    , :channels => {:csv => ","}
   define_message :Names   , :channels => {:csv => ","}
   define_message :Oper    , :user, :password
-  define_message :Part    , {:channels => {:csv => ","}}, :part_message
+  define_message :Part    , {:channels => {:csv => ","}}, :part_message => :postfix
   define_message :Pass    , :password
   define_message :Ping    , :target, :final_target
   define_message :Pong    , :server, :target
