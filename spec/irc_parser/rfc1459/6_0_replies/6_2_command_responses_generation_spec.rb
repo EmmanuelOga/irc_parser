@@ -172,7 +172,8 @@ describe IRCParser, "command responses" do
   # WHOREPLY is only sent if there is an appropriate match to the WHO query.
   # If there is a list of parameters supplied with a WHO msg, a ENDOFWHO
   # must be sent after processing each list item with <name> being the item.
-  it_parses "352 #channel user host server nick H*@ :10 John B. Jovi" do |msg| # <H|G>[*][@|+]
+  it_parses "352 nick #channel user host server nick H*@ :10 John B. Jovi" do |msg| # <H|G>[*][@|+]
+    msg.nick.should ==  "nick"
     msg.channel.should ==  "#channel"
     msg.user.should ==  "user"
     msg.host.should ==  "host"
@@ -199,7 +200,8 @@ describe IRCParser, "command responses" do
     msg.nicks_with_flags.should ==  %w|@nick1 +nick2 nick3|
   end
 
-  it_parses "366 #channel :End of /NAMES list" do |msg|
+  it_parses "366 nick #channel :End of /NAMES list" do |msg|
+    msg.nick.should ==  "nick"
     msg.channel.should ==  "#channel"
   end
 

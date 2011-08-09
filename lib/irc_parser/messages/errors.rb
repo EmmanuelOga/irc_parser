@@ -11,7 +11,7 @@ module IRCParser::Messages
   define_message :ErrNoTextToSend     , '412', :nick, "No text to send"
   define_message :ErrNoTopLevel       , '413', :nick, :mask, "No toplevel domain specified"
   define_message :ErrWildTopLevel     , '414', :nick, :mask, "Wildcard in toplevel domain"
-  define_message :ErrUnknownCommand   , '421', :command, "Unknown command"
+  define_message :ErrUnknownCommand   , '421', :nick, :command, "Unknown command"
   define_message :ErrNoMotd           , '422', :nick, "MOTD File is missing"
   define_message :ErrNoAdminInfo      , '423', :nick, :server, "No administrative info available"
   define_message :ErrFileError        , '424', :nick, "File error doing %{fileop} on %{file}"

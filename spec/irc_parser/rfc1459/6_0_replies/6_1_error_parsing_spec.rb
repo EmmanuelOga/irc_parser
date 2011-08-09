@@ -81,7 +81,8 @@ describe IRCParser, "error replies" do
 
   # Returned to a registered client to indicate that the command sent is
   # unknown by the server.
-  it_parses "421 PILDONGA :Unknown command" do |msg|
+  it_parses "421 nick PILDONGA :Unknown command" do |msg|
+    msg.nick.should == "nick"
     msg.command.should == "PILDONGA"
   end
 

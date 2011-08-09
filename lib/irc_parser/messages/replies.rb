@@ -132,7 +132,7 @@ module IRCParser::Messages
   # 352 channel           username   address                             server                          nick      flags :hops info
   # 352 #peace&protection IsaacHayes sdn-ar-004mokcitP324.dialsprint.net NewBrunswick.NJ.US.Undernet.Org DrDthmtch H+    :4    Isaac Hayes (QuickScript.ml.org)
   # Flags: <H|G>[*][@|+] (here, gone)
-  define_message :RplWhoReply, "352", :channel, :user, :host, :server, :user_nick, :flags, "%{hopcount} %{realname}" do
+  define_message :RplWhoReply, "352", :nick, :channel, :user, :host, :server, :user_nick, :flags, "%{hopcount} %{realname}" do
     FLAGS_INDEX_ON_PARAMS = 6
 
     FLAGS = {
@@ -193,7 +193,7 @@ module IRCParser::Messages
 
   # http://www.mirc.net/raws/?view=366
   # :rpl_end_of_names >> :sendak.freenode.net 366 emmanuel #pipita2 :End of /NAMES list.
-  define_message :RplEndOfNames, '366', :channel, "End of /NAMES list"
+  define_message :RplEndOfNames, '366', :nick, :channel, "End of /NAMES list"
 
   # Not Used / Reserved ( http://tools.ietf.org/html/rfc1459#section-6.3
   # RplTraceClass    , '209'
